@@ -19,7 +19,7 @@ namespace Wheel.DependencyInjection
                 {
                     foreach (var typeInterface in typeInterfaces)
                     {
-                        services.AddSingleton(typeInterface, transientType);
+                        services.AddTransient(typeInterface, transientType);
                     }
                 }
                 else
@@ -36,7 +36,7 @@ namespace Wheel.DependencyInjection
                 {
                     foreach (var typeInterface in typeInterfaces)
                     {
-                        services.AddSingleton(typeInterface, scopeType);
+                        services.AddScoped(typeInterface, scopeType);
                     }
                 }
                 else
