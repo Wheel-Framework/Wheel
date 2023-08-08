@@ -11,8 +11,7 @@ namespace Wheel.DependencyInjection
         {
             var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(ab=>ab.GetTypes());
             var transientTypes = types
-                .Where(t => !t.IsInterface)
-                .Where(t => t.GetInterface(nameof(ITransientDependency))!= null);
+                .Where(t => t.IsClass && !t.IsAbstract && typeof(ITransientDependency).IsAssignableFrom(t));
             foreach (var transientType in transientTypes)
             {
                 var typeInterfaces = transientType.GetInterfaces();
@@ -29,8 +28,7 @@ namespace Wheel.DependencyInjection
                 }
             }
             var scopeTypes = types
-                .Where(t => !t.IsInterface)
-                .Where(t => t.GetInterface(nameof(IScopeDependency))!= null);
+                .Where(t => t.IsClass && !t.IsAbstract && typeof(IScopeDependency).IsAssignableFrom(t));
             foreach (var scopeType in scopeTypes)
             {
                 var typeInterfaces = scopeType.GetInterfaces();
@@ -47,8 +45,7 @@ namespace Wheel.DependencyInjection
                 }
             }
             var singletonTypes = types
-                .Where(t => !t.IsInterface)
-                .Where(t => t.GetInterface(nameof(ISingletonDependency))!= null);
+                .Where(t => t.IsClass && !t.IsAbstract && typeof(ISingletonDependency).IsAssignableFrom(t));
             foreach (var singletonType in singletonTypes)
             {
                 var typeInterfaces = singletonType.GetInterfaces();
