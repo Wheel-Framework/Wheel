@@ -9,9 +9,10 @@ namespace Wheel.DependencyInjection
     {
         public static IServiceCollection InitWheelDependency(this IServiceCollection services)
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a=> !a.FullName.Contains("Microsoft") && !a.FullName.Contains("System"))
-                .SelectMany(ab=>ab.GetTypes().Where(t => t.IsClass && !t.IsAbstract));
+            var types = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
+                        .Where(x => !x.Contains("Microsoft.") && !x.Contains("System."))
+                        .Select(x => Assembly.Load(AssemblyName.GetAssemblyName(x)))
+                        .SelectMany(ab=>ab.GetTypes().Where(t => t.IsClass && !t.IsAbstract));
             var transientTypes = types
                 .Where(t => typeof(ITransientDependency).IsAssignableFrom(t));
             foreach (var transientType in transientTypes)
