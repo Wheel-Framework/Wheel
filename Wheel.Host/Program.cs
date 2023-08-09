@@ -1,6 +1,8 @@
 using IdGen.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Wheel.DependencyInjection;
+using Wheel.Domain.Identity;
 using Wheel.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,11 @@ builder.Services.AddDbContext<WheelDbContext>(options =>
 options.UseSqlite(connectionString)
     .UseLazyLoadingProxies()
 );
+
+builder.Services.AddIdentity<User, Role>()
+    .AddEntityFrameworkStores<WheelDbContext>()
+    .AddDefaultTokenProviders()
+    ;
 
 builder.Services.AddIdGen(0);
 
