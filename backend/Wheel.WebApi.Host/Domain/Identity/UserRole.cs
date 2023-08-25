@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using Wheel.Domain.Common;
 
 namespace Wheel.Domain.Identity
 {
-    public class UserClaim : IdentityUserClaim<long>, IEntity<int>
+    public class UserRole : IdentityUserRole<string>
     {
         public virtual User User { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

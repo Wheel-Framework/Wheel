@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -7,22 +8,8 @@ using Wheel.Domain.Identity;
 
 namespace Wheel.EntityFrameworkCore
 {
-    public class WheelDbContext : DbContext
+    public class WheelDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
-        public virtual DbSet<User> Users { get; set; } = default!;
-
-        public virtual DbSet<UserClaim> UserClaims { get; set; } = default!;
-
-        public virtual DbSet<UserLogin> UserLogins { get; set; } = default!;
-
-        public virtual DbSet<UserToken> UserTokens { get; set; } = default!;
-
-        public virtual DbSet<UserRole> UserRoles { get; set; } = default!;
-
-        public virtual DbSet<Role> Roles { get; set; } = default!;
-
-        public virtual DbSet<RoleClaim> RoleClaims { get; set; } = default!;
-
         private StoreOptions? GetStoreOptions() => this.GetService<IDbContextOptions>()
                             .Extensions.OfType<CoreOptionsExtension>()
                             .FirstOrDefault()?.ApplicationServiceProvider
@@ -61,6 +48,7 @@ namespace Wheel.EntityFrameworkCore
                 b.ToTable("Users");
                 b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
+                b.Property(u => u.Id).HasMaxLength(36);
                 b.Property(u => u.UserName).HasMaxLength(256);
                 b.Property(u => u.NormalizedUserName).HasMaxLength(256);
                 b.Property(u => u.Email).HasMaxLength(256);
@@ -148,6 +136,7 @@ namespace Wheel.EntityFrameworkCore
                 b.HasKey(r => r.Id);
                 b.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique();
                 b.ToTable("Roles");
+                b.Property(u => u.Id).HasMaxLength(36);
                 b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
 
                 b.Property(u => u.Name).HasMaxLength(256);

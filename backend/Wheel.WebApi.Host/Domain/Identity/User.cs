@@ -3,7 +3,7 @@ using Wheel.Domain.Common;
 
 namespace Wheel.Domain.Identity
 {
-    public class User : IdentityUser<long>, IEntity
+    public class User : IdentityUser, IEntity<string>
     {
         public virtual ICollection<UserClaim> Claims { get; set; }
         public virtual ICollection<UserLogin> Logins { get; set; }

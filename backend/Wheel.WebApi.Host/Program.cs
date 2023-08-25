@@ -6,26 +6,28 @@ using Wheel.Domain.Identity;
 using Wheel.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("WheelHostContextConnection") ?? throw new InvalidOperationException("Connection string 'WheelHostContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
+
+// Add services to the container.
 
 builder.Services.InitWheelDependency();
+builder.Services.AddIdGen(0);
 
-builder.Services.AddDbContext<WheelDbContext>(options => 
+builder.Services.AddDbContext<WheelDbContext>(options =>
 options.UseSqlite(connectionString)
     .UseLazyLoadingProxies()
 );
 
-builder.Services.AddIdentity<User, Role>()
-    .AddEntityFrameworkStores<WheelDbContext>()
-    .AddDefaultTokenProviders()
-    ;
+builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
+    .AddBearerToken(IdentityConstants.BearerScheme)
+    .AddIdentityCookies();
+builder.Services.AddAuthorizationBuilder();
 
-builder.Services.AddIdGen(0);
-
-// Add services to the container.
+builder.Services.AddIdentityCore<User>()
+                .AddEntityFrameworkStores<WheelDbContext>()
+                .AddApiEndpoints();
 
 builder.Services.AddControllers();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -41,9 +43,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapIdentityApi<User>();
 app.MapControllers();
 
 app.Run();

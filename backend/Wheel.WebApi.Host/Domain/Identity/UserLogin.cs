@@ -2,7 +2,7 @@
 
 namespace Wheel.Domain.Identity
 {
-    public class UserLogin : IdentityUserLogin<long>
+    public class UserLogin : IdentityUserLogin<string>
     {
         public virtual User User { get; set; }
     }

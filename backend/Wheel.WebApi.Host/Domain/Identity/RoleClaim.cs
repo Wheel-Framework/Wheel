@@ -4,7 +4,7 @@ using Wheel.Domain.Common;
 
 namespace Wheel.Domain.Identity
 {
-    public class RoleClaim : IdentityRoleClaim<long>, IEntity<int>
+    public class RoleClaim : IdentityRoleClaim<string>, IEntity<int>
     {
         public virtual Role Role { get; set; }
     }
