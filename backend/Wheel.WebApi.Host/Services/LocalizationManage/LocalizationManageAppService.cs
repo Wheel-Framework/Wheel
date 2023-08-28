@@ -3,7 +3,7 @@ using Wheel.Domain.Localization;
 
 namespace Wheel.Services.LocalizationManage
 {
-    public class LocalizationManageAppService : ILocalizationManageAppService
+    public class LocalizationManageAppService : WheelServiceBase, ILocalizationManageAppService
     {
         private readonly IBasicRepository<LocalizationCulture, int> _localizationCultureRepository;
         private readonly IBasicRepository<LocalizationResource, int> _localizationResourceRepository;

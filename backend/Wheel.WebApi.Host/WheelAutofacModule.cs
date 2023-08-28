@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Autofac.Core;
+using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using Wheel.DependencyInjection;
 using Wheel.Domain;
@@ -21,15 +23,28 @@ namespace Wheel
             builder.RegisterAssemblyTypes(abs)
                 .Where(t => typeof(ITransientDependency).IsAssignableFrom(t))
                 .AsImplementedInterfaces()
+                .AsSelf()
+                .PropertiesAutowired()
                 .InstancePerDependency(); //瞬态
             builder.RegisterAssemblyTypes(abs)
                 .Where(t => typeof(IScopeDependency).IsAssignableFrom(t))
                 .AsImplementedInterfaces()
+                .AsSelf()
+                .PropertiesAutowired()
                 .InstancePerLifetimeScope(); //范围
             builder.RegisterAssemblyTypes(abs)
                 .Where(t => typeof(ISingletonDependency).IsAssignableFrom(t))
                 .AsImplementedInterfaces()
-                .SingleInstance(); //单例
+                .AsSelf()
+                .PropertiesAutowired()
+                .SingleInstance(); //单例.
+
+
+            // 获取所有控制器类型并使用属性注入
+            var controllerBaseType = typeof(ControllerBase);
+            builder.RegisterAssemblyTypes(abs)
+                .Where(t => controllerBaseType.IsAssignableFrom(t) && t != controllerBaseType)
+                .PropertiesAutowired();
         }
     }
 }
