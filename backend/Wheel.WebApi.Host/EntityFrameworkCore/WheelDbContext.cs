@@ -1,15 +1,23 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Castle.Core.Resource;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Options;
+using System.Text.RegularExpressions;
 using Wheel.Domain.Identity;
+using Wheel.Domain.Localization;
 
 namespace Wheel.EntityFrameworkCore
 {
     public class WheelDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
+        #region Localization
+        public DbSet<LocalizationCulture> Cultures { get; set; }
+        public DbSet<LocalizationResource> Resources { get; set; }
+        #endregion
+
         private StoreOptions? GetStoreOptions() => this.GetService<IDbContextOptions>()
                             .Extensions.OfType<CoreOptionsExtension>()
                             .FirstOrDefault()?.ApplicationServiceProvider
@@ -28,17 +36,10 @@ namespace Wheel.EntityFrameworkCore
             ConfigureIdentity(builder);
         }
 
-        private sealed class PersonalDataConverter : ValueConverter<string, string>
-        {
-            public PersonalDataConverter(IPersonalDataProtector protector) : base(s => protector.Protect(s), s => protector.Unprotect(s), default)
-            { }
-        }
         void ConfigureIdentity(ModelBuilder builder)
         {
             var storeOptions = GetStoreOptions();
             var maxKeyLength = storeOptions?.MaxLengthForKeys ?? 0;
-            var encryptPersonalData = storeOptions?.ProtectPersonalData ?? false;
-            PersonalDataConverter? converter = null;
 
             builder.Entity<User>(b =>
             {
@@ -54,20 +55,6 @@ namespace Wheel.EntityFrameworkCore
                 b.Property(u => u.Email).HasMaxLength(256);
                 b.Property(u => u.NormalizedEmail).HasMaxLength(256);
 
-                if (encryptPersonalData)
-                {
-                    converter = new PersonalDataConverter(this.GetService<IPersonalDataProtector>());
-                    var personalDataProps = typeof(User).GetProperties().Where(
-                                    prop => Attribute.IsDefined(prop, typeof(ProtectedPersonalDataAttribute)));
-                    foreach (var p in personalDataProps)
-                    {
-                        if (p.PropertyType != typeof(string))
-                        {
-                            throw new InvalidOperationException("Can Only Protect Strings");
-                        }
-                        b.Property(typeof(string), p.Name).HasConversion(converter);
-                    }
-                }
                 b.HasMany(e => e.Claims)
                     .WithOne(e => e.User)
                     .HasForeignKey(uc => uc.UserId)
@@ -114,21 +101,6 @@ namespace Wheel.EntityFrameworkCore
                     b.Property(t => t.LoginProvider).HasMaxLength(maxKeyLength);
                     b.Property(t => t.Name).HasMaxLength(maxKeyLength);
                 }
-
-                if (encryptPersonalData)
-                {
-                    var tokenProps = typeof(UserToken).GetProperties().Where(
-                                    prop => Attribute.IsDefined(prop, typeof(ProtectedPersonalDataAttribute)));
-                    foreach (var p in tokenProps)
-                    {
-                        if (p.PropertyType != typeof(string))
-                        {
-                            throw new InvalidOperationException("Can Only Protect Strings");
-                        }
-                        b.Property(typeof(string), p.Name).HasConversion(converter);
-                    }
-                }
-
                 b.ToTable("UserTokens");
             });
             builder.Entity<Role>(b =>
@@ -163,6 +135,23 @@ namespace Wheel.EntityFrameworkCore
             {
                 b.HasKey(r => new { r.UserId, r.RoleId });
                 b.ToTable("UserRoles");
+            });
+        }
+
+        void ConfigureLocalization(ModelBuilder builder)
+        {
+            builder.Entity<LocalizationCulture>(b =>
+            {
+                b.HasKey(uc => uc.Id);
+                b.ToTable("LocalizationCulture");
+                b.Property(a => a.Name).HasMaxLength(32);
+                b.HasMany(a => a.Resources);
+            });
+            builder.Entity<LocalizationResource>(b =>
+            {
+                b.HasKey(uc => uc.Id);
+                b.ToTable("LocalizationResource");
+                b.HasOne(a => a.Culture);
             });
         }
     }

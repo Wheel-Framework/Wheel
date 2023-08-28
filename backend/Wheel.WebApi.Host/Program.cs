@@ -1,9 +1,18 @@
 using IdGen.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using System.Globalization;
+using Wheel.Core.Exceptions;
+using Wheel.Core.Http;
 using Wheel.DependencyInjection;
 using Wheel.Domain.Identity;
 using Wheel.EntityFrameworkCore;
+using Wheel.Localization;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
@@ -27,6 +36,11 @@ builder.Services.AddIdentityCore<User>()
                 .AddEntityFrameworkStores<WheelDbContext>()
                 .AddApiEndpoints();
 
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.AddSingleton<IStringLocalizerFactory, EFStringLocalizerFactory>();
+
 builder.Services.AddSignalR();
 
 builder.Services.AddControllers();
@@ -37,12 +51,60 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+var forwardOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwardOptions.KnownNetworks.Clear();
+forwardOptions.KnownProxies.Clear();
+
+app.UseForwardedHeaders(forwardOptions);
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("zh-CN"),
+    SupportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("en"),
+                new CultureInfo("zh-CN"),
+            },
+    SupportedUICultures = new List<CultureInfo>
+            {
+                new CultureInfo("en"),
+                new CultureInfo("zh-CN"),
+            }
+});
+
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+        // using static System.Net.Mime.MediaTypeNames;
+        context.Response.ContentType = Application.Json;
+        var exceptionHandlerPathFeature =
+            context.Features.Get<IExceptionHandlerPathFeature>();
+
+        if (exceptionHandlerPathFeature?.Error is BusinessException businessException)
+        {
+            var L = context.RequestServices.GetRequiredService<IStringLocalizer>();
+            await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message] });
+        }
+        else
+        {
+            await context.Response.WriteAsJsonAsync(new R { Code = "50000", Message = exceptionHandlerPathFeature?.Error.Message });
+        }
+    });
+});
 
 app.UseHttpsRedirection();
 
