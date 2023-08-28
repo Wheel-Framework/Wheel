@@ -21,15 +21,15 @@ namespace Wheel
             builder.RegisterAssemblyTypes(abs)
                 .Where(t => typeof(ITransientDependency).IsAssignableFrom(t))
                 .AsImplementedInterfaces()
-                .InstancePerDependency();
+                .InstancePerDependency(); //瞬态
             builder.RegisterAssemblyTypes(abs)
                 .Where(t => typeof(IScopeDependency).IsAssignableFrom(t))
                 .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
+                .InstancePerLifetimeScope(); //范围
             builder.RegisterAssemblyTypes(abs)
                 .Where(t => typeof(ISingletonDependency).IsAssignableFrom(t))
                 .AsImplementedInterfaces()
-                .SingleInstance();
+                .SingleInstance(); //单例
         }
     }
 }
