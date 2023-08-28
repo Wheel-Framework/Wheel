@@ -1,3 +1,5 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using IdGen.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -6,21 +8,29 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using Wheel;
 using Wheel.Const;
 using Wheel.Core.Exceptions;
 using Wheel.Core.Http;
 using Wheel.DependencyInjection;
+using Wheel.Domain;
 using Wheel.Domain.Identity;
 using Wheel.EntityFrameworkCore;
 using Wheel.Localization;
 using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+{
+    builder.RegisterModule<WheelAutofacModule>();
+});
+
 var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
 
 // Add services to the container.
 
-builder.Services.InitWheelDependency();
 builder.Services.AddIdGen(0);
 
 builder.Services.AddDbContext<WheelDbContext>(options =>
@@ -99,7 +109,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         {
             var L = context.RequestServices.GetRequiredService<IStringLocalizer>();
             if(businessException.Data != null)
-                await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message, businessException.Data] });
+                await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message, businessException.MessageData] });
             else
                 await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message] });
         }

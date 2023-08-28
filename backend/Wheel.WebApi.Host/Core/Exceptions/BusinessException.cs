@@ -4,16 +4,16 @@
     {
         public string Code { get; set; }
 
-        public List<string>? Data { get; set; }
+        public List<string>? MessageData { get; set; }
 
         public BusinessException(string code, string? message = "") : base(message)
         {
             Code = code;
         }
 
-        public void WithData(List<string> data)
+        public void WithMessageDataData(List<string> data)
         {
-            Data = data;
+            MessageData = data;
         }
     }
 }
