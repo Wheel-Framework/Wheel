@@ -143,13 +143,15 @@ namespace Wheel.EntityFrameworkCore
             builder.Entity<LocalizationCulture>(b =>
             {
                 b.HasKey(uc => uc.Id);
-                b.ToTable("LocalizationCulture");
+                b.Property(a => a.Id).ValueGeneratedOnAdd();
+                b.ToTable("LocalizationCulture"); 
                 b.Property(a => a.Name).HasMaxLength(32);
                 b.HasMany(a => a.Resources);
             });
             builder.Entity<LocalizationResource>(b =>
             {
                 b.HasKey(uc => uc.Id);
+                b.Property(a => a.Id).ValueGeneratedOnAdd();
                 b.ToTable("LocalizationResource");
                 b.HasOne(a => a.Culture);
             });
