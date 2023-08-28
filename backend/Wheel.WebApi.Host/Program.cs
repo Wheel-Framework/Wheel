@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using Wheel.Const;
 using Wheel.Core.Exceptions;
 using Wheel.Core.Http;
 using Wheel.DependencyInjection;
@@ -97,11 +98,14 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         if (exceptionHandlerPathFeature?.Error is BusinessException businessException)
         {
             var L = context.RequestServices.GetRequiredService<IStringLocalizer>();
-            await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message] });
+            if(businessException.Data != null)
+                await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message, businessException.Data] });
+            else
+                await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message] });
         }
         else
         {
-            await context.Response.WriteAsJsonAsync(new R { Code = "50000", Message = exceptionHandlerPathFeature?.Error.Message });
+            await context.Response.WriteAsJsonAsync(new R { Code = ErrorCode.InternalError, Message = exceptionHandlerPathFeature?.Error.Message });
         }
     });
 });

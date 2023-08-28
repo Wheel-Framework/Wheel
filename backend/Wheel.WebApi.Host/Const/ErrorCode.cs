@@ -8,6 +8,6 @@
     /// </summary>
     public class ErrorCode
     {
-        
+        public const string InternalError = "50000";
     }
 }
