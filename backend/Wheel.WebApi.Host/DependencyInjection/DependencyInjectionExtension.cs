@@ -18,7 +18,7 @@ namespace Wheel.DependencyInjection
             foreach (var transientType in transientTypes)
             {
                 var typeInterfaces = transientType.GetInterfaces();
-                if (typeInterfaces.Length > 0)
+                if (typeInterfaces.Length > 1)
                 {
                     foreach (var typeInterface in typeInterfaces)
                     {
@@ -35,7 +35,7 @@ namespace Wheel.DependencyInjection
             foreach (var scopeType in scopeTypes)
             {
                 var typeInterfaces = scopeType.GetInterfaces();
-                if (typeInterfaces.Length > 0)
+                if (typeInterfaces.Length > 1)
                 {
                     foreach (var typeInterface in typeInterfaces)
                     {
@@ -52,7 +52,7 @@ namespace Wheel.DependencyInjection
             foreach (var singletonType in singletonTypes)
             {
                 var typeInterfaces = singletonType.GetInterfaces();
-                if (typeInterfaces.Length > 0)
+                if (typeInterfaces.Length > 1)
                 {
                     foreach (var typeInterface in typeInterfaces)
                     {

@@ -27,7 +27,10 @@ builder.Services.AddIdentityCore<User>()
                 .AddEntityFrameworkStores<WheelDbContext>()
                 .AddApiEndpoints();
 
+builder.Services.AddSignalR();
+
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -43,7 +46,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthorization(); 
+
+var webSocketOptions = new WebSocketOptions
+{
+};
+app.UseWebSockets(webSocketOptions);
 
 app.MapIdentityApi<User>();
 app.MapControllers();
