@@ -8,14 +8,14 @@ namespace Wheel.Uow
     public interface IUnitOfWork : IScopeDependency, IDisposable, IAsyncDisposable
     {
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default); 
-        Task<IDbContextTransaction> BeginTransactionAsync();
-        Task CommitAsync();
-        Task RollbackAsync();
+        Task<IDbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
+        Task CommitAsync(CancellationToken cancellationToken = default);
+        Task RollbackAsync(CancellationToken cancellationToken = default);
     }
     public class UnitOfWork : IUnitOfWork
     {
         private readonly WheelDbContext _dbContext;
-        private IDbContextTransaction? Transaction = null;
+        private IDbTransaction? Transaction = null;
 
         public UnitOfWork(WheelDbContext dbContext)
         {
@@ -26,19 +26,28 @@ namespace Wheel.Uow
         {
             return await _dbContext.SaveChangesAsync(cancellationToken);
         }
-        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        public async Task<IDbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
-            Transaction = await _dbContext.Database.BeginTransactionAsync();
+            Transaction = new DbTransaction(_dbContext);
+            await Transaction.BeginTransactionAsync(cancellationToken);
             return Transaction;
         }
-        public async Task CommitAsync()
+        public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            await Transaction.CommitAsync();
+            if(Transaction == null) 
+            {
+                throw new Exception("Transaction is null, Please BeginTransaction");
+            }
+            await Transaction.CommitAsync(cancellationToken);
         }
 
-        public async Task RollbackAsync()
+        public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
-            await Transaction.RollbackAsync();
+            if (Transaction == null)
+            {
+                throw new Exception("Transaction is null, Please BeginTransaction");
+            }
+            await Transaction.RollbackAsync(cancellationToken);
         }
         public void Dispose()
         {
