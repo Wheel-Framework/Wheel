@@ -79,5 +79,30 @@ namespace Wheel.EntityFrameworkCore
             return (items, total);
         }
 
+        public IQueryable<TEntity> GetQueryable(bool noTracking = true)
+        {
+            if (noTracking)
+            {
+                return _dbContext.Set<TEntity>().AsNoTracking();
+            }
+            return _dbContext.Set<TEntity>();
+        }
+        public IQueryable<TEntity> GetQueryableWithIncludes(params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return Includes(GetQueryable(), propertySelectors);
+        }
+
+        private static IQueryable<TEntity> Includes(IQueryable<TEntity> query, Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            if (propertySelectors != null && propertySelectors.Length > 0)
+            {
+                foreach (var propertySelector in propertySelectors)
+                {
+                    query = query.Include(propertySelector);
+                }
+            }
+
+            return query;
+        }
     }
 }
