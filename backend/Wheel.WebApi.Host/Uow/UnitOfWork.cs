@@ -15,7 +15,7 @@ namespace Wheel.Uow
     public class UnitOfWork : IUnitOfWork
     {
         private readonly WheelDbContext _dbContext;
-        private IDbContextTransaction Transaction = null;
+        private IDbContextTransaction? Transaction = null;
 
         public UnitOfWork(WheelDbContext dbContext)
         {
