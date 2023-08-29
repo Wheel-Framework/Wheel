@@ -1,4 +1,6 @@
-﻿using Wheel.Utilities;
+﻿using AutoMapper;
+using Wheel.Uow;
+using Wheel.Utilities;
 
 namespace Wheel.Services
 {
@@ -7,5 +9,8 @@ namespace Wheel.Services
         public SnowflakeIdGenerator SnowflakeIdGenerator { get; set; }
         public IServiceProvider ServiceProvider { get; set; }
         public IHttpContextAccessor HttpContextAccessor { get; set; }
+        public IUnitOfWork UnitOfWork { get; set; }
+
+        public IMapper Mapper { get; set; }
     }
 }

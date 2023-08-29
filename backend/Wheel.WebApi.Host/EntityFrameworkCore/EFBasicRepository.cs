@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -17,45 +19,82 @@ namespace Wheel.EntityFrameworkCore
             _dbContext = dbContext;
         }
 
-        public async Task<int> InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            var savedEntity = (await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken)).Entity;
+            if (autoSave)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            return savedEntity;
         }
-        public async Task<int> InsertManyAsync(List<TEntity> entities, CancellationToken cancellationToken = default)
+        public async Task InsertManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             await _dbContext.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            if (autoSave)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
         }
-        public async Task<int> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            _dbContext.Set<TEntity>().Update(entity);
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            var savedEntity = _dbContext.Set<TEntity>().Update(entity).Entity;
+
+            if (autoSave)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            return savedEntity;
         }
-        public async Task<int> UpdateAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             await _dbContext.Set<TEntity>().Where(predicate).ExecuteUpdateAsync(setPropertyCalls, cancellationToken);
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            if (autoSave)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
         }
-        public async Task<int> UpdateManyAsync(List<TEntity> entities, CancellationToken cancellationToken = default)
+        public async Task UpdateManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             _dbContext.Set<TEntity>().UpdateRange(entities);
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            if (autoSave)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
         }
-        public async Task<int> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var entity = await _dbContext.Set<TEntity>().FindAsync(id, cancellationToken);
+            if(entity != null)
+                _dbContext.Set<TEntity>().Remove(entity);
+            if (autoSave)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+        }
+        public async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             _dbContext.Set<TEntity>().Remove(entity);
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            if (autoSave)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
         }
-        public async Task<int> DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             await _dbContext.Set<TEntity>().Where(predicate).ExecuteDeleteAsync(cancellationToken);
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            if (autoSave)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
         }
-        public async Task<int> DeleteManyAsync(List<TEntity> entities, CancellationToken cancellationToken = default)
+        public async Task DeleteManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             _dbContext.Set<TEntity>().RemoveRange(entities);
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            if (autoSave)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
         }
         public async Task<TEntity?> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
@@ -63,7 +102,7 @@ namespace Wheel.EntityFrameworkCore
         }
         public async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Set<TEntity>().FindAsync(predicate, cancellationToken);
+            return await _dbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken);
         }
         public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
@@ -104,5 +143,26 @@ namespace Wheel.EntityFrameworkCore
 
             return query;
         }
+
+        public async Task<int> SaveChangeAsync(CancellationToken cancellationToken = default)
+        {
+            return await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        protected DbSet<TEntity> GetDbSet()
+        {
+            return _dbContext.Set<TEntity>();
+        }
+
+        protected IDbConnection GetDbConnection()
+        {
+            return _dbContext.Database.GetDbConnection();
+        }
+
+        protected IDbTransaction? GetDbTransaction()
+        {
+            return _dbContext.Database.CurrentTransaction?.GetDbTransaction();
+        }
+
     }
 }

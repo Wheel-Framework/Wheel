@@ -6,14 +6,15 @@ namespace Wheel.Domain
 {
     public interface IBasicRepository<TEntity, TKey> where TEntity : class 
     {
-        Task<int> InsertAsync(TEntity entity, CancellationToken cancellationToken = default);
-        Task<int> InsertManyAsync(List<TEntity> entities, CancellationToken cancellationToken = default);
-        Task<int> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
-        Task<int> UpdateAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, CancellationToken cancellationToken = default);
-        Task<int> UpdateManyAsync(List<TEntity> entities, CancellationToken cancellationToken = default);
-        Task<int> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
-        Task<int> DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
-        Task<int> DeleteManyAsync(List<TEntity> entities, CancellationToken cancellationToken = default);
+        Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task InsertManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task UpdateManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
+        Task DeleteManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);
         Task<TEntity?> FindAsync(TKey id, CancellationToken cancellationToken = default);
         Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
         Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
@@ -22,5 +23,7 @@ namespace Wheel.Domain
         IQueryable<TEntity> GetQueryable(bool noTracking = true);
 
         IQueryable<TEntity> GetQueryableWithIncludes(params Expression<Func<TEntity, object>>[] propertySelectors);
+
+        Task<int> SaveChangeAsync(CancellationToken cancellationToken = default);
     }
 }
