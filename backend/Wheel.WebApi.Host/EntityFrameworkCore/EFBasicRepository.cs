@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using Wheel.Domain;
+using Wheel.Domain.Common;
 
 namespace Wheel.EntityFrameworkCore
 {
@@ -20,9 +22,24 @@ namespace Wheel.EntityFrameworkCore
             await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
             return await _dbContext.SaveChangesAsync(cancellationToken);
         }
+        public async Task<int> InsertManyAsync(List<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            await _dbContext.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
+            return await _dbContext.SaveChangesAsync(cancellationToken);
+        }
         public async Task<int> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _dbContext.Set<TEntity>().Update(entity);
+            return await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        public async Task<int> UpdateAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, CancellationToken cancellationToken = default)
+        {
+            await _dbContext.Set<TEntity>().Where(predicate).ExecuteUpdateAsync(setPropertyCalls, cancellationToken);
+            return await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        public async Task<int> UpdateManyAsync(List<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            _dbContext.Set<TEntity>().UpdateRange(entities);
             return await _dbContext.SaveChangesAsync(cancellationToken);
         }
         public async Task<int> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
@@ -30,9 +47,23 @@ namespace Wheel.EntityFrameworkCore
             _dbContext.Set<TEntity>().Remove(entity);
             return await _dbContext.SaveChangesAsync(cancellationToken);
         }
+        public async Task<int> DeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            await _dbContext.Set<TEntity>().Where(predicate).ExecuteDeleteAsync(cancellationToken);
+            return await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        public async Task<int> DeleteManyAsync(List<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            _dbContext.Set<TEntity>().RemoveRange(entities);
+            return await _dbContext.SaveChangesAsync(cancellationToken);
+        }
         public async Task<TEntity?> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return await _dbContext.Set<TEntity>().FindAsync(id, cancellationToken);
+        }
+        public async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            return await _dbContext.Set<TEntity>().FindAsync(predicate, cancellationToken);
         }
         public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
@@ -47,5 +78,6 @@ namespace Wheel.EntityFrameworkCore
                 .ToListAsync(cancellationToken);
             return (items, total);
         }
+
     }
 }
