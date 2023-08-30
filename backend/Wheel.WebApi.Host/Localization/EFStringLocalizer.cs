@@ -115,10 +115,22 @@ namespace Wheel.Localization
 
         private string? GetString(string name)
         {
-            return _db.Resources
+            if (_memoryCache.TryGetValue<string>($"{CultureInfo.CurrentCulture.Name}:{name}", out var value))
+            {
+                return value;
+            }
+            else
+            {
+                value = _db.Resources
                 .Include(r => r.Culture)
                 .Where(r => r.Culture.Name == CultureInfo.CurrentCulture.Name)
                 .FirstOrDefault(r => r.Key == name)?.Value;
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    _memoryCache.Set($"{CultureInfo.CurrentCulture.Name}:{name}", value, TimeSpan.FromMinutes(1));
+                }
+                return value;
+            }
         }
     }
 }
