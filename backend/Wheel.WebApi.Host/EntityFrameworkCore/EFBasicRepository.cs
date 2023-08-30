@@ -108,9 +108,49 @@ namespace Wheel.EntityFrameworkCore
         {
             return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync(cancellationToken);
         }
+        public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return await GetQueryableWithIncludes(propertySelectors).Where(predicate).ToListAsync(cancellationToken);
+        }
+        public async Task<List<TSelect>> SelectListAsync<TSelect>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TSelect>> selectPredicate, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            return await GetQueryableWithIncludes(propertySelectors).Where(predicate).Select(selectPredicate).ToListAsync(cancellationToken);
+        }
+        public async Task<List<TSelect>> SelectListAsync<TSelect>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TSelect>> selectPredicate, CancellationToken cancellationToken = default)
+        {
+            return await GetQueryable().Where(predicate).Select(selectPredicate).ToListAsync(cancellationToken);
+        }
+        public async Task<(List<TSelect> items, long total)> SelectPageListAsync<TSelect>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TSelect>> selectPredicate, int skip, int take, string orderby = "Id", CancellationToken cancellationToken = default)
+        {
+            var query = GetQueryable().Where(predicate).Select(selectPredicate);
+            var total = await query.LongCountAsync(cancellationToken);
+            var items = await query.OrderBy(orderby)
+                .Skip(skip).Take(take)
+                .ToListAsync(cancellationToken);
+            return (items, total);
+        }
+        public async Task<(List<TSelect> items, long total)> SelectPageListAsync<TSelect>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TSelect>> selectPredicate, int skip, int take, string orderby = "Id", CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            var query = GetQueryableWithIncludes(propertySelectors).Where(predicate).Select(selectPredicate);
+            var total = await query.LongCountAsync(cancellationToken);
+            var items = await query.OrderBy(orderby)
+                .Skip(skip).Take(take)
+                .ToListAsync(cancellationToken);
+            return (items, total);
+        }
         public async Task<(List<TEntity> items, long total)> GetPageListAsync(Expression<Func<TEntity, bool>> predicate, int skip, int take, string orderby = "Id", CancellationToken cancellationToken = default)
         {
-            var query = _dbContext.Set<TEntity>().Where(predicate);
+            var query = GetQueryable().Where(predicate);
+            var total = await query.LongCountAsync(cancellationToken);
+            var items = await query.OrderBy(orderby)
+                .Skip(skip).Take(take)
+                .ToListAsync(cancellationToken);
+            return (items, total);
+        }
+        public async Task<(List<TEntity> items, long total)> GetPageListAsync(Expression<Func<TEntity, bool>> predicate, 
+            int skip, int take, string orderby = "Id", CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            var query = GetQueryableWithIncludes(propertySelectors).Where(predicate);
             var total = await query.LongCountAsync(cancellationToken);
             var items = await query.OrderBy(orderby)
                 .Skip(skip).Take(take)
@@ -143,7 +183,6 @@ namespace Wheel.EntityFrameworkCore
 
             return query;
         }
-
         public async Task<int> SaveChangeAsync(CancellationToken cancellationToken = default)
         {
             return await _dbContext.SaveChangesAsync(cancellationToken);

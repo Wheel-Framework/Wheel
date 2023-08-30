@@ -41,5 +41,24 @@ namespace Wheel.Controllers
         {
             return await _localizationManageAppService.GetLocalizationCulturePageListAsync(input);
         }
+
+        [HttpPost("Resource")]
+        public async Task<R<LocalizationResourceDto>> CreateResource(CreateLocalizationResourceDto input)
+        {
+            var resource = await _localizationManageAppService.CreateLocalizationResourceAsync(input);
+            return new R<LocalizationResourceDto>(resource);
+        }
+        [HttpPut("Resource")]
+        public async Task<R> UpdateResource(UpdateLocalizationResourceDto input)
+        {
+            await _localizationManageAppService.UpdateLocalizationResourceAsync(input);
+            return new R();
+        }
+        [HttpDelete("Resource/{id}")]
+        public async Task<R> DeleteResource(int id)
+        {
+            await _localizationManageAppService.DeleteLocalizationResourceAsync(id);
+            return new R();
+        }
     }
 }

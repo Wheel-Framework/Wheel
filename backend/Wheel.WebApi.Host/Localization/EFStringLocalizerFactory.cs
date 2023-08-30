@@ -1,4 +1,5 @@
 ﻿using Castle.Core.Resource;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using System.Text.RegularExpressions;
 using Wheel.Domain.Localization;
@@ -16,14 +17,18 @@ namespace Wheel.Localization
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            var db = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<WheelDbContext>();
-            return new EFStringLocalizer(db);
+            var scope = _serviceProvider.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<WheelDbContext>();
+            var cahce = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+            return new EFStringLocalizer(db, cahce);
         }
 
         public IStringLocalizer Create(string baseName, string location)
         {
-            var db = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<WheelDbContext>();
-            return new EFStringLocalizer(db);
+            var scope = _serviceProvider.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<WheelDbContext>();
+            var cahce = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
+            return new EFStringLocalizer(db, cahce);
         }
     }
 }

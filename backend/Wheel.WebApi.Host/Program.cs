@@ -51,6 +51,8 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 
 builder.Services.AddSingleton<IStringLocalizerFactory, EFStringLocalizerFactory>();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddSignalR();
 
 builder.Services.AddControllers()

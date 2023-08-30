@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using Wheel.EntityFrameworkCore;
@@ -8,9 +9,11 @@ namespace Wheel.Localization
     public class EFStringLocalizer : IStringLocalizer
     {
         private readonly WheelDbContext _db;
-        public EFStringLocalizer(WheelDbContext db)
+        private readonly IMemoryCache _memoryCache;
+        public EFStringLocalizer(WheelDbContext db, IMemoryCache memoryCache)
         {
             _db = db;
+            _memoryCache = memoryCache;
         }
 
         public LocalizedString this[string name]
@@ -35,7 +38,7 @@ namespace Wheel.Localization
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             CultureInfo.DefaultThreadCurrentCulture = culture;
-            return new EFStringLocalizer(_db);
+            return new EFStringLocalizer(_db, _memoryCache);
         }
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeAncestorCultures)
@@ -48,20 +51,33 @@ namespace Wheel.Localization
 
         private string? GetString(string name)
         {
-            return _db.Resources
+            if (_memoryCache.TryGetValue<string>($"{CultureInfo.CurrentCulture.Name}:{name}", out var value))
+            {
+                return value;
+            }
+            else
+            {
+                value = _db.Resources
                 .Include(r => r.Culture)
                 .Where(r => r.Culture.Name == CultureInfo.CurrentCulture.Name)
                 .FirstOrDefault(r => r.Key == name)?.Value;
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    _memoryCache.Set($"{CultureInfo.CurrentCulture.Name}:{name}", value, TimeSpan.FromMinutes(1));
+                }
+                return value;
+            }
         }
     }
 
     public class EFStringLocalizer<T> : IStringLocalizer<T>
     {
         private readonly WheelDbContext _db;
-
-        public EFStringLocalizer(WheelDbContext db)
+        private readonly IMemoryCache _memoryCache;
+        public EFStringLocalizer(WheelDbContext db, IMemoryCache memoryCache)
         {
             _db = db;
+            _memoryCache = memoryCache;
         }
 
         public LocalizedString this[string name]
@@ -86,7 +102,7 @@ namespace Wheel.Localization
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             CultureInfo.DefaultThreadCurrentCulture = culture;
-            return new EFStringLocalizer(_db);
+            return new EFStringLocalizer(_db, _memoryCache);
         }
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeAncestorCultures)

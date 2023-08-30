@@ -11,5 +11,8 @@ namespace Wheel.Services.LocalizationManage
         Task<Page<LocalizationCultureDto>?> GetLocalizationCulturePageListAsync(PageRequest input);
         Task<LocalizationCultureDto> CreateLocalizationCultureAsync(CreateLocalizationCultureDto input);
         Task DeleteLocalizationCultureAsync(int id);
+        Task<LocalizationResourceDto> CreateLocalizationResourceAsync(CreateLocalizationResourceDto input);
+        Task UpdateLocalizationResourceAsync(UpdateLocalizationResourceDto input);
+        Task DeleteLocalizationResourceAsync(int id);
     }
 }

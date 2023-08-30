@@ -25,9 +25,10 @@ namespace Wheel.Services.LocalizationManage
         public async Task<Page<LocalizationCultureDto>?> GetLocalizationCulturePageListAsync(PageRequest input)
         {
             var (entities, total) = await _localizationCultureRepository
-                .GetPageListAsync(a=> true,
+                .GetPageListAsync(a => true,
                 (input.PageIndex - 1) * input.PageSize,
-                input.PageSize
+                input.PageSize,
+                propertySelectors: a => a.Resources
                 );
 
             return new Page<LocalizationCultureDto>(Mapper.Map<List<LocalizationCultureDto>>(entities), total);
@@ -44,6 +45,25 @@ namespace Wheel.Services.LocalizationManage
         public async Task DeleteLocalizationCultureAsync(int id)
         {
             await _localizationCultureRepository.DeleteAsync(id);
+            await UnitOfWork.SaveChangesAsync();
+        }
+        public async Task<LocalizationResourceDto> CreateLocalizationResourceAsync(CreateLocalizationResourceDto input)
+        {
+            var entity = Mapper.Map<LocalizationResource>(input);
+            entity = await _localizationResourceRepository.InsertAsync(entity);
+            await UnitOfWork.SaveChangesAsync();
+            return Mapper.Map<LocalizationResourceDto>(entity);
+        }
+        public async Task UpdateLocalizationResourceAsync(UpdateLocalizationResourceDto input)
+        {
+            await _localizationResourceRepository.UpdateAsync(a => a.Id == input.Id,
+                a => a.SetProperty(b => b.Key, b => input.Key).SetProperty(b => b.Value, b => input.Value));
+            await UnitOfWork.SaveChangesAsync();
+        }
+
+        public async Task DeleteLocalizationResourceAsync(int id)
+        {
+            await _localizationResourceRepository.DeleteAsync(id);
             await UnitOfWork.SaveChangesAsync();
         }
     }
