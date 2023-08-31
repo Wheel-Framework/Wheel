@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
+using Wheel.Notifications;
 
 namespace Wheel.Hubs
 {
@@ -16,7 +20,10 @@ namespace Wheel.Hubs
         {
             if(Context.UserIdentifier != null)
             {
-                await Clients.Caller.SendAsync("Notification", Context.User.Identity.Name, L["Hello"].Value);
+                var wellcome = new NotificationData(NotificationType.WellCome)
+                    .WithData("name", Context.User!.Identity!.Name!)
+                    .WithData("message", L["Hello"].Value);
+                await Clients.Caller.SendAsync("Notification", wellcome);
             }
         }
     }
