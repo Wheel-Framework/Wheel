@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Wheel.Uow;
@@ -6,6 +7,7 @@ using Wheel.Utilities;
 
 namespace Wheel.Controllers
 {
+    [Authorize]
     public abstract class WheelControllerBase : ControllerBase
     {
         public IServiceProvider ServiceProvider { get; set; }
