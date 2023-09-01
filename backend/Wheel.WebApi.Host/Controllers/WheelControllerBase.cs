@@ -7,7 +7,7 @@ using Wheel.Utilities;
 
 namespace Wheel.Controllers
 {
-    [Authorize]
+    [Authorize("Permission")]
     public abstract class WheelControllerBase : ControllerBase
     {
         public IServiceProvider ServiceProvider { get; set; }

@@ -5,7 +5,7 @@ using Wheel.Services.LocalizationManage.Dtos;
 
 namespace Wheel.Services.LocalizationManage
 {
-    public interface ILocalizationManageAppService : IScopeDependency
+    public interface ILocalizationManageAppService : ITransientDependency
     {
         Task<LocalizationCultureDto?> GetLocalizationCultureAsync(int id);
         Task<Page<LocalizationCultureDto>?> GetLocalizationCulturePageListAsync(PageRequest input);
