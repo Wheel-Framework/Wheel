@@ -8,6 +8,8 @@ using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;
 using Wheel.Domain.Identity;
 using Wheel.Domain.Localization;
+using Wheel.Domain.Menus;
+using Wheel.Domain.Permissions;
 
 namespace Wheel.EntityFrameworkCore
 {
@@ -16,6 +18,13 @@ namespace Wheel.EntityFrameworkCore
         #region Localization
         public DbSet<LocalizationCulture> Cultures { get; set; }
         public DbSet<LocalizationResource> Resources { get; set; }
+        #endregion
+        #region Permission
+        public DbSet<PermissionGrant> PermissionGrants { get; set; }
+        #endregion
+
+        #region Menu
+        public DbSet<Menu> Menus { get; set; }
         #endregion
 
         private StoreOptions? GetStoreOptions() => this.GetService<IDbContextOptions>()
@@ -34,6 +43,9 @@ namespace Wheel.EntityFrameworkCore
             base.OnModelCreating(builder);
 
             ConfigureIdentity(builder);
+            ConfigureLocalization(builder);
+            ConfigurePermissionGrants(builder);
+            ConfigureMenus(builder);
         }
 
         void ConfigureIdentity(ModelBuilder builder)
@@ -142,7 +154,6 @@ namespace Wheel.EntityFrameworkCore
         {
             builder.Entity<LocalizationCulture>(b =>
             {
-                b.HasKey(uc => uc.Id);
                 b.Property(a => a.Id).ValueGeneratedOnAdd();
                 b.ToTable("LocalizationCulture"); 
                 b.Property(a => a.Name).HasMaxLength(32);
@@ -150,10 +161,31 @@ namespace Wheel.EntityFrameworkCore
             });
             builder.Entity<LocalizationResource>(b =>
             {
-                b.HasKey(uc => uc.Id);
                 b.Property(a => a.Id).ValueGeneratedOnAdd();
                 b.ToTable("LocalizationResource");
                 b.HasOne(a => a.Culture);
+            });
+        }
+
+        void ConfigurePermissionGrants(ModelBuilder builder)
+        {
+            builder.Entity<PermissionGrant>(b =>
+            {
+                b.HasKey(o => o.Id);
+                b.Property(o => o.Permission).HasMaxLength(128);
+                b.Property(o => o.GrantValue).HasMaxLength(128);
+                b.Property(o => o.GrantType).HasMaxLength(32);
+            });
+        }
+        void ConfigureMenus(ModelBuilder builder)
+        {
+            builder.Entity<Menu>(b =>
+            {
+                b.HasKey(o => o.Id);
+                b.Property(o => o.Permission).HasMaxLength(128);
+                b.Property(o => o.Path).HasMaxLength(128);
+                b.Property(o => o.Name).HasMaxLength(128);
+                b.Property(o => o.DisplayName).HasMaxLength(128);
             });
         }
     }

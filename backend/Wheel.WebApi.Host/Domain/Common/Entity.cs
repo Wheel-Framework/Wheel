@@ -1,4 +1,6 @@
-﻿namespace Wheel.Domain.Common
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Wheel.Domain.Common
 {
     public interface IEntity : IEntity<long>
     {
@@ -6,6 +8,7 @@
     }
     public interface IEntity<TKey> where TKey : IEquatable<TKey>
     {
+        [Key]
         TKey Id { get; set; }
     }
     public class Entity<TKey> : IEntity<TKey> where TKey : IEquatable<TKey>
