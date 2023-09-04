@@ -32,5 +32,13 @@ namespace Wheel.Domain.Menus
         /// 排序
         /// </summary>
         public int Sort { get; set; }
+        /// <summary>
+        /// 上级菜单Id
+        /// </summary>
+        public virtual Guid? ParentId { get; set; }
+        /// <summary>
+        /// 子菜单
+        /// </summary>
+        public virtual List<Menu> Childs { get; set; }
     }
 }
