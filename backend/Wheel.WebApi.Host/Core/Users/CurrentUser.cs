@@ -16,5 +16,10 @@ namespace Wheel.Core.Users
         public string UserName => User.Identity.Name;
 
         public string[] Roles => User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+
+        public bool IsInRoles(string role)
+        {
+            return User.IsInRole(role);
+        }
     }
 }

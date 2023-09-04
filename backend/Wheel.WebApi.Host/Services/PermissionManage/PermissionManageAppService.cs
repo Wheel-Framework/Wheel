@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Reflection;
+using System.Runtime.ConstrainedExecution;
 using System.Text.Json;
 using System.Xml;
 using Wheel.DependencyInjection;
 using Wheel.Domain;
+using Wheel.Domain.Permissions;
 using Wheel.Services.PermissionManage.Dtos;
 using Wheel.Utilities;
 
@@ -16,10 +18,12 @@ namespace Wheel.Services.PermissionManage
 {
     public class PermissionManageAppService : WheelServiceBase, IPermissionManageAppService
     {
+        private readonly IBasicRepository<PermissionGrant, Guid> _permissionGrantRepository;
         private readonly XmlCommentHelper _xmlCommentHelper;
-        public PermissionManageAppService(XmlCommentHelper xmlCommentHelper)
+        public PermissionManageAppService(XmlCommentHelper xmlCommentHelper, IBasicRepository<PermissionGrant, Guid> permissionGrantRepository)
         {
             _xmlCommentHelper = xmlCommentHelper;
+            _permissionGrantRepository = permissionGrantRepository;
         }
         public async Task<List<GetAllPermissionDto>> GetAllPermission()
         {
@@ -60,6 +64,27 @@ namespace Wheel.Services.PermissionManage
                 await DistributedCache.SetAsync("AllDefinePermission", result);
             }
             // todo: 获取当前用户角色已有权限并标记
+            if (CurrentUser.IsInRoles("admin"))
+            {
+                result.ForEach(p => p.Permissions.ForEach(a => a.IsGranted = true));
+            }
+            else
+            {
+                var grantPermissions = (await _permissionGrantRepository
+                    .SelectListAsync(a => a.GrantType == "R" && CurrentUser.Roles.Contains(a.GrantValue), a => a.Permission))
+                    .Distinct().ToList();
+
+                foreach (var group in result)
+                {
+                    foreach (var permission in group.Permissions)
+                    {
+                        if (grantPermissions.Any(b => b == $"{group.Group}:{permission.Name}"))
+                            permission.IsGranted = true;
+                        else
+                            permission.IsGranted = false;
+                    }
+                }
+            }
             return result;
         }
     }

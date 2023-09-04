@@ -9,5 +9,7 @@ namespace Wheel.Core.Users
         string UserName { get; }
 
         string[] Roles { get; }
+
+        bool IsInRoles(string role);
     }
 }
