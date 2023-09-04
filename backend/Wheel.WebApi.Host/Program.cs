@@ -20,6 +20,8 @@ using static System.Net.Mime.MediaTypeNames;
 using Wheel.Hubs;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using System.Reflection;
+using Microsoft.AspNetCore.DataProtection;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +75,15 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 builder.Services.AddSingleton<IStringLocalizerFactory, EFStringLocalizerFactory>();
 
 builder.Services.AddMemoryCache();
+builder.Services.AddStackExchangeRedisCache(options => 
+{
+    options.Configuration = builder.Configuration["Cache:Redis"];
+});
+
+builder.Services.AddDataProtection()
+    .SetApplicationName("Wheel")
+    .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["Cache:Redis"]));
+    ;
 
 builder.Services.AddSignalR()
     .AddJsonProtocol()
