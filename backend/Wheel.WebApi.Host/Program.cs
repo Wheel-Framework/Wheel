@@ -90,7 +90,8 @@ builder.Services.AddDataProtection()
 
 builder.Services.AddSignalR()
     .AddJsonProtocol()
-    .AddMessagePackProtocol();
+    .AddMessagePackProtocol()
+    .AddStackExchangeRedis(builder.Configuration["Cache:Redis"]);
 
 builder.Services.AddControllers()
     .AddControllersAsServices();
