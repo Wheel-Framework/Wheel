@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Wheel.Uow;
 using Wheel.Utilities;
@@ -14,6 +16,9 @@ namespace Wheel.Services
         public IUnitOfWork UnitOfWork => LazyGetService<IUnitOfWork>();
 
         public IMapper Mapper =>  LazyGetService<IMapper>();
+        public IMemoryCache MemoryCache => LazyGetService<IMemoryCache>();
+
+        public IDistributedCache DistributedCache => LazyGetService<IDistributedCache>();
         public IStringLocalizerFactory LocalizerFactory => LazyGetService<IStringLocalizerFactory>();
 
         private IStringLocalizer _stringLocalizer = null;

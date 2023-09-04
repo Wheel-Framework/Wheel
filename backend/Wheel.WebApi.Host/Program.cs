@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Authentication.BearerToken;
 using System.Reflection;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,14 +76,16 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 builder.Services.AddSingleton<IStringLocalizerFactory, EFStringLocalizerFactory>();
 
 builder.Services.AddMemoryCache();
+var redis = ConnectionMultiplexer.Connect(builder.Configuration["Cache:Redis"]);
+builder.Services.AddSingleton<IConnectionMultiplexer, ConnectionMultiplexer>(_ => redis);
 builder.Services.AddStackExchangeRedisCache(options => 
 {
-    options.Configuration = builder.Configuration["Cache:Redis"];
+    options.ConnectionMultiplexerFactory = async () => await Task.FromResult(redis);
 });
 
 builder.Services.AddDataProtection()
     .SetApplicationName("Wheel")
-    .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(builder.Configuration["Cache:Redis"]));
+    .PersistKeysToStackExchangeRedis(redis);
     ;
 
 builder.Services.AddSignalR()
