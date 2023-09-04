@@ -27,13 +27,14 @@ namespace Wheel.Utilities
         /// </summary>
         public void LoadAll()
         {
-            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory).Where(a=>a.EndsWith(".xml")).ToList();
-            foreach (var file in files)
+            var binXmlFiles =
+                new DirectoryInfo(string.IsNullOrWhiteSpace(AppDomain.CurrentDomain.BaseDirectory)
+                    ? Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
+                    : AppDomain.CurrentDomain.BaseDirectory).GetFiles("*.xml", SearchOption.TopDirectoryOnly);
+            foreach (var file in binXmlFiles)
             {
-                if (string.Equals(Path.GetExtension(file), ".xml", StringComparison.OrdinalIgnoreCase))
-                {
-                    Load(file);
-                }
+                Load(file.FullName);
+                
             }
         }
         /// <summary>

@@ -19,6 +19,7 @@ using Wheel.AutoMapper;
 using static System.Net.Mime.MediaTypeNames;
 using Wheel.Hubs;
 using Microsoft.AspNetCore.Authentication.BearerToken;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,7 +83,42 @@ builder.Services.AddControllers()
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => 
+{
+    //遍历所有xml并加载
+    var binXmlFiles =
+        new DirectoryInfo(string.IsNullOrWhiteSpace(AppDomain.CurrentDomain.BaseDirectory)
+            ? Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
+            : AppDomain.CurrentDomain.BaseDirectory).GetFiles("*.xml", SearchOption.TopDirectoryOnly);
+    foreach (var filePath in binXmlFiles.Select(item => item.FullName))
+    {
+        options.IncludeXmlComments(filePath, true);
+    }
+    string GetCustomerSchemaId(Type type, bool first = true)
+    {
+        var name = "";
+        if (first)
+            name = type.FullName;
+        else
+            name = type.Name;
+        if (type.IsGenericType)
+        {
+            name = type.Name.Substring(0, type.Name.IndexOf("`"));
+            name += "<";
+            for (int i = 0; i < type.GenericTypeArguments.Length; i++)
+            {
+                var arg = type.GenericTypeArguments[i];
+                name += GetCustomerSchemaId(arg, false);
+                if (i < type.GenericTypeArguments.Length - 1)
+                    name += ",";
+            }
+            name += ">";
+        }
+        return name;
+    }
+
+    options.CustomSchemaIds(type => GetCustomerSchemaId(type));
+});
 
 var app = builder.Build();
 
