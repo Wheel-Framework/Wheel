@@ -10,7 +10,7 @@ namespace Wheel.EventBus.Local.MediatR
         {
             return Task.Factory.StartNew(async () => 
             {
-                foreach (var handler in handlerExecutors.DistinctBy(a => a.HandlerInstance.GetType().FullName)) 
+                foreach (var handler in handlerExecutors) 
                 {
                     await handler.HandlerCallback(notification, cancellationToken).ConfigureAwait(false);
                 }
