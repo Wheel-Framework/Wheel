@@ -12,8 +12,12 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.2.0" />
+		<PackageReference Include="DotNetCore.CAP.Sqlite" Version="7.2.0" />
 		<PackageReference Include="IdGen" Version="3.0.3" />
 		<PackageReference Include="IdGen.DependencyInjection" Version="3.0.0" />
+		<PackageReference Include="MediatR" Version="12.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0-preview.7.23375.9" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0-preview.7.23375.9" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-preview.7.23375.9" />

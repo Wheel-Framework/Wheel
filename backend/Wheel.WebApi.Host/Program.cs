@@ -23,6 +23,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using Microsoft.Extensions.DependencyInjection;
+using Wheel.EventBus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,8 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
 
 // Add services to the container.
+builder.Services.AddLocalEventBus();
+builder.Services.AddDistributedEventBus(builder.Configuration);
 builder.Services.AddAutoMapper();
 builder.Services.AddIdGen(0);
 

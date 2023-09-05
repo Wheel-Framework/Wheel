@@ -1,7 +1,7 @@
 ﻿namespace Wheel.EventBus.Distributed
 {
-    public interface IDistributedEventHandler<TEventData>
+    public interface IDistributedEventHandler<in TEventData>
     {
-        Task Handle(TEventData eventData);
+        Task Handle(TEventData eventData, CancellationToken cancellationToken = default);
     }
 }
