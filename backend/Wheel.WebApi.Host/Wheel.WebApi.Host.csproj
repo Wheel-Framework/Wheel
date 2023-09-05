@@ -14,6 +14,7 @@
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="DotNetCore.CAP" Version="7.2.0" />
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.2.0" />
+		<PackageReference Include="DotNetCore.CAP.RedisStreams" Version="7.2.0" />
 		<PackageReference Include="DotNetCore.CAP.Sqlite" Version="7.2.0" />
 		<PackageReference Include="IdGen" Version="3.0.3" />
 		<PackageReference Include="IdGen.DependencyInjection" Version="3.0.0" />

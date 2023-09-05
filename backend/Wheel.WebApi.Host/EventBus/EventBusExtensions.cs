@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DotNetCore.CAP.Internal;
 using System.Reflection;
 using Wheel.EntityFrameworkCore;
+using Wheel.EventBus.Distributed;
+using Wheel.EventBus.Distributed.Cap;
 
 namespace Wheel.EventBus
 {
@@ -18,13 +20,15 @@ namespace Wheel.EventBus
         }
         public static IServiceCollection AddDistributedEventBus(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<IConsumerServiceSelector, WheelConsumerServiceSelector>();
             services.AddCap(x =>
             {
                 x.UseEntityFramework<WheelDbContext>();
 
                 x.UseSqlite(configuration.GetConnectionString("Default"));
 
-                x.UseRabbitMQ(configuration["RabbitMQ:ConnectionString"]);
+                //x.UseRabbitMQ(configuration["RabbitMQ:ConnectionString"]);
+                x.UseRedis(configuration["Cache:Redis"]);
             });
             return services;
         }

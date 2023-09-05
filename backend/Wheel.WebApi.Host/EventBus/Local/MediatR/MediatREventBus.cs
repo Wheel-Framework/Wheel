@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Wheel.DependencyInjection;
 
-namespace Wheel.EventBus.Local
+namespace Wheel.EventBus.Local.MediatR
 {
     public class MediatREventBus : ILocalEventBus, ITransientDependency
     {

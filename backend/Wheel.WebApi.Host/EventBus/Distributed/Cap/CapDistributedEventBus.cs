@@ -1,9 +1,10 @@
 ﻿using DotNetCore.CAP;
 using System.Reflection;
+using Wheel.DependencyInjection;
 
-namespace Wheel.EventBus.Distributed
+namespace Wheel.EventBus.Distributed.Cap
 {
-    public class CapDistributedEventBus : IDistributedEventBus
+    public class CapDistributedEventBus : IDistributedEventBus, ITransientDependency
     {
         private readonly ICapPublisher _capBus;
 
