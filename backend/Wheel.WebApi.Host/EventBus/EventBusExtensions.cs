@@ -3,6 +3,7 @@ using System.Reflection;
 using Wheel.EntityFrameworkCore;
 using Wheel.EventBus.Distributed;
 using Wheel.EventBus.Distributed.Cap;
+using Wheel.EventBus.Local.MediatR;
 
 namespace Wheel.EventBus
 {
@@ -15,6 +16,8 @@ namespace Wheel.EventBus
                 cfg.RegisterServicesFromAssemblies(Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
                                     .Where(x => !x.Contains("Microsoft.") && !x.Contains("System."))
                                     .Select(x => Assembly.Load(AssemblyName.GetAssemblyName(x))).ToArray());
+                cfg.NotificationPublisher = new WheelPublisher();
+                cfg.NotificationPublisherType = typeof(WheelPublisher);
             });
             return services;
         }
