@@ -182,7 +182,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 
         if (exceptionHandlerPathFeature?.Error is BusinessException businessException)
         {
-            var L = context.RequestServices.GetRequiredService<IStringLocalizer>();
+            var L = context.RequestServices.GetRequiredService<IStringLocalizerFactory>().Create(null);
             if (businessException.Data != null)
                 await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message, businessException.MessageData] });
             else
