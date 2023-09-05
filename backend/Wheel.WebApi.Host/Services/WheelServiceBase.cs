@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Wheel.Core.Users;
+using Wheel.EventBus.Distributed;
 using Wheel.EventBus.Local;
 using Wheel.Uow;
 using Wheel.Utilities;
@@ -22,6 +23,7 @@ namespace Wheel.Services
 
         public IDistributedCache DistributedCache => LazyGetService<IDistributedCache>();
         public ILocalEventBus LocalEventBus => LazyGetService<ILocalEventBus>();
+        public IDistributedEventBus DistributedEventBus => LazyGetService<IDistributedEventBus>();
         public ICurrentUser CurrentUser => LazyGetService<ICurrentUser>();
         public IStringLocalizerFactory LocalizerFactory => LazyGetService<IStringLocalizerFactory>();
 
