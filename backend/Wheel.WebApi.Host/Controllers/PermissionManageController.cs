@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using StackExchange.Redis;
-using System.Reflection;
-using System.Xml;
+﻿using Microsoft.AspNetCore.Mvc;
 using Wheel.Core.Http;
 using Wheel.Services.PermissionManage;
 using Wheel.Services.PermissionManage.Dtos;

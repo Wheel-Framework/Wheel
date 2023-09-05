@@ -72,8 +72,7 @@ namespace Wheel.EventBus.Distributed.Cap
                 .MakeGenericType(eventType);
             var method = typeInfo
                 .GetMethod(
-                    nameof(IDistributedEventHandler<object>.Handle),
-                    new[] { eventType }
+                    nameof(IDistributedEventHandler<object>.Handle)
                 );
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var topicAttr = method.GetCustomAttributes<TopicAttribute>(true);
@@ -94,6 +93,7 @@ namespace Wheel.EventBus.Distributed.Cap
                         Name = parameter.Name,
                         ParameterType = parameter.ParameterType,
                         IsFromCap = parameter.GetCustomAttributes(typeof(FromCapAttribute)).Any()
+                                    || typeof(CancellationToken).IsAssignableFrom(parameter.ParameterType)
                     }).ToList();
 
                 yield return InitDescriptor(attr, method, typeInfo.GetTypeInfo(), serviceTypeInfo.GetTypeInfo(), parameters);
