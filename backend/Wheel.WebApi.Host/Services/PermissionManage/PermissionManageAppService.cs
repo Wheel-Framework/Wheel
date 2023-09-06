@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using System.Reflection;
 using System.Runtime.ConstrainedExecution;
 using System.Text.Json;
@@ -33,7 +34,7 @@ namespace Wheel.Services.PermissionManage
         }
         public async Task<List<GetAllPermissionDto>> GetPermission()
         {
-            var result = await DistributedCache.GetAsync<List<GetAllPermissionDto>>("AllDefinePermission");
+            var result = MemoryCache.Get<List<GetAllPermissionDto>>("AllDefinePermission");
             if(result == null)
             {
                 result = new List<GetAllPermissionDto>();
@@ -67,7 +68,7 @@ namespace Wheel.Services.PermissionManage
                     if (permissionGroup.Permissions.Count > 0)
                         result.Add(permissionGroup);
                 }
-                await DistributedCache.SetAsync("AllDefinePermission", result);
+                MemoryCache.Set("AllDefinePermission", result);
             }
             // todo: 获取当前用户角色已有权限并标记
             if (CurrentUser.IsInRoles("admin"))
@@ -100,7 +101,7 @@ namespace Wheel.Services.PermissionManage
             {
                 var exsit = await _roleManager.RoleExistsAsync(dto.Value);
                 if (!exsit)
-                    throw new BusinessException(ErrorCode.RoleNotExist, "Role {0} not exist")
+                    throw new BusinessException(ErrorCode.RoleNotExist, "RoleNotExist")
                         .WithMessageDataData(dto.Value);
             }
             using (var tran = await UnitOfWork.BeginTransactionAsync())

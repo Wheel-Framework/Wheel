@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Wheel.Core.Http;
+using Wheel.Core.Dto;
 using Wheel.Services.LocalizationManage;
 using Wheel.Services.LocalizationManage.Dtos;
 using Wheel.Utilities;

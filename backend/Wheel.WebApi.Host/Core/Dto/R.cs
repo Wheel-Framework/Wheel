@@ -1,4 +1,4 @@
-﻿namespace Wheel.Core.Http
+﻿namespace Wheel.Core.Dto
 {
     public class R
     {

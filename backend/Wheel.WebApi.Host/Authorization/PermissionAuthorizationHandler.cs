@@ -5,7 +5,7 @@ using Wheel.DependencyInjection;
 
 namespace Wheel.Authorization
 {
-    public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionAuthorizationRequirement>, ISingletonDependency
+    public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionAuthorizationRequirement>, ITransientDependency
     {
         private readonly IPermissionChecker _permissionChecker;
 

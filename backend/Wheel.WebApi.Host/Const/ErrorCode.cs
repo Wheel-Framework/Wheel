@@ -13,6 +13,8 @@
         #endregion
         #region 4XXXX
         public const string RoleNotExist = "40011";
+        public const string RoleExist = "40012";
+        public const string CreateRoleError = "40013";
         #endregion
     }
 }

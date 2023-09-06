@@ -11,7 +11,7 @@ using System.Globalization;
 using Wheel;
 using Wheel.Const;
 using Wheel.Core.Exceptions;
-using Wheel.Core.Http;
+using Wheel.Core.Dto;
 using Wheel.Domain.Identity;
 using Wheel.EntityFrameworkCore;
 using Wheel.Localization;
