@@ -8,6 +8,11 @@
     /// </summary>
     public class ErrorCode
     {
+        #region 5XXXX
         public const string InternalError = "50000";
+        #endregion
+        #region 4XXXX
+        public const string RoleNotExist = "40011";
+        #endregion
     }
 }

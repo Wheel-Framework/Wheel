@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using Microsoft.Extensions.DependencyInjection;
 using Wheel.EventBus;
+using Role = Wheel.Domain.Identity.Role;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,11 +67,11 @@ builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
                 return Task.CompletedTask;
             }
         };
-    })
-    .AddIdentityCookies();
+    });
 builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddIdentityCore<User>()
+                .AddRoles<Role>()
                 .AddEntityFrameworkStores<WheelDbContext>()
                 .AddApiEndpoints();
 
@@ -186,7 +188,7 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         if (exceptionHandlerPathFeature?.Error is BusinessException businessException)
         {
             var L = context.RequestServices.GetRequiredService<IStringLocalizerFactory>().Create(null);
-            if (businessException.Data != null)
+            if (businessException.MessageData != null)
                 await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message, businessException.MessageData] });
             else
                 await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message] });
@@ -206,8 +208,8 @@ var webSocketOptions = new WebSocketOptions
 {
 };
 app.UseWebSockets(webSocketOptions);
+app.MapControllers();
 app.MapHub<NotificationHub>("/hubs/notification");
 app.MapIdentityApi<User>();
-app.MapControllers();
 
 app.Run();

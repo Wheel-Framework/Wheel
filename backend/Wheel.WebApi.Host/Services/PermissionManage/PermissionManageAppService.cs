@@ -1,5 +1,6 @@
 ﻿using Castle.Core.Internal;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -8,8 +9,11 @@ using System.Reflection;
 using System.Runtime.ConstrainedExecution;
 using System.Text.Json;
 using System.Xml;
+using Wheel.Const;
+using Wheel.Core.Exceptions;
 using Wheel.DependencyInjection;
 using Wheel.Domain;
+using Wheel.Domain.Identity;
 using Wheel.Domain.Permissions;
 using Wheel.Services.PermissionManage.Dtos;
 using Wheel.Utilities;
@@ -19,13 +23,15 @@ namespace Wheel.Services.PermissionManage
     public class PermissionManageAppService : WheelServiceBase, IPermissionManageAppService
     {
         private readonly IBasicRepository<PermissionGrant, Guid> _permissionGrantRepository;
+        private readonly RoleManager<Role> _roleManager;
         private readonly XmlCommentHelper _xmlCommentHelper;
-        public PermissionManageAppService(XmlCommentHelper xmlCommentHelper, IBasicRepository<PermissionGrant, Guid> permissionGrantRepository)
+        public PermissionManageAppService(XmlCommentHelper xmlCommentHelper, IBasicRepository<PermissionGrant, Guid> permissionGrantRepository, RoleManager<Role> roleManager)
         {
             _xmlCommentHelper = xmlCommentHelper;
             _permissionGrantRepository = permissionGrantRepository;
+            _roleManager = roleManager;
         }
-        public async Task<List<GetAllPermissionDto>> GetAllPermission()
+        public async Task<List<GetAllPermissionDto>> GetPermission()
         {
             var result = await DistributedCache.GetAsync<List<GetAllPermissionDto>>("AllDefinePermission");
             if(result == null)
@@ -86,6 +92,30 @@ namespace Wheel.Services.PermissionManage
                 }
             }
             return result;
+        }
+
+        public async Task UpdatePermission(UpdatePermissionDto dto)
+        {
+            if(dto.Type == "R") 
+            {
+                var exsit = await _roleManager.RoleExistsAsync(dto.Value);
+                if (!exsit)
+                    throw new BusinessException(ErrorCode.RoleNotExist, "Role {0} not exist")
+                        .WithMessageDataData(dto.Value);
+            }
+            using (var tran = await UnitOfWork.BeginTransactionAsync())
+            {
+                await _permissionGrantRepository.DeleteAsync(a => a.GrantType == dto.Type && a.GrantValue == dto.Value);
+                await _permissionGrantRepository.InsertManyAsync(dto.Permissions.Select(a=> new PermissionGrant 
+                {
+                    Id = GuidGenerator.Create(),
+                    GrantType = dto.Type,
+                    GrantValue = dto.Value,
+                    Permission = a
+                }).ToList());
+                await DistributedCache.SetAsync($"Permission:{dto.Type}:{dto.Value}", dto.Permissions);
+                await tran.CommitAsync();
+            }
         }
     }
 }

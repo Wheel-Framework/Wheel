@@ -14,19 +14,18 @@ namespace Wheel.Authorization
             _permissionChecker = permissionChecker;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionAuthorizationRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionAuthorizationRequirement requirement)
         {
             if (context.Resource is HttpContext httpContext)
             {
                 var actionDescriptor = httpContext.GetEndpoint()?.Metadata.GetMetadata<ControllerActionDescriptor>();
                 var controllerName = actionDescriptor?.ControllerName;
                 var actionName = actionDescriptor?.ActionName;
-                if (_permissionChecker.Check(controllerName, actionName))
+                if (await _permissionChecker.Check(controllerName, actionName))
                 {
                     context.Succeed(requirement);
                 }
             }
-            return Task.CompletedTask;
         }
     }
 }

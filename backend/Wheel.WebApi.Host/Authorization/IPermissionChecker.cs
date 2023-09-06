@@ -2,6 +2,6 @@
 {
     public interface IPermissionChecker
     {
-        bool Check(string controller, string action);
+        Task<bool> Check(string controller, string action);
     }
 }

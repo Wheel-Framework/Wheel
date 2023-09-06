@@ -17,6 +17,7 @@ namespace Wheel.Controllers
     {
         public IServiceProvider ServiceProvider { get; set; }
         public SnowflakeIdGenerator SnowflakeIdGenerator => LazyGetService<SnowflakeIdGenerator>();
+        public GuidGenerator GuidGenerator => LazyGetService<GuidGenerator>();
         public IUnitOfWork UnitOfWork => LazyGetService<IUnitOfWork>();
         public IMapper Mapper => LazyGetService<IMapper>();
         public IMemoryCache MemoryCache => LazyGetService<IMemoryCache>();

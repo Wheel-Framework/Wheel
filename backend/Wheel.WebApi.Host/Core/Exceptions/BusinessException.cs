@@ -11,9 +11,10 @@
             Code = code;
         }
 
-        public void WithMessageDataData(params string[] messageData)
+        public BusinessException WithMessageDataData(params string[] messageData)
         {
             MessageData = messageData;
+            return this;
         }
     }
 }
