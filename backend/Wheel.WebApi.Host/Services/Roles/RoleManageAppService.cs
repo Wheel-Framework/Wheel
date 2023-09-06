@@ -8,7 +8,7 @@ using Wheel.Domain;
 
 namespace Wheel.Services.Roles
 {
-    public class RoleManageAppService : IRoleManageAppService
+    public class RoleManageAppService : WheelServiceBase, IRoleManageAppService
     {
         private readonly RoleManager<Role> _roleManager;
         private readonly IBasicRepository<Role, string> _roleRepository;
