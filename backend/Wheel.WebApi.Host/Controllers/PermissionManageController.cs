@@ -22,10 +22,18 @@ namespace Wheel.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet()]
-        public async Task<R<List<GetAllPermissionDto>>> GetPermission()
+        public Task<R<List<GetAllPermissionDto>>> GetPermission()
         {
-            var result = await _permissionManageAppService.GetPermission();
-            return new R<List<GetAllPermissionDto>>(result);
+            return _permissionManageAppService.GetPermission();
+        }
+        /// <summary>
+        /// 获取指定角色权限
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{role}")]
+        public Task<R<List<GetAllPermissionDto>>> GetRolePermission(string role)
+        {
+            return _permissionManageAppService.GetRolePermission(role);
         }
         /// <summary>
         /// 修改权限

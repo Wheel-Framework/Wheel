@@ -11,6 +11,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text.Json;
 using System.Xml;
 using Wheel.Const;
+using Wheel.Core.Dto;
 using Wheel.Core.Exceptions;
 using Wheel.DependencyInjection;
 using Wheel.Domain;
@@ -32,10 +33,83 @@ namespace Wheel.Services.PermissionManage
             _permissionGrantRepository = permissionGrantRepository;
             _roleManager = roleManager;
         }
-        public async Task<List<GetAllPermissionDto>> GetPermission()
+        public async Task<R<List<GetAllPermissionDto>>> GetPermission()
         {
+            var result = await GetAllDefinePermission();
+            // todo: 获取当前用户角色已有权限并标记
+            if (CurrentUser.IsInRoles("admin"))
+            {
+                result.ForEach(p => p.Permissions.ForEach(a => a.IsGranted = true));
+            }
+            else
+            {
+                var grantPermissions = (await _permissionGrantRepository
+                    .SelectListAsync(a => a.GrantType == "R" && CurrentUser.Roles.Contains(a.GrantValue), a => a.Permission))
+                    .Distinct().ToList();
+
+                foreach (var group in result)
+                {
+                    foreach (var permission in group.Permissions)
+                    {
+                        if (grantPermissions.Any(b => b == $"{group.Group}:{permission.Name}"))
+                            permission.IsGranted = true;
+                        else
+                            permission.IsGranted = false;
+                    }
+                }
+            }
+            return new R<List<GetAllPermissionDto>>(result);
+        }
+        public async Task<R<List<GetAllPermissionDto>>> GetRolePermission(string RoleName)
+        {
+            var result = await GetAllDefinePermission();
+
+            var grantPermissions = (await _permissionGrantRepository
+                .SelectListAsync(a => a.GrantType == "R" && RoleName == a.GrantValue, a => a.Permission))
+                .Distinct().ToList();
+
+            foreach (var group in result)
+            {
+                foreach (var permission in group.Permissions)
+                {
+                    if (grantPermissions.Any(b => b == $"{group.Group}:{permission.Name}"))
+                        permission.IsGranted = true;
+                    else
+                        permission.IsGranted = false;
+                }
+            }
+
+            return new R<List<GetAllPermissionDto>>(result);
+        }
+        public async Task UpdatePermission(UpdatePermissionDto dto)
+        {
+            if(dto.Type == "R") 
+            {
+                var exsit = await _roleManager.RoleExistsAsync(dto.Value);
+                if (!exsit)
+                    throw new BusinessException(ErrorCode.RoleNotExist, "RoleNotExist")
+                        .WithMessageDataData(dto.Value);
+            }
+            using (var tran = await UnitOfWork.BeginTransactionAsync())
+            {
+                await _permissionGrantRepository.DeleteAsync(a => a.GrantType == dto.Type && a.GrantValue == dto.Value);
+                await _permissionGrantRepository.InsertManyAsync(dto.Permissions.Select(a=> new PermissionGrant 
+                {
+                    Id = GuidGenerator.Create(),
+                    GrantType = dto.Type,
+                    GrantValue = dto.Value,
+                    Permission = a
+                }).ToList());
+                await DistributedCache.SetAsync($"Permission:{dto.Type}:{dto.Value}", dto.Permissions);
+                await tran.CommitAsync();
+            }
+        }
+
+        private ValueTask<List<GetAllPermissionDto>> GetAllDefinePermission()
+        {
+
             var result = MemoryCache.Get<List<GetAllPermissionDto>>("AllDefinePermission");
-            if(result == null)
+            if (result == null)
             {
                 result = new List<GetAllPermissionDto>();
                 var apiDescriptionGroupCollectionProvider = ServiceProvider.GetRequiredService<IApiDescriptionGroupCollectionProvider>();
@@ -70,53 +144,7 @@ namespace Wheel.Services.PermissionManage
                 }
                 MemoryCache.Set("AllDefinePermission", result);
             }
-            // todo: 获取当前用户角色已有权限并标记
-            if (CurrentUser.IsInRoles("admin"))
-            {
-                result.ForEach(p => p.Permissions.ForEach(a => a.IsGranted = true));
-            }
-            else
-            {
-                var grantPermissions = (await _permissionGrantRepository
-                    .SelectListAsync(a => a.GrantType == "R" && CurrentUser.Roles.Contains(a.GrantValue), a => a.Permission))
-                    .Distinct().ToList();
-
-                foreach (var group in result)
-                {
-                    foreach (var permission in group.Permissions)
-                    {
-                        if (grantPermissions.Any(b => b == $"{group.Group}:{permission.Name}"))
-                            permission.IsGranted = true;
-                        else
-                            permission.IsGranted = false;
-                    }
-                }
-            }
-            return result;
-        }
-
-        public async Task UpdatePermission(UpdatePermissionDto dto)
-        {
-            if(dto.Type == "R") 
-            {
-                var exsit = await _roleManager.RoleExistsAsync(dto.Value);
-                if (!exsit)
-                    throw new BusinessException(ErrorCode.RoleNotExist, "RoleNotExist")
-                        .WithMessageDataData(dto.Value);
-            }
-            using (var tran = await UnitOfWork.BeginTransactionAsync())
-            {
-                await _permissionGrantRepository.DeleteAsync(a => a.GrantType == dto.Type && a.GrantValue == dto.Value);
-                await _permissionGrantRepository.InsertManyAsync(dto.Permissions.Select(a=> new PermissionGrant 
-                {
-                    Id = GuidGenerator.Create(),
-                    GrantType = dto.Type,
-                    GrantValue = dto.Value,
-                    Permission = a
-                }).ToList());
-                await DistributedCache.SetAsync($"Permission:{dto.Type}:{dto.Value}", dto.Permissions);
-                await tran.CommitAsync();
-            }
+            return ValueTask.FromResult(result);
         }
     }
 }
