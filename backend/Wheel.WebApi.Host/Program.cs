@@ -26,6 +26,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Wheel.EventBus;
 using Role = Wheel.Domain.Identity.Role;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Wheel.EntityFrameworkCore.SoftDelete;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ builder.Services.AddIdGen(0);
 
 builder.Services.AddDbContext<WheelDbContext>(options =>
 options.UseSqlite(connectionString)
+    .AddInterceptors(new SoftDeleteInterceptor())
     .UseLazyLoadingProxies()
 );
 
@@ -91,7 +93,6 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddDataProtection()
     .SetApplicationName("Wheel")
     .PersistKeysToStackExchangeRedis(redis);
-    ;
 
 builder.Services.AddSignalR()
     .AddJsonProtocol()
