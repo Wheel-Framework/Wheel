@@ -37,7 +37,7 @@ namespace Wheel.Services.Roles
             {
                 throw new BusinessException(ErrorCode.RoleExist, "RoleExist");
             }
-            var result = await _roleManager.CreateAsync(new Role(dto.Name));
+            var result = await _roleManager.CreateAsync(new Role(dto.Name, dto.RoleType));
             if(result.Succeeded)
             {
                 return;

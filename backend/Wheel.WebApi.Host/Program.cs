@@ -27,6 +27,7 @@ using Wheel.EventBus;
 using Role = Wheel.Domain.Identity.Role;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Wheel.EntityFrameworkCore.SoftDelete;
+using Wheel.DataSeeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -142,6 +143,9 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+//初始化种子信息
+await app.SeedData();
 
 var forwardOptions = new ForwardedHeadersOptions
 {

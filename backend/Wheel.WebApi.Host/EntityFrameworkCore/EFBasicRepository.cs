@@ -14,6 +14,8 @@ namespace Wheel.EntityFrameworkCore
     {
         private readonly WheelDbContext _dbContext;
 
+        private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
+
         public EFBasicRepository(WheelDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -158,6 +160,15 @@ namespace Wheel.EntityFrameworkCore
             return (items, total);
         }
 
+        public Task<bool> AnyAsync(CancellationToken cancellationToken = default)
+        {
+            return DbSet.AnyAsync(cancellationToken);
+        }
+
+        public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            return DbSet.AnyAsync(predicate, cancellationToken);
+        }
         public IQueryable<TEntity> GetQueryable(bool noTracking = true)
         {
             if (noTracking)
