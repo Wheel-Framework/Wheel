@@ -211,6 +211,8 @@ var webSocketOptions = new WebSocketOptions
 app.UseWebSockets(webSocketOptions);
 app.MapControllers();
 app.MapHub<NotificationHub>("/hubs/notification");
-app.MapIdentityApi<User>();
+app.MapGroup("api/identity")
+   .WithTags("Identity")
+   .MapIdentityApi<User>();
 
 app.Run();
