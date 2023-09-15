@@ -7,11 +7,11 @@ using Wheel.DependencyInjection;
 
 namespace Wheel.Email
 {
-    public class MailKitService : IEmailSender, ITransientDependency
+    public class MailKitSender : IEmailSender, ITransientDependency
     {
         private readonly IOptions<MailKitOptions> _mailKitOptions;
 
-        public MailKitService(IOptions<MailKitOptions> mailKitOptions)
+        public MailKitSender(IOptions<MailKitOptions> mailKitOptions)
         {
             _mailKitOptions = mailKitOptions;
         }
@@ -23,7 +23,6 @@ namespace Wheel.Email
             message.From.Add(new MailboxAddress(_mailKitOptions.Value.SenderName, _mailKitOptions.Value.UserName));
             //收件人
             message.To.Add(new MailboxAddress(subject, email));
-            //   message.To.Add(new MailboxAddress(title,mailName ));
 
             //标题
             message.Subject = subject;
