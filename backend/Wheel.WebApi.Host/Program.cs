@@ -1,33 +1,32 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using IdGen.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using System.Globalization;
-using Wheel;
-using Wheel.Const;
-using Wheel.Core.Exceptions;
-using Wheel.Core.Dto;
-using Wheel.Domain.Identity;
-using Wheel.EntityFrameworkCore;
-using Wheel.Localization;
-using Wheel.AutoMapper;
-using static System.Net.Mime.MediaTypeNames;
-using Wheel.Hubs;
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using System.Reflection;
-using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
-using Microsoft.Extensions.DependencyInjection;
-using Wheel.EventBus;
-using Role = Wheel.Domain.Identity.Role;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Wheel.EntityFrameworkCore.SoftDelete;
+using System.Globalization;
+using System.Reflection;
+using Wheel;
+using Wheel.AutoMapper;
+using Wheel.Const;
+using Wheel.Core.Dto;
+using Wheel.Core.Exceptions;
 using Wheel.DataSeeders;
+using Wheel.Domain.Identity;
+using Wheel.Email;
+using Wheel.EntityFrameworkCore;
+using Wheel.EntityFrameworkCore.SoftDelete;
+using Wheel.EventBus;
+using Wheel.Hubs;
+using Wheel.Localization;
+using static System.Net.Mime.MediaTypeNames;
+using Role = Wheel.Domain.Identity.Role;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +39,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
 
 // Add services to the container.
+builder.Services.AddMailKit(builder.Configuration);
 builder.Services.AddLocalEventBus();
 builder.Services.AddDistributedEventBus(builder.Configuration);
 builder.Services.AddAutoMapper();
@@ -52,7 +52,7 @@ options.UseSqlite(connectionString)
 );
 
 builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
-    .AddBearerToken(IdentityConstants.BearerScheme, options => 
+    .AddBearerToken(IdentityConstants.BearerScheme, options =>
     {
         options.Events = new BearerTokenEvents
         {
@@ -60,7 +60,7 @@ builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
             {
                 var accessToken = context.Request.Query["access_token"];
                 // If the request is for our hub...
-                var path = context.HttpContext.Request.Path; 
+                var path = context.HttpContext.Request.Path;
                 if (!string.IsNullOrEmpty(accessToken) &&
                     (path.StartsWithSegments("/hubs")))
                 {
@@ -86,7 +86,7 @@ builder.Services.AddSingleton<IStringLocalizerFactory, EFStringLocalizerFactory>
 builder.Services.AddMemoryCache();
 var redis = ConnectionMultiplexer.Connect(builder.Configuration["Cache:Redis"]);
 builder.Services.AddSingleton<IConnectionMultiplexer, ConnectionMultiplexer>(_ => redis);
-builder.Services.AddStackExchangeRedisCache(options => 
+builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.ConnectionMultiplexerFactory = async () => await Task.FromResult(redis);
 });
@@ -105,7 +105,7 @@ builder.Services.AddControllers()
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => 
+builder.Services.AddSwaggerGen(options =>
 {
     //遍历所有xml并加载
     var binXmlFiles =
