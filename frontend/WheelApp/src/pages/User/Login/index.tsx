@@ -102,11 +102,13 @@ const Login: React.FC = () => {
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
+    const permissions = await initialState?.featchPermissions?.();
     if (userInfo) {
       flushSync(() => {
         setInitialState((s) => ({
           ...s,
           currentUser: userInfo,
+          permissions: permissions
         }));
       });
     }

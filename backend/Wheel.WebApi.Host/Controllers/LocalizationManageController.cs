@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Wheel.Core.Dto;
 using Wheel.Services.LocalizationManage;
 using Wheel.Services.LocalizationManage.Dtos;
@@ -97,6 +98,18 @@ namespace Wheel.Controllers
         {
             await _localizationManageAppService.DeleteLocalizationResourceAsync(id);
             return new R();
+        }
+        /// <summary>
+        /// 获取多语言资源列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpGet("Resources")]
+        [AllowAnonymous]
+        public Task<R<Dictionary<string, string>>> GetResources()
+        {
+            var resources = L.GetAllStrings().ToDictionary(a=>a.Name, a=>a.Value);
+            return Task.FromResult(new R<Dictionary<string, string>>(resources));
         }
     }
 }

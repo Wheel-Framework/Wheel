@@ -46,7 +46,7 @@ namespace Wheel.Localization
             return _db.Resources
                 .Include(r => r.Culture)
                 .Where(r => r.Culture.Name == CultureInfo.CurrentCulture.Name)
-                .Select(r => new LocalizedString(r.Key, r.Value, true));
+                .Select(r => new LocalizedString(r.Key, r.Value, r.Value == null));
         }
 
         private string? GetString(string name)

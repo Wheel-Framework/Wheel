@@ -10,6 +10,12 @@ import { errorConfig } from './requestErrorConfig';
 import React from 'react';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { getCurrentUser } from './services/Wheel/CurrentUser';
+import { getLocalizationManageResources } from './services/Wheel/LocalizationManage';
+import { getPermissionManage } from './services/Wheel/PermissionManage';
+import { addLocale, getLocale, } from 'umi';
+import enUS from 'antd/es/locale/en_US';
+import { Locale } from 'antd/es/locale';
+
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
@@ -20,7 +26,11 @@ export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.ICurrentUser;
   loading?: boolean;
+  localizationResources?: Record<string, any>;
+  permissions?: API.GetAllPermissionDto[];
   fetchUserInfo?: () => Promise<API.ICurrentUser | undefined>;
+  featchLocalizationManageResources?: () => Promise<Record<string, any> | undefined>;
+  featchPermissions?: () => Promise<API.GetAllPermissionDto[] | undefined>
 }> {
   const fetchUserInfo = async () => {
     try {
@@ -31,18 +41,63 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
+
+  const featchLocalizationManageResources = async () => {
+    try{
+      const resources = await getLocalizationManageResources()
+      return resources.data
+    }catch(error){
+      return undefined
+    }
+  }
+  const featchPermissions = async () => {
+    try{
+      const resources = await getPermissionManage()
+      return resources.data
+    }catch(error){
+      return undefined
+    }
+  }
+  const localizationResources = await featchLocalizationManageResources();
+
+  let locale = getLocale() as string;
+
+  let antdLocale = {} as Locale
+
+  if(locale === 'en-US'){
+    locale = 'en'
+    antdLocale = enUS
+  }
+
+  locale = getLocale() as string;
+  addLocale(
+    locale,
+    localizationResources,
+    {
+      momentLocale: antdLocale.locale,
+      antd: antdLocale,
+    }
+  );
+
   // 如果不是登录页面，执行
   const { location } = history;
   if (location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
+    const permissions = await featchPermissions();
     return {
       fetchUserInfo,
       currentUser,
+      localizationResources,
+      permissions,
+      featchPermissions,
+      featchLocalizationManageResources,
       settings: defaultSettings as Partial<LayoutSettings>,
     };
   }
   return {
     fetchUserInfo,
+    localizationResources,
+    featchLocalizationManageResources,
     settings: defaultSettings as Partial<LayoutSettings>,
   };
 }

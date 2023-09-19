@@ -103,3 +103,11 @@ export async function deleteLocalizationManageResourceId(
     ...(options || {}),
   });
 }
+
+/** 获取多语言资源列表 GET /api/LocalizationManage/Resources */
+export async function getLocalizationManageResources(options?: { [key: string]: any }) {
+  return request<API.RDictionaryStringString>('/api/LocalizationManage/Resources', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}

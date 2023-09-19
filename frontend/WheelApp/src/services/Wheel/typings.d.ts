@@ -209,6 +209,12 @@ declare namespace API {
     message?: string;
   };
 
+  type RDictionaryStringString = {
+    code?: string;
+    message?: string;
+    data?: Record<string, any>;
+  };
+
   type RefreshRequest = {
     refreshToken?: string;
   };
