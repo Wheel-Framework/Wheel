@@ -40,6 +40,7 @@ declare namespace API {
 
   type CreateRoleDto = {
     name?: string;
+    roleType?: RoleType;
   };
 
   type deleteLocalizationManageCultureIdParams = {
@@ -105,6 +106,12 @@ declare namespace API {
     detail?: string;
     instance?: string;
     errors?: Record<string, any>;
+  };
+
+  type ICurrentUser = {
+    isAuthenticated?: boolean;
+    userName?: string;
+    roles?: string[];
   };
 
   type InfoRequest = {
@@ -221,6 +228,12 @@ declare namespace API {
     newPassword?: string;
   };
 
+  type RICurrentUser = {
+    code?: string;
+    message?: string;
+    data?: ICurrentUser;
+  };
+
   type RListGetAllPermissionDto = {
     code?: string;
     message?: string;
@@ -248,7 +261,10 @@ declare namespace API {
   type RoleDto = {
     id?: string;
     name?: string;
+    roleType?: RoleType;
   };
+
+  type RoleType = 0 | 1;
 
   type TwoFactorRequest = {
     enable?: boolean;
