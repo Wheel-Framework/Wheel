@@ -4,14 +4,18 @@ using IdGen.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Serilog;
+using Serilog.Events;
 using StackExchange.Redis;
 using System.Globalization;
 using System.Reflection;
+using System.Text.Json;
 using Wheel;
 using Wheel.AutoMapper;
 using Wheel.Const;
@@ -29,6 +33,21 @@ using static System.Net.Mime.MediaTypeNames;
 using Role = Wheel.Domain.Identity.Role;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// logging
+Log.Logger = new LoggerConfiguration()
+#if DEBUG
+    .MinimumLevel.Debug()
+#else
+    .MinimumLevel.Information()
+#endif
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+    .WriteTo.Async(c=>c.Console())
+    .WriteTo.Async(c=>c.File("Logs/log.txt", rollingInterval: RollingInterval.Day))
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
@@ -50,6 +69,11 @@ options.UseSqlite(connectionString)
     .AddInterceptors(new SoftDeleteInterceptor())
     .UseLazyLoadingProxies()
 );
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
 
 builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
     .AddBearerToken(IdentityConstants.BearerScheme, options =>
@@ -142,6 +166,8 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => GetCustomerSchemaId(type));
 });
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 //初始化种子信息
@@ -218,5 +244,5 @@ app.MapHub<NotificationHub>("/hubs/notification");
 app.MapGroup("api/identity")
    .WithTags("Identity")
    .MapIdentityApi<User>();
-
+app.MapHealthChecks("Health");
 app.Run();
