@@ -6,6 +6,17 @@ declare namespace API {
     refreshToken?: string;
   };
 
+  type AntdMenuDto = {
+    /** 名称 */
+    name?: string;
+    /** 菜单路径 */
+    path?: string;
+    /** 图标 */
+    icon?: string;
+    /** 子菜单 */
+    children?: AntdMenuDto[];
+  };
+
   type confirmEmailParams = {
     userId?: string;
     code?: string;
@@ -110,8 +121,8 @@ declare namespace API {
 
   type ICurrentUser = {
     isAuthenticated?: boolean;
-    userName?: string;
     id?: string;
+    userName?: string;
     roles?: string[];
   };
 
@@ -239,6 +250,12 @@ declare namespace API {
     code?: string;
     message?: string;
     data?: ICurrentUser;
+  };
+
+  type RListAntdMenuDto = {
+    code?: string;
+    message?: string;
+    data?: AntdMenuDto[];
   };
 
   type RListGetAllPermissionDto = {

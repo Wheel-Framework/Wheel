@@ -185,6 +185,7 @@ namespace Wheel.EntityFrameworkCore
                 b.Property(o => o.Permission).HasMaxLength(128);
                 b.Property(o => o.Path).HasMaxLength(128);
                 b.Property(o => o.Name).HasMaxLength(128);
+                b.Property(o => o.Icon).HasMaxLength(128);
                 b.Property(o => o.DisplayName).HasMaxLength(128);
             });
         }

@@ -29,16 +29,20 @@ namespace Wheel.Domain.Menus
         /// </summary>
         public string? Permission { get; set; }
         /// <summary>
+        /// 图标
+        /// </summary>
+        public string? Icon { get; set; }
+        /// <summary>
         /// 排序
         /// </summary>
         public int Sort { get; set; }
         /// <summary>
         /// 上级菜单Id
         /// </summary>
-        public virtual Guid? ParentId { get; set; }
+        public virtual Guid? MenuId { get; set; }
         /// <summary>
         /// 子菜单
         /// </summary>
-        public virtual List<Menu> Childs { get; set; }
+        public virtual List<Menu> Children { get; set; }
     }
 }

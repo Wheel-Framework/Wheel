@@ -1,4 +1,5 @@
-﻿using Wheel.Core.Dto;
+﻿using System.Diagnostics;
+using Wheel.Core.Dto;
 using Wheel.Domain;
 using Wheel.Domain.Menus;
 using Wheel.Services.Menus.Dtos;
@@ -51,6 +52,34 @@ namespace Wheel.Services.Menus
                 );
             var resultItems = Mapper.Map<List<MenuDto>>(items);
             return new Page<MenuDto>(resultItems, total);
+        }
+
+        public async Task<R<List<AntdMenuDto>>> GetCurrentMenu()
+        {
+            if (CurrentUser.IsInRoles("admin"))
+            {
+                var menus = await _menuRepository.GetListAsync(a => a.MenuId == null);
+                return new R<List<AntdMenuDto>>(MaptoAntdMenu(menus));
+            }
+            return new R<List<AntdMenuDto>>(new List<AntdMenuDto>());
+        }
+
+        public List<AntdMenuDto> MaptoAntdMenu(List<Menu> menus)
+        {
+            return menus.OrderBy(m => m.Sort).Select(m =>
+            {
+                var result = new AntdMenuDto
+                {
+                    Name = m.Name,
+                    Icon = m.Icon,
+                    Path = m.Path
+                };
+                if(m.Children != null && m.Children.Count > 0)
+                {
+                    result.Children = MaptoAntdMenu(m.Children);
+                }
+                return result;
+            }).ToList();
         }
     }
 }

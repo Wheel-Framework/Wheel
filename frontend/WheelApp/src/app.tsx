@@ -1,7 +1,7 @@
 import Footer from '@/components/Footer';
 import { Question, SelectLang } from '@/components/RightContent';
 import { LinkOutlined } from '@ant-design/icons';
-import type { Settings as LayoutSettings } from '@ant-design/pro-components';
+import type { Settings as LayoutSettings, MenuDataItem } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
@@ -9,12 +9,13 @@ import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import React from 'react';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
-import { getCurrentUser } from './services/Wheel/CurrentUser';
 import { getLocalizationManageResources } from './services/Wheel/LocalizationManage';
 import { getPermissionManage } from './services/Wheel/PermissionManage';
 import { addLocale, getLocale, } from 'umi';
 import enUS from 'antd/es/locale/en_US';
 import { Locale } from 'antd/es/locale';
+import { getCurrentMenu, getCurrentUser } from './services/Wheel/Current';
+import * as allIcons from '@ant-design/icons';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -30,7 +31,8 @@ export async function getInitialState(): Promise<{
   permissions?: API.GetAllPermissionDto[];
   fetchUserInfo?: () => Promise<API.ICurrentUser | undefined>;
   featchLocalizationManageResources?: () => Promise<Record<string, any> | undefined>;
-  featchPermissions?: () => Promise<API.GetAllPermissionDto[] | undefined>
+  featchPermissions?: () => Promise<API.GetAllPermissionDto[] | undefined>;
+  fetchMenuData: () => Promise<API.AntdMenuDto[]>;
 }> {
   const fetchUserInfo = async () => {
     try {
@@ -58,6 +60,16 @@ export async function getInitialState(): Promise<{
       return undefined
     }
   }
+
+  const fetchMenuData = async () => {
+    try{
+      const menus = await getCurrentMenu()
+      return menus.data
+    }catch(error){
+      return []
+    }
+  }
+
   const localizationResources = await featchLocalizationManageResources();
 
   let locale = getLocale() as string;
@@ -68,11 +80,10 @@ export async function getInitialState(): Promise<{
     locale = 'en'
     antdLocale = enUS
   }
-
   locale = getLocale() as string;
   addLocale(
     locale,
-    localizationResources,
+    {...localizationResources},
     {
       momentLocale: antdLocale.locale,
       antd: antdLocale,
@@ -91,6 +102,7 @@ export async function getInitialState(): Promise<{
       permissions,
       featchPermissions,
       featchLocalizationManageResources,
+      fetchMenuData,
       settings: defaultSettings as Partial<LayoutSettings>,
     };
   }
@@ -105,6 +117,31 @@ export async function getInitialState(): Promise<{
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
+    menu: {
+      // 每当 initialState?.currentUser?.userid 发生修改时重新执行 request
+      params: {
+        userId: initialState?.currentUser?.id,
+      },
+      request: async (params, defaultMenuData) => {
+        const menuData = await initialState?.fetchMenuData() as MenuDataItem[];
+
+        // FIX从接口获取菜单时icon为string类型
+        const fixMenuItemIcon = (menus: MenuDataItem[], iconType = 'Outlined'): MenuDataItem[] => {
+          menus.forEach((item) => {
+            const { icon, children } = item;
+            if (typeof icon === 'string') {
+              let fixIconName = icon.slice(0, 1).toLocaleUpperCase() + icon.slice(1) + iconType;
+              item.icon = React.createElement(allIcons[fixIconName] || allIcons[icon]);
+            }
+            children && children.length > 0 ? (item.children = fixMenuItemIcon(children)) : null;
+          });
+          return menus;
+        }
+        const fixIconMenuData = fixMenuItemIcon(menuData)
+        defaultMenuData.concat(fixIconMenuData)
+        return defaultMenuData.concat(menuData);
+      },
+    },
     actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
     avatarProps: {
       src: initialState?.currentUser?.avatar,

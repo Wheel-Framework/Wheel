@@ -11,5 +11,6 @@ namespace Wheel.Services.Menus
         Task Delete(Guid id);
         Task<R<MenuDto>> GetById(Guid id);
         Task<Page<MenuDto>> GetPageList(PageRequest pageRequest);
+        Task<R<List<AntdMenuDto>>> GetCurrentMenu();
     }
 }
