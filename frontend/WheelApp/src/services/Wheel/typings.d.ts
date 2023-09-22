@@ -111,6 +111,7 @@ declare namespace API {
   type ICurrentUser = {
     isAuthenticated?: boolean;
     userName?: string;
+    id?: string;
     roles?: string[];
   };
 
