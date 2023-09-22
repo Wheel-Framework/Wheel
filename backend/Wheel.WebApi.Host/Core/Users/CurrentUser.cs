@@ -12,10 +12,12 @@ namespace Wheel.Core.Users
         }
 
         public bool IsAuthenticated => User.Identity.IsAuthenticated;
+        public string? Id => User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
         public string UserName => User.Identity.Name;
 
         public string[] Roles => User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToArray();
+
 
         public bool IsInRoles(string role)
         {
