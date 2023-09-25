@@ -11,15 +11,15 @@ using Wheel.EntityFrameworkCore;
 namespace Wheel.Migrations
 {
     [DbContext(typeof(WheelDbContext))]
-    [Migration("20230825040554_init")]
-    partial class init
+    [Migration("20230925013918_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0-preview.7.23375.4")
+                .HasAnnotation("ProductVersion", "8.0.0-rc.1.23419.6")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true);
@@ -41,6 +41,9 @@ namespace Wheel.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("RoleType")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -218,6 +221,132 @@ namespace Wheel.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Wheel.Domain.Localization.LocalizationCulture", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LocalizationCulture", (string)null);
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Localization.LocalizationResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CultureId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CultureId");
+
+                    b.ToTable("LocalizationResource", (string)null);
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Menus.Menu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MenuType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Path")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Permission")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Menus");
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Menus.RoleMenu", b =>
+                {
+                    b.Property<Guid>("MenuId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RoleId")
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MenuId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleMenu");
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Permissions.PermissionGrant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GrantType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GrantValue")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Permission")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PermissionGrants");
+                });
+
             modelBuilder.Entity("Wheel.Domain.Identity.RoleClaim", b =>
                 {
                     b.HasOne("Wheel.Domain.Identity.Role", "Role")
@@ -281,6 +410,45 @@ namespace Wheel.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Wheel.Domain.Localization.LocalizationResource", b =>
+                {
+                    b.HasOne("Wheel.Domain.Localization.LocalizationCulture", "Culture")
+                        .WithMany("Resources")
+                        .HasForeignKey("CultureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Culture");
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Menus.Menu", b =>
+                {
+                    b.HasOne("Wheel.Domain.Menus.Menu", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Menus.RoleMenu", b =>
+                {
+                    b.HasOne("Wheel.Domain.Menus.Menu", "Menu")
+                        .WithMany()
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Wheel.Domain.Identity.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("Wheel.Domain.Identity.Role", b =>
                 {
                     b.Navigation("RoleClaims");
@@ -297,6 +465,16 @@ namespace Wheel.Migrations
                     b.Navigation("Tokens");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Localization.LocalizationCulture", b =>
+                {
+                    b.Navigation("Resources");
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Menus.Menu", b =>
+                {
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }

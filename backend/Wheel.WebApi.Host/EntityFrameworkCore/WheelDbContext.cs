@@ -164,6 +164,7 @@ namespace Wheel.EntityFrameworkCore
                 b.Property(a => a.Id).ValueGeneratedOnAdd();
                 b.ToTable("LocalizationResource");
                 b.HasOne(a => a.Culture);
+                b.HasIndex(a => a.CultureId);
             });
         }
 
@@ -187,6 +188,13 @@ namespace Wheel.EntityFrameworkCore
                 b.Property(o => o.Name).HasMaxLength(128);
                 b.Property(o => o.Icon).HasMaxLength(128);
                 b.Property(o => o.DisplayName).HasMaxLength(128);
+                b.HasMany(o => o.Children).WithOne(o => o.Parent);
+                b.HasIndex(o => o.ParentId);
+            });
+            builder.Entity<RoleMenu>(b =>
+            {
+                b.HasKey(o => new { o.MenuId, o.RoleId });
+                b.Property(o => o.RoleId).HasMaxLength(36);
             });
         }
     }

@@ -6,16 +6,68 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Wheel.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "LocalizationCulture",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LocalizationCulture", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Menus",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    DisplayName = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    MenuType = table.Column<int>(type: "INTEGER", nullable: false),
+                    Path = table.Column<string>(type: "TEXT", maxLength: 128, nullable: true),
+                    Permission = table.Column<string>(type: "TEXT", maxLength: 128, nullable: true),
+                    Icon = table.Column<string>(type: "TEXT", maxLength: 128, nullable: true),
+                    Sort = table.Column<int>(type: "INTEGER", nullable: false),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menus", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Menus_Menus_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Menus",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PermissionGrants",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Permission = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    GrantType = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
+                    GrantValue = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PermissionGrants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false),
+                    RoleType = table.Column<int>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
@@ -51,6 +103,27 @@ namespace Wheel.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LocalizationResource",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Key = table.Column<string>(type: "TEXT", nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: false),
+                    CultureId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LocalizationResource", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LocalizationResource_LocalizationCulture_CultureId",
+                        column: x => x.CultureId,
+                        principalTable: "LocalizationCulture",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RoleClaims",
                 columns: table => new
                 {
@@ -65,6 +138,30 @@ namespace Wheel.Migrations
                     table.PrimaryKey("PK_RoleClaims", x => x.Id);
                     table.ForeignKey(
                         name: "FK_RoleClaims_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleMenu",
+                columns: table => new
+                {
+                    RoleId = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false),
+                    MenuId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleMenu", x => new { x.MenuId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_RoleMenu_Menus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoleMenu_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -157,8 +254,23 @@ namespace Wheel.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_LocalizationResource_CultureId",
+                table: "LocalizationResource",
+                column: "CultureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Menus_ParentId",
+                table: "Menus",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
                 table: "RoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleMenu_RoleId",
+                table: "RoleMenu",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
@@ -198,7 +310,16 @@ namespace Wheel.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "LocalizationResource");
+
+            migrationBuilder.DropTable(
+                name: "PermissionGrants");
+
+            migrationBuilder.DropTable(
                 name: "RoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "RoleMenu");
 
             migrationBuilder.DropTable(
                 name: "UserClaims");
@@ -211,6 +332,12 @@ namespace Wheel.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserTokens");
+
+            migrationBuilder.DropTable(
+                name: "LocalizationCulture");
+
+            migrationBuilder.DropTable(
+                name: "Menus");
 
             migrationBuilder.DropTable(
                 name: "Roles");

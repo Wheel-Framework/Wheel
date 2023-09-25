@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Wheel.Domain.Common;
 
 namespace Wheel.EntityFrameworkCore.SoftDelete
 {

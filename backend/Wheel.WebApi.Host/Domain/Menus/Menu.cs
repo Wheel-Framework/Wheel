@@ -39,7 +39,11 @@ namespace Wheel.Domain.Menus
         /// <summary>
         /// 上级菜单Id
         /// </summary>
-        public virtual Guid? MenuId { get; set; }
+        public virtual Guid? ParentId { get; set; }
+        /// <summary>
+        /// 上级菜单
+        /// </summary>
+        public virtual Menu? Parent { get; set; }
         /// <summary>
         /// 子菜单
         /// </summary>

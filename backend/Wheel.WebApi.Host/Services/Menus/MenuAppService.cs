@@ -58,7 +58,7 @@ namespace Wheel.Services.Menus
         {
             if (CurrentUser.IsInRoles("admin"))
             {
-                var menus = await _menuRepository.GetListAsync(a => a.MenuId == null);
+                var menus = await _menuRepository.GetListAsync(a => a.ParentId == null);
                 return new R<List<AntdMenuDto>>(MaptoAntdMenu(menus));
             }
             return new R<List<AntdMenuDto>>(new List<AntdMenuDto>());

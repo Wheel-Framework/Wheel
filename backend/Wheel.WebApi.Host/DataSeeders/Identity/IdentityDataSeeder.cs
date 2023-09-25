@@ -11,24 +11,26 @@ namespace Wheel.DataSeeders.Identity
         private readonly IBasicRepository<User, string> _userRepository;
         private readonly UserManager<User> _userManager;
         private readonly IUserStore<User> _userStore;
+        private readonly RoleManager<Role> _roleManager;
 
-        public IdentityDataSeeder(IBasicRepository<Role, string> roleRepository, IBasicRepository<User, string> userRepository, UserManager<User> userManager, IUserStore<User> userStore)
+        public IdentityDataSeeder(IBasicRepository<Role, string> roleRepository, IBasicRepository<User, string> userRepository, UserManager<User> userManager, IUserStore<User> userStore, RoleManager<Role> roleManager)
         {
             _roleRepository = roleRepository;
             _userRepository = userRepository;
             _userManager = userManager;
             _userStore = userStore;
+            _roleManager = roleManager;
         }
 
         public async Task Seed(CancellationToken cancellationToken = default)
         {
             if(!await _roleRepository.AnyAsync(a=>a.Name == "admin"))
             {
-                await _roleRepository.InsertAsync(new Role("admin", Enums.RoleType.Admin), true);
+                await _roleManager.CreateAsync(new Role("admin", Enums.RoleType.Admin));
             }
             if(!await _roleRepository.AnyAsync(a=>a.Name == "user"))
             {
-                await _roleRepository.InsertAsync(new Role("user", Enums.RoleType.App), true);
+                await _roleManager.CreateAsync(new Role("user", Enums.RoleType.App));
             }
 
             if(!await _userRepository.AnyAsync(a=>a.UserName == "admin"))

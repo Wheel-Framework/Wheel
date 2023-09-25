@@ -1,4 +1,4 @@
-﻿namespace Wheel.EntityFrameworkCore.SoftDelete
+﻿namespace Wheel.Domain.Common
 {
     public interface ISoftDelete
     {

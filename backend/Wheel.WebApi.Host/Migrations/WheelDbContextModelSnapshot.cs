@@ -273,15 +273,15 @@ namespace Wheel.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("MenuId")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("MenuType")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Path")
@@ -297,9 +297,25 @@ namespace Wheel.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MenuId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Menus");
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Menus.RoleMenu", b =>
+                {
+                    b.Property<Guid>("MenuId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RoleId")
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MenuId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleMenu");
                 });
 
             modelBuilder.Entity("Wheel.Domain.Permissions.PermissionGrant", b =>
@@ -404,9 +420,30 @@ namespace Wheel.Migrations
 
             modelBuilder.Entity("Wheel.Domain.Menus.Menu", b =>
                 {
-                    b.HasOne("Wheel.Domain.Menus.Menu", null)
+                    b.HasOne("Wheel.Domain.Menus.Menu", "Parent")
                         .WithMany("Children")
-                        .HasForeignKey("MenuId");
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("Wheel.Domain.Menus.RoleMenu", b =>
+                {
+                    b.HasOne("Wheel.Domain.Menus.Menu", "Menu")
+                        .WithMany()
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Wheel.Domain.Identity.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Wheel.Domain.Identity.Role", b =>
