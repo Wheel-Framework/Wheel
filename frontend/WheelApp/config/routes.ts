@@ -23,6 +23,38 @@ export default [
     ],
   },
   {
+    path: '/System',
+    name: 'SystemManage',
+    icon: 'Setting',
+    routes: [
+      {
+        path: '/System/Menu',
+        name: 'MenuManage',
+        component: './System/Menu',
+      },
+      {
+        path: '/System/Permission',
+        name: 'PermissionManage',
+        component: './System/Permission',
+      },
+      {
+        path: '/System/Localization',
+        name: 'LocalizationManage',
+        component: './System/Localization',
+      },
+      {
+        path: '/System/User',
+        name: 'UserManage',
+        component: './System/User',
+      },
+      {
+        path: '/System/Role',
+        name: 'RoleManage',
+        component: './System/Role',
+      },
+    ]
+  },
+  {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
