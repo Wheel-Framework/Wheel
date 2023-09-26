@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IdGen;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Wheel.Core.Dto;
 using Wheel.Services.Menus;
 using Wheel.Services.Menus.Dtos;
+using Wheel.Services.Roles.Dtos;
 
 namespace Wheel.Controllers
 {
@@ -25,7 +27,7 @@ namespace Wheel.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost()]
-        public Task Create(CreateOrUpdateMenuDto dto)
+        public Task<R> Create(CreateOrUpdateMenuDto dto)
         {
             return _menuAppService.Create(dto);
         }
@@ -35,7 +37,7 @@ namespace Wheel.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public Task Delete(Guid id)
+        public Task<R> Delete(Guid id)
         {
             return _menuAppService.Delete(id);
         }
@@ -65,9 +67,30 @@ namespace Wheel.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public Task Update(Guid id, CreateOrUpdateMenuDto dto)
+        public Task<R> Update(Guid id, CreateOrUpdateMenuDto dto)
         {
             return _menuAppService.Update(id, dto);
+        }
+        /// <summary>
+        /// 修改角色菜单
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPut("role/{roleId}")]
+        public Task<R> UpdateRoleMenu(string roleId, UpdateRoleMenuDto dto)
+        {
+            return _menuAppService.UpdateRoleMenu(roleId, dto);
+        }
+        /// <summary>
+        /// 获取角色菜单列表
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpGet("role/{roleId}")]
+        public Task<R<List<MenuDto>>> GetRoleMenuList(string roleId)
+        {
+            return _menuAppService.GetRoleMenuList(roleId);
         }
     }
 }

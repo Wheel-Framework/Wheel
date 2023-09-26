@@ -81,7 +81,7 @@ namespace Wheel.Services.PermissionManage
 
             return new R<List<GetAllPermissionDto>>(result);
         }
-        public async Task UpdatePermission(UpdatePermissionDto dto)
+        public async Task<R> UpdatePermission(UpdatePermissionDto dto)
         {
             if(dto.Type == "R") 
             {
@@ -103,6 +103,7 @@ namespace Wheel.Services.PermissionManage
                 await DistributedCache.SetAsync($"Permission:{dto.Type}:{dto.Value}", dto.Permissions);
                 await tran.CommitAsync();
             }
+            return new R();
         }
 
         private ValueTask<List<GetAllPermissionDto>> GetAllDefinePermission()

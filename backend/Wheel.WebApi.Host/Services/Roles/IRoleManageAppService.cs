@@ -7,7 +7,7 @@ namespace Wheel.Services.Roles
     public interface IRoleManageAppService : ITransientDependency
     {
         Task<Page<RoleDto>> GetRolePageList(PageRequest pageRequest);
-        Task CreateRole(CreateRoleDto dto);
-        Task DeleteRole(string roleName);
+        Task<R> CreateRole(CreateRoleDto dto);
+        Task<R> DeleteRole(string roleName);
     }
 }

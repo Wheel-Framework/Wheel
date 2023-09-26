@@ -7,7 +7,7 @@ namespace Wheel.Services.PermissionManage
     public interface IPermissionManageAppService : ITransientDependency
     {
         Task<R<List<GetAllPermissionDto>>> GetPermission();
-        Task UpdatePermission(UpdatePermissionDto dto);
+        Task<R> UpdatePermission(UpdatePermissionDto dto);
         Task<R<List<GetAllPermissionDto>>> GetRolePermission(string RoleName);
     }
 }

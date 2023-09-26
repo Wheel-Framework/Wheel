@@ -11,8 +11,10 @@ declare namespace API {
     name?: string;
     /** 菜单路径 */
     path?: string;
+    component?: string;
     /** 图标 */
     icon?: string;
+    access?: string;
     /** 子菜单 */
     children?: AntdMenuDto[];
   };
@@ -41,6 +43,8 @@ declare namespace API {
     menuType?: MenuType;
     /** 菜单路径 */
     path?: string;
+    /** 图标 */
+    icon?: string;
     /** 权限名称 */
     permission?: string;
     /** 排序 */
@@ -94,10 +98,8 @@ declare namespace API {
     id: string;
   };
 
-  type getMenuParams = {
-    PageIndex?: number;
-    PageSize?: number;
-    OrderBy?: string;
+  type getMenuRoleRoleIdParams = {
+    roleId: string;
   };
 
   type getPermissionManageRoleParams = {
@@ -168,6 +170,8 @@ declare namespace API {
     menuType?: MenuType;
     /** 菜单路径 */
     path?: string;
+    /** 图标 */
+    icon?: string;
     /** 权限名称 */
     permission?: string;
     /** 排序 */
@@ -175,7 +179,7 @@ declare namespace API {
     /** 上级菜单Id */
     parentId?: string;
     /** 子菜单 */
-    childs?: MenuDto[];
+    children?: MenuDto[];
   };
 
   type MenuType = 0 | 1 | 2;
@@ -184,13 +188,6 @@ declare namespace API {
     code?: string;
     message?: string;
     data?: LocalizationCultureDto[];
-    total?: number;
-  };
-
-  type PageMenuDto = {
-    code?: string;
-    message?: string;
-    data?: MenuDto[];
     total?: number;
   };
 
@@ -214,6 +211,10 @@ declare namespace API {
 
   type putMenuIdParams = {
     id: string;
+  };
+
+  type putMenuRoleRoleIdParams = {
+    roleId: string;
   };
 
   type R = {
@@ -262,6 +263,12 @@ declare namespace API {
     code?: string;
     message?: string;
     data?: GetAllPermissionDto[];
+  };
+
+  type RListMenuDto = {
+    code?: string;
+    message?: string;
+    data?: MenuDto[];
   };
 
   type RLocalizationCultureDto = {
@@ -316,5 +323,9 @@ declare namespace API {
     type?: string;
     value?: string;
     permissions?: string[];
+  };
+
+  type UpdateRoleMenuDto = {
+    menuIds?: string[];
   };
 }

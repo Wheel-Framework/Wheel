@@ -2,24 +2,17 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** 分页查询菜单 GET /api/Menu */
-export async function getMenu(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getMenuParams,
-  options?: { [key: string]: any },
-) {
-  return request<API.PageMenuDto>('/api/Menu', {
+/** 查询菜单列表 GET /api/Menu */
+export async function getMenu(options?: { [key: string]: any }) {
+  return request<API.RListMenuDto>('/api/Menu', {
     method: 'GET',
-    params: {
-      ...params,
-    },
     ...(options || {}),
   });
 }
 
 /** 新增菜单 POST /api/Menu */
 export async function postMenu(body: API.CreateOrUpdateMenuDto, options?: { [key: string]: any }) {
-  return request<any>('/api/Menu', {
+  return request<API.R>('/api/Menu', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -51,7 +44,7 @@ export async function putMenuId(
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<any>(`/api/Menu/${param0}`, {
+  return request<API.R>(`/api/Menu/${param0}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -69,9 +62,42 @@ export async function deleteMenuId(
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<any>(`/api/Menu/${param0}`, {
+  return request<API.R>(`/api/Menu/${param0}`, {
     method: 'DELETE',
     params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 获取角色菜单列表 GET /api/Menu/role/${param0} */
+export async function getMenuRoleRoleId(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getMenuRoleRoleIdParams,
+  options?: { [key: string]: any },
+) {
+  const { roleId: param0, ...queryParams } = params;
+  return request<API.RListMenuDto>(`/api/Menu/role/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 修改角色菜单 PUT /api/Menu/role/${param0} */
+export async function putMenuRoleRoleId(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.putMenuRoleRoleIdParams,
+  body: API.UpdateRoleMenuDto,
+  options?: { [key: string]: any },
+) {
+  const { roleId: param0, ...queryParams } = params;
+  return request<API.R>(`/api/Menu/role/${param0}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    params: { ...queryParams },
+    data: body,
     ...(options || {}),
   });
 }

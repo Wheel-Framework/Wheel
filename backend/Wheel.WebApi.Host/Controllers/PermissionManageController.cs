@@ -43,8 +43,7 @@ namespace Wheel.Controllers
         [HttpPut]
         public async Task<R> UpdatePermission(UpdatePermissionDto dto)
         {
-            await _permissionManageAppService.UpdatePermission(dto);
-            return new R();
+            return await _permissionManageAppService.UpdatePermission(dto);
         }
     }
 }

@@ -26,8 +26,7 @@ namespace Wheel.Controllers
         [HttpPost]
         public async Task<R> CreateRole(CreateRoleDto dto)
         {
-            await _roleManageAppService.CreateRole(dto);
-            return new R();
+            return await _roleManageAppService.CreateRole(dto);
         }
         /// <summary>
         /// 删除角色
@@ -37,8 +36,7 @@ namespace Wheel.Controllers
         [HttpDelete]
         public async Task<R> DeleteRole(string roleName)
         {
-            await _roleManageAppService.DeleteRole(roleName);
-            return new R();
+            return await _roleManageAppService.DeleteRole(roleName);
         }
         /// <summary>
         /// 角色分页查询

@@ -31,8 +31,7 @@ namespace Wheel.Controllers
         [HttpGet("Culture/{id}")]
         public async Task<R<LocalizationCultureDto>> GetCulture(int id)
         {
-            var value = await _localizationManageAppService.GetLocalizationCultureAsync(id);
-            return new R<LocalizationCultureDto>(value);
+            return await _localizationManageAppService.GetLocalizationCultureAsync(id);
         }
         /// <summary>
         /// 创建地区多语言
@@ -42,8 +41,7 @@ namespace Wheel.Controllers
         [HttpPost("Culture")]
         public async Task<R<LocalizationCultureDto>> CreateCulture(CreateLocalizationCultureDto input)
         {
-            var culture = await _localizationManageAppService.CreateLocalizationCultureAsync(input);
-            return new R<LocalizationCultureDto>(culture);
+            return await _localizationManageAppService.CreateLocalizationCultureAsync(input);
         }
         /// <summary>
         /// 删除地区多语言
@@ -53,8 +51,7 @@ namespace Wheel.Controllers
         [HttpDelete("Culture/{id}")]
         public async Task<R> DeleteCulture(int id)
         {
-            await _localizationManageAppService.DeleteLocalizationCultureAsync(id);
-            return new R();
+            return await _localizationManageAppService.DeleteLocalizationCultureAsync(id);
         }
         /// <summary>
         /// 分页获取地区多语言列表
@@ -74,8 +71,7 @@ namespace Wheel.Controllers
         [HttpPost("Resource")]
         public async Task<R<LocalizationResourceDto>> CreateResource(CreateLocalizationResourceDto input)
         {
-            var resource = await _localizationManageAppService.CreateLocalizationResourceAsync(input);
-            return new R<LocalizationResourceDto>(resource);
+            return await _localizationManageAppService.CreateLocalizationResourceAsync(input);
         }
         /// <summary>
         /// 修改多语言资源
@@ -85,8 +81,7 @@ namespace Wheel.Controllers
         [HttpPut("Resource")]
         public async Task<R> UpdateResource(UpdateLocalizationResourceDto input)
         {
-            await _localizationManageAppService.UpdateLocalizationResourceAsync(input);
-            return new R();
+            return await _localizationManageAppService.UpdateLocalizationResourceAsync(input);
         }
         /// <summary>
         /// 删除多语言资源
@@ -96,8 +91,7 @@ namespace Wheel.Controllers
         [HttpDelete("Resource/{id}")]
         public async Task<R> DeleteResource(int id)
         {
-            await _localizationManageAppService.DeleteLocalizationResourceAsync(id);
-            return new R();
+            return await _localizationManageAppService.DeleteLocalizationResourceAsync(id);
         }
         /// <summary>
         /// 获取多语言资源列表

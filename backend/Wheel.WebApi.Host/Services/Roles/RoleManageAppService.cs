@@ -30,7 +30,7 @@ namespace Wheel.Services.Roles
             return new Page<RoleDto>(items, total);
         }
 
-        public async Task CreateRole(CreateRoleDto dto)
+        public async Task<R> CreateRole(CreateRoleDto dto)
         {
             var exist = await _roleManager.RoleExistsAsync(dto.Name);
             if (exist)
@@ -40,7 +40,7 @@ namespace Wheel.Services.Roles
             var result = await _roleManager.CreateAsync(new Role(dto.Name, dto.RoleType));
             if(result.Succeeded)
             {
-                return;
+                return new R();
             }
             else
             {
@@ -48,7 +48,7 @@ namespace Wheel.Services.Roles
             }
         }
 
-        public async Task DeleteRole(string roleName)
+        public async Task<R> DeleteRole(string roleName)
         {
             var exist = await _roleManager.RoleExistsAsync(roleName);
             if (exist)
@@ -60,6 +60,7 @@ namespace Wheel.Services.Roles
             {
                 throw new BusinessException(ErrorCode.RoleNotExist, "RoleNotExist");
             }
+            return new R();
         }
     }
 }
