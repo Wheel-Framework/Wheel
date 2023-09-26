@@ -49,7 +49,10 @@ export default {
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
-  'menu.Menu': 'Menu',
-  'menu.Menu.RoleMenuManager': 'Role Menu Manager',
-  'menu.Menu.MenuManager': 'Menu Manager',
+  'menu.SystemManage': 'System Manage',
+  'menu.SystemManage.UserManage': 'User Manage',
+  'menu.SystemManage.RoleManage': 'Role Manage',
+  'menu.SystemManage.PermissionManage': 'Permission Manage',
+  'menu.SystemManage.MenuManage': 'Menu Manage',
+  'menu.SystemManage.LocalizationManage': 'Localization Manage',
 };

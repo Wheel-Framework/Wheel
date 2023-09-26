@@ -120,7 +120,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     menu: {
       // 每当 initialState?.currentUser?.userid 发生修改时重新执行 request
       params: {
-        userId: initialState?.currentUser?.id,
+        userId: initialState?.currentUser,
       },
       request: async (params, defaultMenuData) => {
         const menuData = await initialState?.fetchMenuData() as MenuDataItem[];
@@ -133,13 +133,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
               let fixIconName = icon.slice(0, 1).toLocaleUpperCase() + icon.slice(1) + iconType;
               item.icon = React.createElement(allIcons[fixIconName] || allIcons[icon]);
             }
-            children && children.length > 0 ? (item.children = fixMenuItemIcon(children)) : null;
+            if(children && children.length > 0 )
+              item.children = fixMenuItemIcon(children)
           });
           return menus;
         }
-        const fixIconMenuData = fixMenuItemIcon(menuData)
-        defaultMenuData.concat(fixIconMenuData)
-        return defaultMenuData.concat(menuData);
+        fixMenuItemIcon(menuData)
+        return menuData;
       },
     },
     actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
@@ -157,7 +157,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!initialState?.currentUser?.isAuthenticated && location.pathname !== loginPath) {
         history.push(loginPath);
       }
     },

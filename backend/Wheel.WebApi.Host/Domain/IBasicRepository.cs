@@ -32,4 +32,9 @@ namespace Wheel.Domain
 
         Task<int> SaveChangeAsync(CancellationToken cancellationToken = default);
     }
+
+    public interface IBasicRepository<TEntity> : IBasicRepository<TEntity, object> where TEntity : class
+    {
+
+    }
 }

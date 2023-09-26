@@ -10,10 +10,12 @@
         /// 菜单路径
         /// </summary>
         public string? Path { get; set; }
+        public string? Component { get; set; }
         /// <summary>
         /// 图标
         /// </summary>
         public string? Icon { get; set; }
+        public string? Access { get; set; }
         /// <summary>
         /// 子菜单
         /// </summary>

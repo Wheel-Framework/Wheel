@@ -50,14 +50,13 @@ namespace Wheel.Controllers
             return _menuAppService.GetById(id);
         }
         /// <summary>
-        /// 分页查询菜单
+        /// 查询菜单列表
         /// </summary>
-        /// <param name="pageRequest"></param>
         /// <returns></returns>
         [HttpGet]
-        public Task<Page<MenuDto>> GetPageList([FromQuery]PageRequest pageRequest)
+        public Task<R<List<MenuDto>>> GetList()
         {
-            return _menuAppService.GetPageList(pageRequest);
+            return _menuAppService.GetList();
         }
         /// <summary>
         /// 修改菜单

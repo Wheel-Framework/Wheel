@@ -11,7 +11,7 @@ using Wheel.EntityFrameworkCore;
 namespace Wheel.Migrations
 {
     [DbContext(typeof(WheelDbContext))]
-    [Migration("20230925013918_Init")]
+    [Migration("20230926072206_Init")]
     partial class Init
     {
         /// <inheritdoc />

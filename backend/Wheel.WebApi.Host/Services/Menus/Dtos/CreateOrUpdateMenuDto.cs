@@ -21,6 +21,10 @@ namespace Wheel.Services.Menus.Dtos
         /// </summary>
         public string? Path { get; set; }
         /// <summary>
+        /// 图标
+        /// </summary>
+        public string? Icon { get; set; }
+        /// <summary>
         /// 权限名称
         /// </summary>
         public string? Permission { get; set; }

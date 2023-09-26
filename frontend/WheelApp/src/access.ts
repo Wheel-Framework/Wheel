@@ -14,6 +14,7 @@ export default function access(initialState: { currentUser?: API.ICurrentUser, p
   };
   return {
     canAdmin: currentUser && currentUser.roles?.indexOf('admin') !== -1,
+    abc: false,
     isGranted
   };
 }

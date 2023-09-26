@@ -21,33 +21,60 @@ namespace Wheel.DataSeeders.Identity
             {
                 await _menuRepository.InsertAsync(new Menu
                 {
-                    Name = "Menu",
-                    DisplayName = "菜单",
+                    Name = "SystemManage",
+                    DisplayName = "系统管理",
                     Sort = 99,
                     Id = Guid.NewGuid(),
-                    Icon = "MenuOutlined",
-                    Path = "/menu",
+                    Icon = "SettingOutlined",
+                    Path = "/System",
                     MenuType = Enums.MenuType.Menu,
                     Children = new List<Menu>
                     {
                         new Menu
                         {
-                            Name = "MenuManager",
-                            DisplayName = "菜单管理",
+                            Name = "UserManage",
+                            DisplayName = "用户管理",
                             Sort = 0,
                             Id = Guid.NewGuid(),
-                            Path = "/menu/manager",
+                            Path = "/System/User",
                             MenuType = Enums.MenuType.Page
                         },
                         new Menu
                         {
-                            Name = "RoleMenuManager",
-                            DisplayName = "角色菜单管理",
+                            Name = "RoleManage",
+                            DisplayName = "角色管理",
                             Sort = 1,
                             Id = Guid.NewGuid(),
-                            Path = "/menu/role-menu-manager",
+                            Path = "/System/Role",
+                            MenuType = Enums.MenuType.Page,
+                        },
+                        new Menu
+                        {
+                            Name = "PermissionManage",
+                            DisplayName = "权限管理",
+                            Sort = 2,
+                            Id = Guid.NewGuid(),
+                            Path = "/System/Permission",
                             MenuType = Enums.MenuType.Page
-                        }
+                        },
+                        new Menu
+                        {
+                            Name = "MenuManage",
+                            DisplayName = "菜单管理",
+                            Sort = 3,
+                            Id = Guid.NewGuid(),
+                            Path = "/System/Menu",
+                            MenuType = Enums.MenuType.Page
+                        },
+                        new Menu
+                        {
+                            Name = "LocalizationManage",
+                            DisplayName = "多语言管理",
+                            Sort = 4,
+                            Id = Guid.NewGuid(),
+                            Path = "/System/Localization",
+                            MenuType = Enums.MenuType.Page
+                        },
                     }
                 }, true, cancellationToken: cancellationToken);
             }

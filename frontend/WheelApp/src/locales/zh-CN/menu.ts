@@ -49,7 +49,10 @@ export default {
   'menu.editor.flow': '流程编辑器',
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
-  'menu.Menu': '菜单',
-  'menu.Menu.RoleMenuManager': '角色菜单管理',
-  'menu.Menu.MenuManager': '菜单管理',
+  'menu.SystemManage': '系统管理',
+  'menu.SystemManage.UserManage': '用户管理',
+  'menu.SystemManage.RoleManage': '角色管理',
+  'menu.SystemManage.PermissionManage': '权限管理',
+  'menu.SystemManage.MenuManage': '菜单管理',
+  'menu.SystemManage.LocalizationManage': '多语言管理',
 };

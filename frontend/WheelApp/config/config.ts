@@ -24,12 +24,13 @@ export default defineConfig({
   //   ie: 11,
   // },
   /**
+   * 注释掉则使用约定路由
    * @name 路由的配置，不在路由中引入的文件不会编译
    * @description 只支持 path，component，routes，redirect，wrappers，title 的配置
    * @doc https://umijs.org/docs/guides/routes
    */
   // umi routes: https://umijs.org/docs/routing
-  routes,
+  // routes,
   /**
    * @name 主题的配置
    * @description 虽然叫主题，但是其实只是 less 的变量设置

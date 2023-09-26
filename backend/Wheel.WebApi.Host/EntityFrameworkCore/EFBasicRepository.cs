@@ -215,4 +215,12 @@ namespace Wheel.EntityFrameworkCore
         }
 
     }
+
+
+    public class EFBasicRepository<TEntity> : EFBasicRepository<TEntity, object>, IBasicRepository<TEntity> where TEntity : class
+    {
+        public EFBasicRepository(WheelDbContext dbContext) : base(dbContext)
+        {
+        }
+    }
 }

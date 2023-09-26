@@ -10,7 +10,8 @@ namespace Wheel.Services.Menus
         Task Update(Guid id, CreateOrUpdateMenuDto dto);
         Task Delete(Guid id);
         Task<R<MenuDto>> GetById(Guid id);
-        Task<Page<MenuDto>> GetPageList(PageRequest pageRequest);
+        Task<R<List<MenuDto>>> GetList();
+        Task<R<List<MenuDto>>> GetRoleMenuList(string roleId);
         Task<R<List<AntdMenuDto>>> GetCurrentMenu();
     }
 }

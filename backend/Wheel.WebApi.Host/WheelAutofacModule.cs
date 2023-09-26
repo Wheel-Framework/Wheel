@@ -15,6 +15,7 @@ namespace Wheel
         {
             //把服务的注入规则写在这里
             builder.RegisterGeneric(typeof(EFBasicRepository<,>)).As(typeof(IBasicRepository<,>)).InstancePerDependency();
+            builder.RegisterGeneric(typeof(EFBasicRepository<>)).As(typeof(IBasicRepository<>)).InstancePerDependency();
 
             var abs = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
                         .Where(x => !x.Contains("Microsoft.") && !x.Contains("System."))
