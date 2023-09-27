@@ -1,4 +1,4 @@
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, EditOutlined, PlusCircleOutlined, PlusOutlined, RedoOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button, Tag } from 'antd';
@@ -42,9 +42,29 @@ const columns: ProColumns<API.MenuDto>[] = [
     dataIndex: 'path',
   },
   {
+    title: 'icon',
+    width: 120,
+    dataIndex: 'icon',
+  },
+  {
     title: L('sort'),
     width: 120,
     dataIndex: 'sort',
+  },
+  {
+    title: L('operate'),
+    valueType: 'option',
+    key: 'option',
+    render: (text, record, _, action) => [
+      <a
+        key="editable"
+        onClick={() => {
+          action?.startEditable?.(record.id);
+        }}
+      >
+        <EditOutlined />{L('edit')}
+      </a>
+    ],
   }
 ];
 
@@ -59,14 +79,13 @@ const Menu: React.FC = () => {
       columns={columns}
       request={async (params, sorter, filter) => {
         // 表单搜索项会从 params 传入，传递给后端接口。
-        console.log(params, sorter, filter);
         const menuData = await getMenu();
         return Promise.resolve({
           data: menuData.data,
           success: true,
         });
       }}
-      rowKey="key"
+      rowKey="id"
       pagination={false}
       search={false}
       dateFormatter="string"
@@ -74,8 +93,11 @@ const Menu: React.FC = () => {
       options={false}
       actionRef={ref}
       toolBarRender={() => [
-        <Button key="primary" type="primary" onClick={reload}>
-          {L('refresh')}
+        <Button key="add" type="default">
+          <PlusOutlined />{L('add')}
+        </Button>,
+        <Button key="refresh" type="primary" onClick={reload}>
+          <RedoOutlined /> {L('refresh')}
         </Button>,
       ]}
     />
