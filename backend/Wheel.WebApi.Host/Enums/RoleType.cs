@@ -1,5 +1,8 @@
 ﻿namespace Wheel.Enums
 {
+    /// <summary>
+    /// 角色类型
+    /// </summary>
     public enum RoleType
     {
         /// <summary>
