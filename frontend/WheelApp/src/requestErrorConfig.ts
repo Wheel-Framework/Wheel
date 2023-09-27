@@ -3,7 +3,7 @@ import type { RequestConfig } from '@umijs/max';
 import { message, notification } from 'antd';
 import { getAccessToken } from './WheelStore';
 import Cookies from 'js-cookie';
-import { history } from '@umijs/max';
+import { getLocale, history } from '@umijs/max';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -142,6 +142,9 @@ export const errorConfig: RequestConfig = {
           'RequestVerificationToken': XSRFTOKEN,
         })
       }
+      config.headers = Object.assign(config.headers, {
+        'Accept-Language': getLocale()
+      })
       let url = config?.url;
       if(!isDev){
         if (/^\/api/.test(url)) {
