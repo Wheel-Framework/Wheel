@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -180,6 +181,30 @@ namespace Wheel.EntityFrameworkCore
         public IQueryable<TEntity> GetQueryableWithIncludes(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
             return Includes(GetQueryable(), propertySelectors);
+        }
+
+        public Expression<Func<TEntity, bool>> BuildPredicate(params (bool condition, Expression<Func<TEntity, bool>> predicate)[] conditionPredicates)
+        {
+            if(conditionPredicates == null || conditionPredicates.Length == 0)
+            {
+                throw new ArgumentNullException("conditionPredicates can not be null.");
+            }
+            Expression<Func<TEntity, bool>>? buildPredicate = null;
+            foreach (var (condition, predicate) in conditionPredicates)
+            {
+                if (condition)
+                {
+                    if (buildPredicate == null)
+                        buildPredicate = predicate;
+                    else if(predicate != null)
+                        buildPredicate = buildPredicate.And(predicate);
+                }
+            }
+            if(buildPredicate == null)
+            {
+                buildPredicate = (o) => true;
+            }
+            return buildPredicate;
         }
 
         private static IQueryable<TEntity> Includes(IQueryable<TEntity> query, Expression<Func<TEntity, object>>[] propertySelectors)

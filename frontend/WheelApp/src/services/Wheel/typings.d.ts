@@ -58,6 +58,14 @@ declare namespace API {
     roleType?: RoleType;
   };
 
+  type CreateUserDto = {
+    userName?: string;
+    passowrd?: string;
+    email?: string;
+    phoneNumber?: string;
+    roles?: string[];
+  };
+
   type deleteLocalizationManageCultureIdParams = {
     id: number;
   };
@@ -112,6 +120,23 @@ declare namespace API {
     OrderBy?: string;
   };
 
+  type getSupportDataEnumsTypeParams = {
+    type: string;
+  };
+
+  type getUserManageParams = {
+    UserName?: string;
+    Email?: string;
+    EmailConfirmed?: boolean;
+    PhoneNumber?: string;
+    PhoneNumberConfirmed?: boolean;
+    CreationTimeFrom?: string;
+    CreationTimeTo?: string;
+    PageIndex?: number;
+    PageSize?: number;
+    OrderBy?: string;
+  };
+
   type HttpValidationProblemDetails = {
     type?: string;
     title?: string;
@@ -138,6 +163,11 @@ declare namespace API {
     email?: string;
     isEmailConfirmed?: boolean;
     claims?: Record<string, any>;
+  };
+
+  type LabelValueDto = {
+    label?: string;
+    value?: any;
   };
 
   type LocalizationCultureDto = {
@@ -195,6 +225,13 @@ declare namespace API {
     code?: string;
     message?: string;
     data?: RoleDto[];
+    total?: number;
+  };
+
+  type PageUserDto = {
+    code?: string;
+    message?: string;
+    data?: UserDto[];
     total?: number;
   };
 
@@ -265,6 +302,12 @@ declare namespace API {
     data?: GetAllPermissionDto[];
   };
 
+  type RListLabelValueDto = {
+    code?: string;
+    message?: string;
+    data?: LabelValueDto[];
+  };
+
   type RListMenuDto = {
     code?: string;
     message?: string;
@@ -327,5 +370,14 @@ declare namespace API {
 
   type UpdateRoleMenuDto = {
     menuIds?: string[];
+  };
+
+  type UserDto = {
+    creationTime?: string;
+    userName?: string;
+    email?: string;
+    emailConfirmed?: boolean;
+    phoneNumber?: string;
+    phoneNumberConfirmed?: boolean;
   };
 }

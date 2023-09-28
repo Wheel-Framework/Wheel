@@ -8,6 +8,8 @@ import * as LocalizationManage from './LocalizationManage';
 import * as Menu from './Menu';
 import * as PermissionManage from './PermissionManage';
 import * as RoleManage from './RoleManage';
+import * as SupportData from './SupportData';
+import * as UserManage from './UserManage';
 export default {
   Current,
   Identity,
@@ -15,4 +17,6 @@ export default {
   Menu,
   PermissionManage,
   RoleManage,
+  SupportData,
+  UserManage,
 };

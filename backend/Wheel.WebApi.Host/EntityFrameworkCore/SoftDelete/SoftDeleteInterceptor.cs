@@ -11,6 +11,7 @@ namespace Wheel.EntityFrameworkCore.SoftDelete
     {
         public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
         {
+            OnSavingChanges(eventData);
             return base.SavingChanges(eventData, result);
         }
 

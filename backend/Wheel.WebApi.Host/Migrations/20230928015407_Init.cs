@@ -82,6 +82,7 @@ namespace Wheel.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false),
+                    CreationTime = table.Column<DateTimeOffset>(type: "TEXT", nullable: false, defaultValue: new DateTimeOffset(new DateTime(2023, 9, 28, 9, 54, 6, 21, DateTimeKind.Unspecified).AddTicks(7894), new TimeSpan(0, 8, 0, 0, 0))),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),

@@ -87,6 +87,11 @@ namespace Wheel.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTimeOffset>("CreationTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 9, 28, 9, 54, 6, 21, DateTimeKind.Unspecified).AddTicks(7894), new TimeSpan(0, 8, 0, 0, 0)));
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");

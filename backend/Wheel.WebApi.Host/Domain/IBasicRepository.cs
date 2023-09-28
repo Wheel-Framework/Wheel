@@ -31,6 +31,7 @@ namespace Wheel.Domain
         IQueryable<TEntity> GetQueryableWithIncludes(params Expression<Func<TEntity, object>>[] propertySelectors);
 
         Task<int> SaveChangeAsync(CancellationToken cancellationToken = default);
+        Expression<Func<TEntity, bool>> BuildPredicate(params (bool condition, Expression<Func<TEntity, bool>> predicate)[] conditionPredicates);
     }
 
     public interface IBasicRepository<TEntity> : IBasicRepository<TEntity, object> where TEntity : class
