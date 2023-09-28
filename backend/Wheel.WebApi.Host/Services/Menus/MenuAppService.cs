@@ -40,7 +40,7 @@ namespace Wheel.Services.Menus
         }
         public async Task<R> Delete(Guid id)
         {
-            await _menuRepository.DeleteAsync(id);
+            await _menuRepository.DeleteAsync(id, true);
             return new R();
         }
         public async Task<R<MenuDto>> GetById(Guid id)
