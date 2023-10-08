@@ -52,8 +52,6 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
     builder.RegisterModule<WheelAutofacModule>();
 });
 
-var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
-
 // Add services to the container.
 builder.Services.AddMailKit(builder.Configuration);
 builder.Services.AddLocalEventBus();
@@ -61,10 +59,13 @@ builder.Services.AddDistributedEventBus(builder.Configuration);
 builder.Services.AddAutoMapper();
 builder.Services.AddIdGen(0);
 
+var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
+
+
 builder.Services.AddDbContext<WheelDbContext>(options =>
-options.UseSqlite(connectionString)
-    .AddInterceptors(new WheelEFCoreInterceptor())
-    .UseLazyLoadingProxies()
+    options.UseSqlite(connectionString)
+        .AddInterceptors(new WheelEFCoreInterceptor())
+        .UseLazyLoadingProxies()
 );
 
 builder.Services.ConfigureHttpJsonOptions(options =>
