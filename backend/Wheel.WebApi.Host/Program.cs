@@ -4,7 +4,6 @@ using IdGen.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -15,7 +14,6 @@ using Serilog.Events;
 using StackExchange.Redis;
 using System.Globalization;
 using System.Reflection;
-using System.Text.Json;
 using Wheel;
 using Wheel.AutoMapper;
 using Wheel.Const;
@@ -25,7 +23,6 @@ using Wheel.DataSeeders;
 using Wheel.Domain.Identity;
 using Wheel.Email;
 using Wheel.EntityFrameworkCore;
-using Wheel.EntityFrameworkCore.SoftDelete;
 using Wheel.EventBus;
 using Wheel.Hubs;
 using Wheel.Localization;
@@ -43,8 +40,8 @@ Log.Logger = new LoggerConfiguration()
 #endif
     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
     .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-    .WriteTo.Async(c=>c.Console())
-    .WriteTo.Async(c=>c.File("Logs/log.txt", rollingInterval: RollingInterval.Day))
+    .WriteTo.Async(c => c.Console())
+    .WriteTo.Async(c => c.File("Logs/log.txt", rollingInterval: RollingInterval.Day))
     .CreateLogger();
 
 builder.Host.UseSerilog();
@@ -66,7 +63,7 @@ builder.Services.AddIdGen(0);
 
 builder.Services.AddDbContext<WheelDbContext>(options =>
 options.UseSqlite(connectionString)
-    .AddInterceptors(new SoftDeleteInterceptor())
+    .AddInterceptors(new WheelEFCoreInterceptor())
     .UseLazyLoadingProxies()
 );
 
