@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Threading;
 using Wheel.Const;
 using Wheel.Core.Dto;
 using Wheel.Core.Exceptions;
@@ -54,7 +52,7 @@ namespace Wheel.Services.Users
             var user = new User();
             await _userManager.SetUserNameAsync(user, userDto.UserName);
 
-            if(userDto.Email != null)
+            if (userDto.Email != null)
             {
                 var emailStore = (IUserEmailStore<User>)_userStore;
                 await emailStore.SetEmailAsync(user, userDto.Email, default);
@@ -72,6 +70,31 @@ namespace Wheel.Services.Users
             }
             else
                 throw new BusinessException(ErrorCode.CreateUserError, string.Join("\r\n", result.Errors.Select(a => a.Description)));
+        }
+        public async Task<R> UpdateUser(string userId, UpdateUserDto updateUserDto)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new BusinessException(ErrorCode.UserNotExist, L["UserNotExist"]);
+            }
+            if (updateUserDto.Email != null)
+            {
+                var emailStore = (IUserEmailStore<User>)_userStore;
+                await emailStore.SetEmailAsync(user, updateUserDto.Email, default);
+            }
+            if (updateUserDto.PhoneNumber != null)
+            {
+                await _userManager.SetPhoneNumberAsync(user, updateUserDto.PhoneNumber);
+            }
+            if (updateUserDto.Roles.Count > 0)
+            {
+                var existRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, existRoles);
+                await _userManager.AddToRolesAsync(user, updateUserDto.Roles);
+            }
+            await _userManager.UpdateAsync(user);
+            return new R();
         }
     }
 }

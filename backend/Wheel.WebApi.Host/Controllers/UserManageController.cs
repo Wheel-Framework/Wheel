@@ -38,5 +38,16 @@ namespace Wheel.Controllers
         {
             return _userManageAppService.GetUserPageList(pageRequest);
         }
+        /// <summary>
+        /// 修改用户
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="updateUserDto"></param>
+        /// <returns></returns>
+        [HttpPut("{userId}")]
+        public Task<R> UpdateUser(string userId, UpdateUserDto updateUserDto)
+        {
+            return _userManageAppService.UpdateUser(userId, updateUserDto);
+        }
     }
 }

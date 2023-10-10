@@ -8,5 +8,6 @@ namespace Wheel.Services.Users
     {
         Task<Page<UserDto>> GetUserPageList(UserPageRequest pageRequest);
         Task<R> CreateUser(CreateUserDto userDto);
+        Task<R> UpdateUser(string userId, UpdateUserDto updateUserDto);
     }
 }
