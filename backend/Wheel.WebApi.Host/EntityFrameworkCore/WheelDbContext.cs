@@ -166,6 +166,8 @@ namespace Wheel.EntityFrameworkCore
                 b.ToTable("LocalizationResource");
                 b.HasOne(a => a.Culture);
                 b.HasIndex(a => a.CultureId);
+                b.Property(a => a.Key).HasMaxLength(256);
+                b.Property(a => a.Value).HasMaxLength(1024);
             });
         }
 

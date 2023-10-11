@@ -108,8 +108,6 @@ builder.Services.AddWheelGraphQL();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.AddSingleton<IStringLocalizerFactory, EFStringLocalizerFactory>();
-
 builder.Services.AddMemoryCache();
 var redis = await ConnectionMultiplexer.ConnectAsync(builder.Configuration["Cache:Redis"]);
 builder.Services.AddSingleton<IConnectionMultiplexer, ConnectionMultiplexer>(_ => redis);
@@ -195,6 +193,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
+    ApplyCurrentCultureToResponseHeaders = true,
     DefaultRequestCulture = new RequestCulture("zh-CN"),
     SupportedCultures = new List<CultureInfo>
             {

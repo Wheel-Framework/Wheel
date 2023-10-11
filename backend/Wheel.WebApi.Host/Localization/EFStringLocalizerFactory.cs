@@ -2,12 +2,13 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using System.Text.RegularExpressions;
+using Wheel.DependencyInjection;
 using Wheel.Domain.Localization;
 using Wheel.EntityFrameworkCore;
 
 namespace Wheel.Localization
 {
-    public class EFStringLocalizerFactory : IStringLocalizerFactory
+    public class EFStringLocalizerFactory : IStringLocalizerFactory, ISingletonDependency
     {
         IServiceProvider _serviceProvider;
         public EFStringLocalizerFactory(IServiceProvider serviceProvider)
