@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Xml.XPath;
 using Wheel.DependencyInjection;
+using Path = System.IO.Path;
 
 namespace Wheel.Utilities
 {

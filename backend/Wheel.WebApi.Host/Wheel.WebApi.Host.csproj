@@ -16,6 +16,8 @@
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.2.1" />
 		<PackageReference Include="DotNetCore.CAP.RedisStreams" Version="7.2.1" />
 		<PackageReference Include="DotNetCore.CAP.Sqlite" Version="7.2.0" />
+		<PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1" />
+		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.5.1" />
 		<PackageReference Include="IdGen" Version="3.0.3" />
 		<PackageReference Include="IdGen.DependencyInjection" Version="3.0.0" />
 		<PackageReference Include="MailKit" Version="4.2.0" />

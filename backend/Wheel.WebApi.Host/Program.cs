@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using HotChocolate.Execution;
 using IdGen.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.DataProtection;
@@ -17,6 +18,7 @@ using System.Reflection;
 using Wheel;
 using Wheel.AutoMapper;
 using Wheel.Const;
+using Wheel.Controllers;
 using Wheel.Core.Dto;
 using Wheel.Core.Exceptions;
 using Wheel.DataSeeders;
@@ -26,7 +28,9 @@ using Wheel.EntityFrameworkCore;
 using Wheel.EventBus;
 using Wheel.Hubs;
 using Wheel.Localization;
+using Wheel.Graphql;
 using static System.Net.Mime.MediaTypeNames;
+using Path = System.IO.Path;
 using Role = Wheel.Domain.Identity.Role;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -100,6 +104,7 @@ builder.Services.AddIdentityCore<User>()
                 .AddEntityFrameworkStores<WheelDbContext>()
                 .AddApiEndpoints();
 
+builder.Services.AddWheelGraphQL();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -238,6 +243,7 @@ var webSocketOptions = new WebSocketOptions
 };
 app.UseWebSockets(webSocketOptions);
 app.MapControllers();
+app.MapGraphQL();
 app.MapHub<NotificationHub>("/hubs/notification");
 app.MapGroup("api/identity")
    .WithTags("Identity")

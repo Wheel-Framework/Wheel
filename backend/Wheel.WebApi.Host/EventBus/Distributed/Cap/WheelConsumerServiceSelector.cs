@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Reflection;
 using Autofac.Core;
 using Wheel.DependencyInjection;
+using TopicAttribute = DotNetCore.CAP.Internal.TopicAttribute;
 
 namespace Wheel.EventBus.Distributed.Cap
 {
