@@ -320,7 +320,7 @@ namespace Wheel.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleMenu");
+                    b.ToTable("RoleMenus");
                 });
 
             modelBuilder.Entity("Wheel.Domain.Permissions.PermissionGrant", b =>

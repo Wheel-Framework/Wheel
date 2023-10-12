@@ -146,7 +146,7 @@ namespace Wheel.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleMenu",
+                name: "RoleMenus",
                 columns: table => new
                 {
                     RoleId = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false),
@@ -154,15 +154,15 @@ namespace Wheel.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleMenu", x => new { x.MenuId, x.RoleId });
+                    table.PrimaryKey("PK_RoleMenus", x => new { x.MenuId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_RoleMenu_Menus_MenuId",
+                        name: "FK_RoleMenus_Menus_MenuId",
                         column: x => x.MenuId,
                         principalTable: "Menus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RoleMenu_Roles_RoleId",
+                        name: "FK_RoleMenus_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -270,8 +270,8 @@ namespace Wheel.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoleMenu_RoleId",
-                table: "RoleMenu",
+                name: "IX_RoleMenus_RoleId",
+                table: "RoleMenus",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
@@ -320,7 +320,7 @@ namespace Wheel.Migrations
                 name: "RoleClaims");
 
             migrationBuilder.DropTable(
-                name: "RoleMenu");
+                name: "RoleMenus");
 
             migrationBuilder.DropTable(
                 name: "UserClaims");

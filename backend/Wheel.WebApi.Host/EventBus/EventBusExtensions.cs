@@ -1,7 +1,6 @@
 ﻿using DotNetCore.CAP.Internal;
 using System.Reflection;
 using Wheel.EntityFrameworkCore;
-using Wheel.EventBus.Distributed;
 using Wheel.EventBus.Distributed.Cap;
 using Wheel.EventBus.Local.MediatR;
 

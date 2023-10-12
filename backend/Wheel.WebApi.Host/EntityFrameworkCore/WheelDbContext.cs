@@ -25,6 +25,7 @@ namespace Wheel.EntityFrameworkCore
 
         #region Menu
         public DbSet<Menu> Menus { get; set; }
+        public DbSet<RoleMenu> RoleMenus { get; set; }
         #endregion
 
         private StoreOptions? GetStoreOptions() => this.GetService<IDbContextOptions>()

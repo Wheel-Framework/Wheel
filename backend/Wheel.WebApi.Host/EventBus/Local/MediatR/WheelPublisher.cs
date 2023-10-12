@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using MediatR.NotificationPublishers;
-using System.Reflection;
 
 namespace Wheel.EventBus.Local.MediatR
 {
@@ -8,9 +6,9 @@ namespace Wheel.EventBus.Local.MediatR
     {
         public Task Publish(IEnumerable<NotificationHandlerExecutor> handlerExecutors, INotification notification, CancellationToken cancellationToken)
         {
-            return Task.Factory.StartNew(async () => 
+            return Task.Factory.StartNew(async () =>
             {
-                foreach (var handler in handlerExecutors) 
+                foreach (var handler in handlerExecutors)
                 {
                     await handler.HandlerCallback(notification, cancellationToken).ConfigureAwait(false);
                 }

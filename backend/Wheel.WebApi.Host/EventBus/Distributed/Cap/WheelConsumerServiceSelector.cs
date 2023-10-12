@@ -1,9 +1,6 @@
-﻿using DotNetCore.CAP.Internal;
-using DotNetCore.CAP;
-using Microsoft.Extensions.Options;
+﻿using DotNetCore.CAP;
+using DotNetCore.CAP.Internal;
 using System.Reflection;
-using Autofac.Core;
-using Wheel.DependencyInjection;
 using TopicAttribute = DotNetCore.CAP.Internal.TopicAttribute;
 
 namespace Wheel.EventBus.Distributed.Cap
@@ -45,7 +42,7 @@ namespace Wheel.EventBus.Distributed.Cap
                     {
                         continue;
                     }
-                    if(!(@interface.GetGenericTypeDefinition() == typeof(IDistributedEventHandler<>)))
+                    if (!(@interface.GetGenericTypeDefinition() == typeof(IDistributedEventHandler<>)))
                     {
                         continue;
                     }
