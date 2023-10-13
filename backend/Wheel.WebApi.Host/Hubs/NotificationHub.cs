@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Unicode;
 using Wheel.Notifications;
 
 namespace Wheel.Hubs
@@ -18,7 +15,7 @@ namespace Wheel.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            if(Context.UserIdentifier != null)
+            if (Context.UserIdentifier != null)
             {
                 var wellcome = new NotificationData(NotificationType.WellCome)
                     .WithData("name", Context.User!.Identity!.Name!)
