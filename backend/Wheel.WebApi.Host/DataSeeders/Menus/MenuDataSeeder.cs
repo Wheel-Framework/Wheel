@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Wheel.Domain;
-using Wheel.Domain.Identity;
+﻿using Wheel.Domain;
 using Wheel.Domain.Menus;
 
 namespace Wheel.DataSeeders.Identity
@@ -17,7 +14,7 @@ namespace Wheel.DataSeeders.Identity
 
         public async Task Seed(CancellationToken cancellationToken = default)
         {
-            if(!(await _menuRepository.AnyAsync(cancellationToken)))
+            if (!(await _menuRepository.AnyAsync(cancellationToken)))
             {
                 await _menuRepository.InsertAsync(new Menu
                 {

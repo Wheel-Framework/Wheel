@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Wheel.Domain;
 using Wheel.Domain.Identity;
 
@@ -24,16 +23,16 @@ namespace Wheel.DataSeeders.Identity
 
         public async Task Seed(CancellationToken cancellationToken = default)
         {
-            if(!await _roleRepository.AnyAsync(a=>a.Name == "admin"))
+            if (!await _roleRepository.AnyAsync(a => a.Name == "admin"))
             {
                 await _roleManager.CreateAsync(new Role("admin", Enums.RoleType.Admin));
             }
-            if(!await _roleRepository.AnyAsync(a=>a.Name == "user"))
+            if (!await _roleRepository.AnyAsync(a => a.Name == "user"))
             {
                 await _roleManager.CreateAsync(new Role("user", Enums.RoleType.App));
             }
 
-            if(!await _userRepository.AnyAsync(a=>a.UserName == "admin"))
+            if (!await _userRepository.AnyAsync(a => a.UserName == "admin"))
             {
                 var adminUser = new User();
                 await _userStore.SetUserNameAsync(adminUser, "admin", cancellationToken);
