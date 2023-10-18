@@ -7,10 +7,6 @@
         /// </summary>
         Golbal,
         /// <summary>
-        /// 角色设置
-        /// </summary>
-        Role,
-        /// <summary>
         /// 用户设置
         /// </summary>
         User,
