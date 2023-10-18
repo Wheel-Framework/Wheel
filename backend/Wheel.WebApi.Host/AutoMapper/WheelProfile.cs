@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Wheel.Domain.Localization;
 using Wheel.Domain.Menus;
+using Wheel.Domain.Settings;
 using Wheel.Services.LocalizationManage.Dtos;
 using Wheel.Services.Menus.Dtos;
+using Wheel.Services.SettingManage.Dtos;
 
 namespace Wheel.AutoMapper
 {
@@ -19,6 +21,10 @@ namespace Wheel.AutoMapper
 
             CreateMap<CreateOrUpdateMenuDto, Menu>(MemberList.Source);
             CreateMap<Menu, MenuDto>();
+            CreateMap<SettingGroup, SettingGroupDto>();
+            CreateMap<SettingValue, SettingValueDto>();
+            CreateMap<SettingGroupDto, SettingGroup>(MemberList.Source);
+            CreateMap<SettingValueDto, SettingValue>(MemberList.Source);
         }
     }
 }

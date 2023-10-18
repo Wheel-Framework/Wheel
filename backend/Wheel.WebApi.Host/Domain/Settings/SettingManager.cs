@@ -13,12 +13,14 @@ namespace Wheel.Domain.Settings
         private readonly IBasicRepository<SettingValue, long> _settingValueRepository;
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly SnowflakeIdGenerator _snowflakeIdGenerator;
 
-        public SettingManager(IBasicRepository<SettingGroup, long> settingGroupRepository, IBasicRepository<SettingValue, long> settingValueRepository, IUnitOfWork unitOfWork)
+        public SettingManager(IBasicRepository<SettingGroup, long> settingGroupRepository, IBasicRepository<SettingValue, long> settingValueRepository, IUnitOfWork unitOfWork, SnowflakeIdGenerator snowflakeIdGenerator)
         {
             _settingGroupRepository = settingGroupRepository;
             _settingValueRepository = settingValueRepository;
             _unitOfWork = unitOfWork;
+            _snowflakeIdGenerator = snowflakeIdGenerator;
         }
 
         public async Task<T?> GetSettingValue<T>(string settingGroupName, string settingKey, SettingScope settingScope = SettingScope.Golbal, string? settingScopeKey = null, CancellationToken cancellationToken = default)
@@ -77,14 +79,18 @@ namespace Wheel.Domain.Settings
                 {
                     var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
                     if (settingGroup is null)
-                        settingGroup = await _settingGroupRepository.InsertAsync(new SettingGroup { Name = settingGroupName, NormalizedName = settingGroupName.ToUpper() }, cancellationToken: cancellationToken);
+                        settingGroup = await _settingGroupRepository.InsertAsync(new SettingGroup { Id = _snowflakeIdGenerator.Create(), Name = settingGroupName, NormalizedName = settingGroupName.ToUpper() }, cancellationToken: cancellationToken);
                     
 
                     CheckSettingValueType(settingValue.Value, settingValue.ValueType);
 
                     var sv = await _settingValueRepository.FindAsync(a=> a.SettingGroupId == settingGroup.Id && a.Id == settingValue.Id, cancellationToken);
                     if(sv is null)
+                    {
+                        settingValue.Id = _snowflakeIdGenerator.Create();
+                        settingValue.SettingGroupId = settingGroup.Id;
                         await _settingValueRepository.InsertAsync(settingValue, cancellationToken: cancellationToken);
+                    }
                     else
                         await _settingValueRepository.UpdateAsync(settingValue, cancellationToken: cancellationToken);
                     
@@ -104,7 +110,7 @@ namespace Wheel.Domain.Settings
                 {
                     var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
                     if (settingGroup is null)
-                        settingGroup = await _settingGroupRepository.InsertAsync(new SettingGroup { Name = settingGroupName, NormalizedName = settingGroupName.ToUpper() }, cancellationToken: cancellationToken);
+                        settingGroup = await _settingGroupRepository.InsertAsync(new SettingGroup { Id = _snowflakeIdGenerator.Create(), Name = settingGroupName, NormalizedName = settingGroupName.ToUpper() }, true, cancellationToken: cancellationToken);
 
                     foreach (var settingValue in settingValues)
                     {
@@ -112,7 +118,11 @@ namespace Wheel.Domain.Settings
 
                         var sv = await _settingValueRepository.FindAsync(a => a.SettingGroupId == settingGroup.Id && a.Id == settingValue.Id, cancellationToken);
                         if (sv is null)
+                        {
+                            settingValue.Id = _snowflakeIdGenerator.Create();
+                            settingValue.SettingGroupId = settingGroup.Id;
                             await _settingValueRepository.InsertAsync(settingValue, cancellationToken: cancellationToken);
+                        }
                         else
                             await _settingValueRepository.UpdateAsync(settingValue, cancellationToken: cancellationToken);
                     }
