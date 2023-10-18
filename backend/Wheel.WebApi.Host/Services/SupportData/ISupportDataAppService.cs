@@ -6,6 +6,6 @@ namespace Wheel.Services.SupportData
 {
     public interface ISupportDataAppService : ITransientDependency
     {
-        ValueTask<R<List<LabelValueDto>>> GetEnums(string type);
+        ValueTask<R<List<LabelValueDto>>> GetEnums(string type, string? nameSpace = null);
     }
 }
