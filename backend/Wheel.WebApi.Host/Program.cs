@@ -32,6 +32,10 @@ using Wheel.Graphql;
 using static System.Net.Mime.MediaTypeNames;
 using Path = System.IO.Path;
 using Role = Wheel.Domain.Identity.Role;
+using System.Text.Encodings.Web;
+using Wheel.Json;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,11 +75,6 @@ builder.Services.AddDbContext<WheelDbContext>(options =>
         .AddInterceptors(new WheelEFCoreInterceptor())
         .UseLazyLoadingProxies()
 );
-
-builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-});
 
 builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
     .AddBearerToken(IdentityConstants.BearerScheme, options =>
@@ -125,8 +124,21 @@ builder.Services.AddSignalR()
     .AddMessagePackProtocol()
     .AddStackExchangeRedis(builder.Configuration["Cache:Redis"]);
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.SerializerOptions.Converters.Add(new Int32Converter());
+    options.SerializerOptions.Converters.Add(new LongJsonConverter());
+});
+
 builder.Services.AddControllers()
-    .AddControllersAsServices();
+    .AddControllersAsServices()
+    .AddJsonOptions(configure =>
+    {
+        configure.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        configure.JsonSerializerOptions.Converters.Add(new Int32Converter());
+        configure.JsonSerializerOptions.Converters.Add(new LongJsonConverter());
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
