@@ -3,6 +3,7 @@ using Wheel.Domain.Settings;
 using Wheel.Domain;
 using Wheel.Enums;
 using Wheel.Services.SettingManage.Dtos;
+using Wheel.Settings;
 
 namespace Wheel.Services.SettingManage
 {
@@ -21,7 +22,34 @@ namespace Wheel.Services.SettingManage
 
         public async Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Golbal, string? settingScopeKey = null)
         {
+            var settingDefinitions = ServiceProvider.GetServices<ISettingDefinition>().Where(a => a.SettingScope == settingScope);
             var settingGroups = await _settingGroupRepository.GetListAsync(a => a.SettingValues.Any(a => a.SettingScope == settingScope && a.SettingScopeKey == settingScopeKey));
+            foreach (var settingDefinition in settingDefinitions)
+            {
+                if (settingGroups.Any(a => a.Name == settingDefinition.GroupName))
+                    continue;
+                else
+                {
+                    var group = new SettingGroup
+                    {
+                        Name = settingDefinition.GroupName,
+                        NormalizedName = settingDefinition.GroupName.ToUpper(),
+                        SettingValues = new List<SettingValue>()
+                    };
+                    foreach (var settings in await settingDefinition.Define())
+                    {
+                        group.SettingValues.Add(new SettingValue 
+                        {
+                            Key = settings.Key,
+                            Value = settings.Value.DefalutValue,
+                            ValueType = settings.Value.SettingValueType,
+                            SettingScopeKey = settings.Value.SettingScopeKey,
+                            SettingScope = settingScope
+                        });
+                    }
+                    settingGroups.Add(group);
+                }
+            }
             var settingGroupDtos = Mapper.Map<List<SettingGroupDto>>(settingGroups);
             return new R<List<SettingGroupDto>>(settingGroupDtos);
         }
