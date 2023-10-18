@@ -10,6 +10,7 @@ using Wheel.Domain.Identity;
 using Wheel.Domain.Localization;
 using Wheel.Domain.Menus;
 using Wheel.Domain.Permissions;
+using Wheel.Domain.Settings;
 
 namespace Wheel.EntityFrameworkCore
 {
@@ -26,6 +27,10 @@ namespace Wheel.EntityFrameworkCore
         #region Menu
         public DbSet<Menu> Menus { get; set; }
         public DbSet<RoleMenu> RoleMenus { get; set; }
+        #endregion
+        #region Setting
+        public DbSet<SettingGroup> SettingGroups { get; set; }
+        public DbSet<SettingValue> SettingValues { get; set; }
         #endregion
 
         private StoreOptions? GetStoreOptions() => this.GetService<IDbContextOptions>()
@@ -47,6 +52,7 @@ namespace Wheel.EntityFrameworkCore
             ConfigureLocalization(builder);
             ConfigurePermissionGrants(builder);
             ConfigureMenus(builder);
+            ConfigureSettings(builder);
         }
 
         void ConfigureIdentity(ModelBuilder builder)
@@ -199,6 +205,26 @@ namespace Wheel.EntityFrameworkCore
             {
                 b.HasKey(o => new { o.MenuId, o.RoleId });
                 b.Property(o => o.RoleId).HasMaxLength(36);
+            });
+        }
+        void ConfigureSettings(ModelBuilder builder)
+        {
+            builder.Entity<SettingGroup>(b =>
+            {
+                b.HasKey(o => o.Id);
+                b.Property(o => o.Name).HasMaxLength(128);
+                b.Property(o => o.NormalizedName).HasMaxLength(128);
+                b.HasMany(o => o.SettingValues).WithOne(o => o.SettingGroup);
+                b.HasIndex(o => o.Name);
+            });
+            builder.Entity<SettingValue>(b =>
+            {
+                b.HasKey(o => o.Id);
+                b.Property(o => o.Key).HasMaxLength(128);
+                b.Property(o => o.SettingScopeKey).HasMaxLength(128);
+                b.Property(o => o.ValueType).HasMaxLength(2048);
+                b.HasOne(o => o.SettingGroup).WithMany(o => o.SettingValues);
+                b.HasIndex(o => o.Key);
             });
         }
     }
