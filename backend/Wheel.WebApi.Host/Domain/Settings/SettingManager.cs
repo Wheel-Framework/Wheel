@@ -38,7 +38,7 @@ namespace Wheel.Domain.Settings
                 return default;
 
             if(settingValue.ValueType == SettingValueType.JsonObject)
-                return System.Text.Json.JsonSerializer.Deserialize<T>(settingValue.Value);
+                return settingValue.Value.ToObject<T>();
 
             return (T)Convert.ChangeType(settingValue, typeof(T));
         }
