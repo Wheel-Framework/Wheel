@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Wheel.Core.Users;
 using Wheel.EventBus.Distributed;
 using Wheel.EventBus.Local;
+using Wheel.Settings;
 using Wheel.Uow;
 using Wheel.Utilities;
 
@@ -26,6 +27,7 @@ namespace Wheel.Controllers
         public ILocalEventBus LocalEventBus => LazyGetService<ILocalEventBus>();
         public IDistributedEventBus DistributedEventBus => LazyGetService<IDistributedEventBus>();
         public ICurrentUser CurrentUser => LazyGetService<ICurrentUser>();
+        public ISettingProvider SettingProvider => LazyGetService<ISettingProvider>();
         public IStringLocalizerFactory LocalizerFactory => LazyGetService<IStringLocalizerFactory>();
 
 
