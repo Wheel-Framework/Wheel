@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Wheel.Core.Dto;
 using Wheel.Enums;
 using Wheel.Services.SettingManage;

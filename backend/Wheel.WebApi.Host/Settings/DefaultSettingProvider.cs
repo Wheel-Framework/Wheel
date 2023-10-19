@@ -10,12 +10,14 @@ namespace Wheel.Settings
         private readonly SettingManager _settingManager;
         private readonly IDistributedCache _distributedCache;
         private readonly ICurrentUser _currentUser;
+        private readonly IServiceProvider _serviceProvider;
 
-        public DefaultSettingProvider(SettingManager settingManager, IDistributedCache distributedCache, ICurrentUser currentUser)
+        public DefaultSettingProvider(SettingManager settingManager, IDistributedCache distributedCache, ICurrentUser currentUser, IServiceProvider serviceProvider)
         {
             _settingManager = settingManager;
             _distributedCache = distributedCache;
             _currentUser = currentUser;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task<string> GetGolbalSetting(string groupKey, string settingKey, CancellationToken cancellationToken = default)
@@ -38,7 +40,14 @@ namespace Wheel.Settings
                 var dbSettings = await _settingManager.GetSettingValues(groupKey, SettingScope.Golbal, cancellationToken: cancellationToken);
                 if(dbSettings is null)
                 {
-                    return new();
+                    var settingDefinition = _serviceProvider.GetServices<ISettingDefinition>().FirstOrDefault(a => a.GroupName == groupKey && a.SettingScope == SettingScope.Golbal);
+                    if(settingDefinition is null)
+                        return new();
+                    else
+                    {
+                        var setting = await settingDefinition.Define();
+                        return setting.ToDictionary(a => a.Key, a => a.Value.DefalutValue)!;
+                    }
                 }
                 return dbSettings.ToDictionary(a => a.Key, a => a.Value);
             }
@@ -68,7 +77,14 @@ namespace Wheel.Settings
                 var dbSettings = await _settingManager.GetSettingValues(groupKey, SettingScope.User, settingScopeKey: _currentUser.Id, cancellationToken: cancellationToken);
                 if (dbSettings is null)
                 {
-                    return new();
+                    var settingDefinition = _serviceProvider.GetServices<ISettingDefinition>().FirstOrDefault(a => a.GroupName == groupKey && a.SettingScope == SettingScope.User);
+                    if (settingDefinition is null)
+                        return new();
+                    else
+                    {
+                        var setting = await settingDefinition.Define();
+                        return setting.ToDictionary(a => a.Key, a => a.Value.DefalutValue)!;
+                    }
                 }
                 return dbSettings.ToDictionary(a => a.Key, a => a.Value);
             }
