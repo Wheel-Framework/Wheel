@@ -26,7 +26,7 @@ namespace Wheel.EventBus.Handlers
         {
             var settings = await _settingManager.GetSettingValues(eventData.GroupName, eventData.SettingScope, eventData.SettingScopeKey, cancellationToken);
             
-            await _distributedCache.SetAsync($"Setting:{eventData.GroupName}:{eventData.SettingScope}" + (eventData.SettingScope == Enums.SettingScope.Golbal ? "" : $":{eventData.SettingScopeKey}"), _mapper.Map<List<SettingValueDto>>(settings));
+            await _distributedCache.SetAsync($"Setting:{eventData.GroupName}:{eventData.SettingScope}" + (eventData.SettingScope == Enums.SettingScope.Global ? "" : $":{eventData.SettingScopeKey}"), _mapper.Map<List<SettingValueDto>>(settings));
         }
     }
 }

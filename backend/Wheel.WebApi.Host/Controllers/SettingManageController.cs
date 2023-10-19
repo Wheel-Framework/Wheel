@@ -26,7 +26,7 @@ namespace Wheel.Controllers
         /// <param name="settingScope">设置范围</param>
         /// <returns></returns>
         [HttpGet()]
-        public Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Golbal)
+        public Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Global)
         {
             return _settingManageAppService.GetAllSettingGroup(settingScope);
         }

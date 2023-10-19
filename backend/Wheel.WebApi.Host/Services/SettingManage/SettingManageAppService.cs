@@ -20,7 +20,7 @@ namespace Wheel.Services.SettingManage
             _settingManager = settingManager;
         }
 
-        public async Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Golbal)
+        public async Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Global)
         {
             var settingDefinitions = ServiceProvider.GetServices<ISettingDefinition>().Where(a => a.SettingScope == settingScope);
             var settingGroups = await _settingGroupRepository.GetListAsync(a => a.SettingValues.Any(a => a.SettingScope == settingScope && (settingScope == SettingScope.User ? a.SettingScopeKey == CurrentUser.Id : a.SettingScopeKey == null)));
@@ -54,7 +54,7 @@ namespace Wheel.Services.SettingManage
             return new R<List<SettingGroupDto>>(settingGroupDtos);
         }
 
-        public async Task<R> UpdateSettings(SettingGroupDto settingGroupDto, SettingScope settingScope = SettingScope.Golbal)
+        public async Task<R> UpdateSettings(SettingGroupDto settingGroupDto, SettingScope settingScope = SettingScope.Global)
         {
             var settings = Mapper.Map<List<SettingValue>>(settingGroupDto.SettingValues);
             settings.ForEach(a =>

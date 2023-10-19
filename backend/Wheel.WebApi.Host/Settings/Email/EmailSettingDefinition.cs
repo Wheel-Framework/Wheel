@@ -6,7 +6,7 @@ namespace Wheel.Settings.Email
     {
         public string GroupName => "EmailSetting";
 
-        public SettingScope SettingScope => SettingScope.Golbal;
+        public SettingScope SettingScope => SettingScope.Global;
 
         public ValueTask<Dictionary<string, SettingValueParams>> Define()
         {

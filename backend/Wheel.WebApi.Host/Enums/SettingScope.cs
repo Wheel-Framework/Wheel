@@ -5,7 +5,7 @@
         /// <summary>
         /// 全局设置
         /// </summary>
-        Golbal,
+        Global,
         /// <summary>
         /// 用户设置
         /// </summary>

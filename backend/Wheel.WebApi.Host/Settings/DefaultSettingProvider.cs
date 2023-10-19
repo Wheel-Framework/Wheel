@@ -34,13 +34,13 @@ namespace Wheel.Settings
 
         public async Task<Dictionary<string, string>> GetGolbalSettings(string groupKey, CancellationToken cancellationToken = default)
         {
-            var cacheSettings = await GetCacheItem(groupKey, SettingScope.Golbal, cancellationToken: cancellationToken);
+            var cacheSettings = await GetCacheItem(groupKey, SettingScope.Global, cancellationToken: cancellationToken);
             if(cacheSettings is null)
             {
-                var dbSettings = await _settingManager.GetSettingValues(groupKey, SettingScope.Golbal, cancellationToken: cancellationToken);
+                var dbSettings = await _settingManager.GetSettingValues(groupKey, SettingScope.Global, cancellationToken: cancellationToken);
                 if(dbSettings is null)
                 {
-                    var settingDefinition = _serviceProvider.GetServices<ISettingDefinition>().FirstOrDefault(a => a.GroupName == groupKey && a.SettingScope == SettingScope.Golbal);
+                    var settingDefinition = _serviceProvider.GetServices<ISettingDefinition>().FirstOrDefault(a => a.GroupName == groupKey && a.SettingScope == SettingScope.Global);
                     if(settingDefinition is null)
                         return new();
                     else
@@ -100,7 +100,7 @@ namespace Wheel.Settings
         }
         private string BuildCacheKey(string groupKey, SettingScope settingScope, string settingScopeKey)
         {
-            return $"{groupKey}:{settingScope}"+ (settingScope == SettingScope.Golbal ? "" : $":{settingScopeKey}");
+            return $"{groupKey}:{settingScope}"+ (settingScope == SettingScope.Global ? "" : $":{settingScopeKey}");
         }
     }
 }

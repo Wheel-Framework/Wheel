@@ -28,7 +28,7 @@ namespace Wheel.Domain.Settings
             _distributedEventBus = distributedEventBus;
         }
 
-        public async Task<T?> GetSettingValue<T>(string settingGroupName, string settingKey, SettingScope settingScope = SettingScope.Golbal, string? settingScopeKey = null, CancellationToken cancellationToken = default)
+        public async Task<T?> GetSettingValue<T>(string settingGroupName, string settingKey, SettingScope settingScope = SettingScope.Global, string? settingScopeKey = null, CancellationToken cancellationToken = default)
         {
             var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
 
@@ -48,7 +48,7 @@ namespace Wheel.Domain.Settings
             return (T)Convert.ChangeType(settingValue, typeof(T));
         }
 
-        public async Task<SettingValue?> GetSettingValue(string settingGroupName, string settingKey, SettingScope settingScope = SettingScope.Golbal, string? settingScopeKey = null, CancellationToken cancellationToken = default)
+        public async Task<SettingValue?> GetSettingValue(string settingGroupName, string settingKey, SettingScope settingScope = SettingScope.Global, string? settingScopeKey = null, CancellationToken cancellationToken = default)
         {
             var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
 
@@ -62,7 +62,7 @@ namespace Wheel.Domain.Settings
             return settingValue;
         }
 
-        public async Task<List<SettingValue>?> GetSettingValues(string settingGroupName, SettingScope settingScope = SettingScope.Golbal, string? settingScopeKey = null, CancellationToken cancellationToken = default)
+        public async Task<List<SettingValue>?> GetSettingValues(string settingGroupName, SettingScope settingScope = SettingScope.Global, string? settingScopeKey = null, CancellationToken cancellationToken = default)
         {
             var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
 
