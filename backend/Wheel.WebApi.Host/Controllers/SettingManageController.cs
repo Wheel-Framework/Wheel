@@ -12,7 +12,6 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class SettingManageController : WheelControllerBase
     {
         private readonly ISettingManageAppService _settingManageAppService;
