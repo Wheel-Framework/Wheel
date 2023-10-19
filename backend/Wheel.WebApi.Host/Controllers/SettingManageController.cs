@@ -26,24 +26,22 @@ namespace Wheel.Controllers
         /// 获取所有设置
         /// </summary>
         /// <param name="settingScope">设置范围</param>
-        /// <param name="settingScopeKey">设置范围键值</param>
         /// <returns></returns>
         [HttpGet()]
-        public Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Golbal, string? settingScopeKey = null)
+        public Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Golbal)
         {
-            return _settingManageAppService.GetAllSettingGroup(settingScope, settingScopeKey);
+            return _settingManageAppService.GetAllSettingGroup(settingScope);
         }
         /// <summary>
         /// 更新设置
         /// </summary>
         /// <param name="settingGroupDto">设置组数据</param>
         /// <param name="settingScope">设置范围</param>
-        /// <param name="settingScopeKey">设置范围键值</param>
         /// <returns></returns>
-        [HttpPut()]
-        public Task<R> UpdateSettings(SettingGroupDto settingGroupDto, [FromQuery]SettingScope settingScope, [FromQuery]string? settingScopeKey)
+        [HttpPut("{settingScope}")]
+        public Task<R> UpdateSettings(SettingGroupDto settingGroupDto, SettingScope settingScope)
         {
-            return _settingManageAppService.UpdateSettings(settingGroupDto, settingScope, settingScopeKey);
+            return _settingManageAppService.UpdateSettings(settingGroupDto, settingScope);
         }
     }
 }

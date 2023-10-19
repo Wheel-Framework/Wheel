@@ -7,7 +7,7 @@ namespace Wheel.Services.SettingManage
 {
     public interface ISettingManageAppService : ITransientDependency
     {
-        Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Golbal, string? settingScopeKey = null);
-        Task<R> UpdateSettings(SettingGroupDto settingGroupDto, SettingScope settingScope = SettingScope.Golbal, string? settingScopeKey = null);
+        Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Golbal);
+        Task<R> UpdateSettings(SettingGroupDto settingGroupDto, SettingScope settingScope = SettingScope.Golbal);
     }
 }

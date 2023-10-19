@@ -1,7 +1,10 @@
 ﻿using HotChocolate.Types.Relay;
+using System;
 using System.Linq;
 using Wheel.DependencyInjection;
 using Wheel.Enums;
+using Wheel.EventBus.Distributed;
+using Wheel.EventBus.EventDatas;
 using Wheel.Uow;
 using Wheel.Utilities;
 
@@ -14,13 +17,15 @@ namespace Wheel.Domain.Settings
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly SnowflakeIdGenerator _snowflakeIdGenerator;
+        private readonly IDistributedEventBus _distributedEventBus;
 
-        public SettingManager(IBasicRepository<SettingGroup, long> settingGroupRepository, IBasicRepository<SettingValue, long> settingValueRepository, IUnitOfWork unitOfWork, SnowflakeIdGenerator snowflakeIdGenerator)
+        public SettingManager(IBasicRepository<SettingGroup, long> settingGroupRepository, IBasicRepository<SettingValue, long> settingValueRepository, IUnitOfWork unitOfWork, SnowflakeIdGenerator snowflakeIdGenerator, IDistributedEventBus distributedEventBus)
         {
             _settingGroupRepository = settingGroupRepository;
             _settingValueRepository = settingValueRepository;
             _unitOfWork = unitOfWork;
             _snowflakeIdGenerator = snowflakeIdGenerator;
+            _distributedEventBus = distributedEventBus;
         }
 
         public async Task<T?> GetSettingValue<T>(string settingGroupName, string settingKey, SettingScope settingScope = SettingScope.Golbal, string? settingScopeKey = null, CancellationToken cancellationToken = default)
@@ -95,10 +100,12 @@ namespace Wheel.Domain.Settings
                         await _settingValueRepository.UpdateAsync(settingValue, cancellationToken: cancellationToken);
                     
                     await uow.CommitAsync(cancellationToken);
-                }catch(Exception ex)
+                    await _distributedEventBus.PublishAsync(new UpdateSettingEventData() { GroupName = settingGroupName, SettingScope = settingValue.SettingScope, SettingScopeKey = settingValue.SettingScopeKey });
+                }
+                catch(Exception ex)
                 {
                     await uow.RollbackAsync(cancellationToken);
-                    throw ex;
+                    ex.ReThrow();
                 }
             }
         }
@@ -128,10 +135,12 @@ namespace Wheel.Domain.Settings
                     }
                     
                     await uow.CommitAsync(cancellationToken);
-                }catch(Exception ex)
+                    await _distributedEventBus.PublishAsync(new UpdateSettingEventData() { GroupName = settingGroupName, SettingScope = settingValues.First().SettingScope, SettingScopeKey = settingValues.First().SettingScopeKey });
+                }
+                catch (Exception ex)
                 {
                     await uow.RollbackAsync(cancellationToken);
-                    throw ex;
+                    ex.ReThrow();
                 }
             }
         }

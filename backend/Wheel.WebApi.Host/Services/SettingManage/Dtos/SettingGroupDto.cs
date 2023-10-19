@@ -1,7 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Wheel.Json;
-
-namespace Wheel.Services.SettingManage.Dtos
+﻿namespace Wheel.Services.SettingManage.Dtos
 {
     public class SettingGroupDto
     {
