@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Wheel.Core.Dto;
 using Wheel.Services.FileStorageManage;
 using Wheel.Services.FileStorageManage.Dtos;
@@ -11,7 +10,6 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class FileController : WheelControllerBase
     {
         private readonly IFileStorageManageAppService _fileStorageManageAppService;
