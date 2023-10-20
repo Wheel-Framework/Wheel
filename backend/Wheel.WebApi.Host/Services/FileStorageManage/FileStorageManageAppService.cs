@@ -6,6 +6,7 @@ using Wheel.Domain.FileStorages;
 using Wheel.Enums;
 using Wheel.FileStorages;
 using Wheel.Services.FileStorageManage.Dtos;
+using Path = System.IO.Path;
 
 namespace Wheel.Services.FileStorageManage
 {
@@ -53,7 +54,7 @@ namespace Wheel.Services.FileStorageManage
             var fileStorages = new List<FileStorage>();
             foreach (var file in files) 
             {
-                var fileName = uploadFileDto.Cover ? file.FileName : $"{file.FileName}-{SnowflakeIdGenerator.Create()}";
+                var fileName = uploadFileDto.Cover ? file.FileName : $"{Path.GetFileNameWithoutExtension(file.FileName)}-{SnowflakeIdGenerator.Create()}{Path.GetExtension(file.FileName)}";
                 var fileStream = file.OpenReadStream();
                 var fileStorageType = FileStorageTypeChecker.CheckFileType(file.ContentType);
                 var uploadFileArgs = new UploadFileArgs 

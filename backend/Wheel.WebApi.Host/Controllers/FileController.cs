@@ -11,6 +11,7 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class FileController : WheelControllerBase
     {
         private readonly IFileStorageManageAppService _fileStorageManageAppService;
