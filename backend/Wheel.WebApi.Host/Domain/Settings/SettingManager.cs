@@ -34,7 +34,7 @@ namespace Wheel.Domain.Settings
 
             if (settingGroup is null)
             {
-                throw new ArgumentException($"SettingGroup: {settingGroup} Not Exist.");
+                return default(T);
             }
 
             var settingValue = settingGroup?.SettingValues.FirstOrDefault(a => a.Key == settingKey && a.SettingScope == settingScope && a.SettingScopeKey == settingScopeKey);
@@ -54,7 +54,7 @@ namespace Wheel.Domain.Settings
 
             if (settingGroup is null)
             {
-                throw new ArgumentException($"SettingGroup: {settingGroup} Not Exist.");
+                return null;
             }
 
             var settingValue = settingGroup?.SettingValues.FirstOrDefault(a => a.Key == settingKey && a.SettingScope == settingScope && a.SettingScopeKey == settingScopeKey);
@@ -68,7 +68,7 @@ namespace Wheel.Domain.Settings
 
             if (settingGroup is null)
             {
-                throw new ArgumentException($"SettingGroup: {settingGroup} Not Exist.");
+                return null;
             }
 
             var settingValues = settingGroup?.SettingValues.Where(a => a.SettingScope == settingScope && a.SettingScopeKey == settingScopeKey).ToList();

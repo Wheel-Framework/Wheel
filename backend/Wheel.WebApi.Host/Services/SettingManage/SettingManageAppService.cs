@@ -36,7 +36,7 @@ namespace Wheel.Services.SettingManage
                         NormalizedName = settingDefinition.GroupName.ToUpper(),
                         SettingValues = new List<SettingValue>()
                     };
-                    foreach (var settings in await settingDefinition.Define())
+                    foreach (var settings in settingDefinition.Define())
                     {
                         group.SettingValues.Add(new SettingValue 
                         {

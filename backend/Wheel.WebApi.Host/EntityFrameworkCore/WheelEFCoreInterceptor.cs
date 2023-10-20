@@ -14,7 +14,11 @@ namespace Wheel.EntityFrameworkCore
             OnSavingChanges(eventData);
             return base.SavingChanges(eventData, result);
         }
-
+        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        {
+            OnSavingChanges(eventData);
+            return base.SavingChangesAsync(eventData, result, cancellationToken);
+        }
         public static void OnSavingChanges(DbContextEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData.Context);

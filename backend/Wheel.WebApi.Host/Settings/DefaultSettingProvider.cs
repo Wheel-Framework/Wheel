@@ -45,7 +45,7 @@ namespace Wheel.Settings
                         return new();
                     else
                     {
-                        var setting = await settingDefinition.Define();
+                        var setting = settingDefinition.Define();
                         return setting.ToDictionary(a => a.Key, a => a.Value.DefalutValue)!;
                     }
                 }
@@ -82,7 +82,7 @@ namespace Wheel.Settings
                         return new();
                     else
                     {
-                        var setting = await settingDefinition.Define();
+                        var setting = settingDefinition.Define();
                         return setting.ToDictionary(a => a.Key, a => a.Value.DefalutValue)!;
                     }
                 }

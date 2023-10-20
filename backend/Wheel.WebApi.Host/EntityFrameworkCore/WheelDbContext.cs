@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;
+using Wheel.Domain.Common;
+using Wheel.Domain.FileStorages;
 using Wheel.Domain.Identity;
 using Wheel.Domain.Localization;
 using Wheel.Domain.Menus;
@@ -33,6 +36,10 @@ namespace Wheel.EntityFrameworkCore
         public DbSet<SettingValue> SettingValues { get; set; }
         #endregion
 
+        #region FileStorage
+        public DbSet<FileStorage> FileStorages { get; set; }
+        #endregion
+
         private StoreOptions? GetStoreOptions() => this.GetService<IDbContextOptions>()
                             .Extensions.OfType<CoreOptionsExtension>()
                             .FirstOrDefault()?.ApplicationServiceProvider
@@ -41,7 +48,6 @@ namespace Wheel.EntityFrameworkCore
 
         public WheelDbContext(DbContextOptions<WheelDbContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -53,6 +59,7 @@ namespace Wheel.EntityFrameworkCore
             ConfigurePermissionGrants(builder);
             ConfigureMenus(builder);
             ConfigureSettings(builder);
+            ConfigureFileStorage(builder);
         }
 
         void ConfigureIdentity(ModelBuilder builder)
@@ -163,7 +170,7 @@ namespace Wheel.EntityFrameworkCore
             builder.Entity<LocalizationCulture>(b =>
             {
                 b.Property(a => a.Id).ValueGeneratedOnAdd();
-                b.ToTable("LocalizationCulture"); 
+                b.ToTable("LocalizationCulture");
                 b.Property(a => a.Name).HasMaxLength(32);
                 b.HasMany(a => a.Resources);
             });
@@ -225,6 +232,17 @@ namespace Wheel.EntityFrameworkCore
                 b.Property(o => o.ValueType).HasMaxLength(2048);
                 b.HasOne(o => o.SettingGroup).WithMany(o => o.SettingValues);
                 b.HasIndex(o => o.Key);
+            });
+        }
+        void ConfigureFileStorage(ModelBuilder builder)
+        {
+            builder.Entity<FileStorage>(b =>
+            {
+                b.HasKey(o => o.Id);
+                b.Property(o => o.FileName).HasMaxLength(256);
+                b.Property(o => o.Path).HasMaxLength(256);
+                b.Property(o => o.ContentType).HasMaxLength(32);
+                b.Property(o => o.Provider).HasMaxLength(32);
             });
         }
     }

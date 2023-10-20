@@ -8,6 +8,6 @@ namespace Wheel.Settings
         string GroupName { get; }
         SettingScope SettingScope { get; }
 
-        ValueTask<Dictionary<string, SettingValueParams>> Define();
+        Dictionary<string, SettingValueParams> Define();
     }
 }

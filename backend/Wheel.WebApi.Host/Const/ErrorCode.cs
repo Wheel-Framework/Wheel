@@ -17,6 +17,10 @@
         public const string RoleNotExist = "40011";
         public const string RoleExist = "40012";
         public const string CreateRoleError = "40013";
+
+
+        public const string FileNotExist = "40030";
+        public const string FileDownloadFail = "40031";
         #endregion
     }
 }

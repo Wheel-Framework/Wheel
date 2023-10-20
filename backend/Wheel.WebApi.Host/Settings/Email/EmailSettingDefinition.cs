@@ -8,9 +8,9 @@ namespace Wheel.Settings.Email
 
         public SettingScope SettingScope => SettingScope.Global;
 
-        public ValueTask<Dictionary<string, SettingValueParams>> Define()
+        public Dictionary<string, SettingValueParams> Define()
         {
-            return ValueTask.FromResult(new Dictionary<string, SettingValueParams>
+            return new Dictionary<string, SettingValueParams>
             {
                 { "SenderName", new(SettingValueType.String, "Wheel") },
                 { "Host", new(SettingValueType.String, "smtp.exmail.qq.com") },
@@ -18,7 +18,7 @@ namespace Wheel.Settings.Email
                 { "UserName", new(SettingValueType.String) },
                 { "Password", new(SettingValueType.String) },
                 { "UseSsl", new(SettingValueType.Bool, "true") },
-            });
+            };
         }
     }
 }
