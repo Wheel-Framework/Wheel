@@ -82,6 +82,25 @@ declare namespace API {
     roleName?: string;
   };
 
+  type FileStorageDto = {
+    id?: number;
+    /** 文件名 */
+    fileName?: string;
+    /** 文件类型ContentType */
+    contentType?: string;
+    fileStorageType?: FileStorageType;
+    /** 大小 */
+    size?: number;
+    /** 存储路径 */
+    path?: string;
+    /** 创建时间 */
+    creationTime?: string;
+    /** 存储类型 */
+    provider?: string;
+  };
+
+  type FileStorageType = 0 | 1 | 2 | 3 | 4;
+
   type ForgotPasswordRequest = {
     email?: string;
   };
@@ -90,6 +109,30 @@ declare namespace API {
     group?: string;
     summary?: string;
     permissions?: PermissionDto[];
+  };
+
+  type getFileIdParams = {
+    id: number;
+  };
+
+  type getFileParams = {
+    /** 文件名 */
+    FileName?: string;
+    /** 文件类型ContentType */
+    ContentType?: string;
+    /** 文件类型 */
+    FileStorageType?: FileStorageType;
+    /** 存储路径 */
+    Path?: string;
+    /** 创建时间From */
+    CreationTimeFrom?: string;
+    /** 创建时间To */
+    CreationTimeTo?: string;
+    /** 存储类型 */
+    Provider?: string;
+    PageIndex?: number;
+    PageSize?: number;
+    OrderBy?: string;
   };
 
   type getLocalizationManageCultureIdParams = {
@@ -120,8 +163,16 @@ declare namespace API {
     OrderBy?: string;
   };
 
+  type getSettingManageParams = {
+    /** 设置范围 */
+    settingScope?: SettingScope;
+  };
+
   type getSupportDataEnumsTypeParams = {
+    /** 枚举类型 */
     type: string;
+    /** 枚举命名空间，默认Wheel.Enums */
+    nameSpace?: string;
   };
 
   type getUserManageParams = {
@@ -214,6 +265,13 @@ declare namespace API {
 
   type MenuType = 0 | 1 | 2;
 
+  type PageFileStorageDto = {
+    code?: string;
+    message?: string;
+    data?: FileStorageDto[];
+    total?: number;
+  };
+
   type PageLocalizationCultureDto = {
     code?: string;
     message?: string;
@@ -241,6 +299,11 @@ declare namespace API {
     isGranted?: boolean;
   };
 
+  type postFileParams = {
+    Cover?: boolean;
+    Provider?: string;
+  };
+
   type postIdentityLoginParams = {
     useCookies?: boolean;
     useSessionCookies?: boolean;
@@ -252,6 +315,15 @@ declare namespace API {
 
   type putMenuRoleRoleIdParams = {
     roleId: string;
+  };
+
+  type putSettingManageSettingScopeParams = {
+    /** 设置范围 */
+    settingScope: SettingScope;
+  };
+
+  type putUserManageUserIdParams = {
+    userId: string;
   };
 
   type R = {
@@ -296,6 +368,12 @@ declare namespace API {
     data?: AntdMenuDto[];
   };
 
+  type RListFileStorageDto = {
+    code?: string;
+    message?: string;
+    data?: FileStorageDto[];
+  };
+
   type RListGetAllPermissionDto = {
     code?: string;
     message?: string;
@@ -312,6 +390,12 @@ declare namespace API {
     code?: string;
     message?: string;
     data?: MenuDto[];
+  };
+
+  type RListSettingGroupDto = {
+    code?: string;
+    message?: string;
+    data?: SettingGroupDto[];
   };
 
   type RLocalizationCultureDto = {
@@ -339,6 +423,25 @@ declare namespace API {
   };
 
   type RoleType = 0 | 1;
+
+  type SettingGroupDto = {
+    id?: number;
+    name?: string;
+    normalizedName?: string;
+    settingValues?: SettingValueDto[];
+  };
+
+  type SettingScope = 0 | 1;
+
+  type SettingValueDto = {
+    id?: number;
+    settingGroupId?: number;
+    key?: string;
+    value?: string;
+    valueType?: SettingValueType;
+  };
+
+  type SettingValueType = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
   type TwoFactorRequest = {
     enable?: boolean;
@@ -370,6 +473,12 @@ declare namespace API {
 
   type UpdateRoleMenuDto = {
     menuIds?: string[];
+  };
+
+  type UpdateUserDto = {
+    email?: string;
+    phoneNumber?: string;
+    roles?: string[];
   };
 
   type UserDto = {

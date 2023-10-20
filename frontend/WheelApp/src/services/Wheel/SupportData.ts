@@ -11,7 +11,9 @@ export async function getSupportDataEnumsType(
   const { type: param0, ...queryParams } = params;
   return request<API.RListLabelValueDto>(`/api/SupportData/Enums/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: {
+      ...queryParams,
+    },
     ...(options || {}),
   });
 }
