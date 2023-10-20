@@ -52,6 +52,16 @@ export default [
         name: 'RoleManage',
         component: './System/Role',
       },
+      {
+        path: '/System/Setting',
+        name: 'SettingManage',
+        component: './System/Setting',
+      },
+      {
+        path: '/System/File',
+        name: 'FileManage',
+        component: './System/File',
+      },
     ]
   },
   {
