@@ -1,5 +1,4 @@
-﻿using HotChocolate.Types.Relay;
-using System;
+﻿using System;
 using System.Linq;
 using Wheel.DependencyInjection;
 using Wheel.Enums;

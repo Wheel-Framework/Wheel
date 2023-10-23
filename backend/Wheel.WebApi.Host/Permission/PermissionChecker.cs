@@ -2,8 +2,6 @@
 using Wheel.Authorization;
 using Wheel.Core.Users;
 using Wheel.DependencyInjection;
-using Wheel.Domain;
-using Wheel.Domain.Permissions;
 
 namespace Wheel.Permission
 {

@@ -1,17 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Threading;
-using Wheel.DependencyInjection;
-using Wheel.EntityFrameworkCore;
 
 namespace Wheel.Uow
 {
-    public interface IDbTransaction : IDisposable, IAsyncDisposable
-    {
-        Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
-        Task CommitAsync(CancellationToken cancellationToken = default);
-        Task RollbackAsync(CancellationToken cancellationToken = default);
-    }
     public class DbTransaction : IDbTransaction
     {
         private readonly DbContext _dbContext;
@@ -25,10 +16,9 @@ namespace Wheel.Uow
             _dbContext = dbContext;
         }
 
-        public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
             CurrentDbContextTransaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
-            return CurrentDbContextTransaction;
         }
 
         public async Task CommitAsync(CancellationToken cancellationToken = default)
@@ -53,9 +43,9 @@ namespace Wheel.Uow
         }
         public void Dispose()
         {
-            if(CurrentDbContextTransaction != null)
+            if (CurrentDbContextTransaction != null)
             {
-                if(!isCommit && !isRollback)
+                if (!isCommit && !isRollback)
                 {
                     Commit();
                 }
@@ -65,7 +55,7 @@ namespace Wheel.Uow
 
         public async ValueTask DisposeAsync()
         {
-            if(CurrentDbContextTransaction != null)
+            if (CurrentDbContextTransaction != null)
             {
                 if (!isCommit && !isRollback)
                 {

@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using Wheel.Domain.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Wheel.Core.Users
 {

@@ -1,13 +1,9 @@
-﻿using Castle.Core.Resource;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System.Text.RegularExpressions;
-using Wheel.Domain.Common;
 using Wheel.Domain.FileStorages;
 using Wheel.Domain.Identity;
 using Wheel.Domain.Localization;

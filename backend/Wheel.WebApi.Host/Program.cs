@@ -1,6 +1,5 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using HotChocolate.Execution;
 using IdGen.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.DataProtection;
@@ -15,10 +14,10 @@ using Serilog.Events;
 using StackExchange.Redis;
 using System.Globalization;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Wheel;
 using Wheel.AutoMapper;
 using Wheel.Const;
-using Wheel.Controllers;
 using Wheel.Core.Dto;
 using Wheel.Core.Exceptions;
 using Wheel.DataSeeders;
@@ -26,16 +25,12 @@ using Wheel.Domain.Identity;
 using Wheel.Email;
 using Wheel.EntityFrameworkCore;
 using Wheel.EventBus;
-using Wheel.Hubs;
-using Wheel.Localization;
 using Wheel.Graphql;
+using Wheel.Hubs;
+using Wheel.Json;
 using static System.Net.Mime.MediaTypeNames;
 using Path = System.IO.Path;
 using Role = Wheel.Domain.Identity.Role;
-using System.Text.Encodings.Web;
-using Wheel.Json;
-using System.Text.Json.Serialization;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -18,35 +18,37 @@
 		<PackageReference Include="DotNetCore.CAP.Sqlite" Version="7.2.0" />
 		<PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1" />
 		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.5.1" />
-		<PackageReference Include="IdGen" Version="3.0.3" />
-		<PackageReference Include="IdGen.DependencyInjection" Version="3.0.0" />
 		<PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
 		<PackageReference Include="MailKit" Version="4.2.0" />
-		<PackageReference Include="MediatR" Version="12.1.1" />
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0-rc.1.23421.29" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0-rc.1.23421.29" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-rc.1.23421.29" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="8.0.0-rc.1.23421.29" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="8.0.0-rc.1.23421.29" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="7.3.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.0-rc.1.23419.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-rc.1.23419.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-rc.1.23419.6">
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="8.0.0-rc.2.23480.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="7.3.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.0-rc.2.23480.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-rc.2.23480.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-rc.2.23480.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0-rc.1.23419.6">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0-rc.2.23480.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0-rc.1.23421.29" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0-rc.2.23480.2" />
 		<PackageReference Include="Minio" Version="6.0.0" />
-		<PackageReference Include="SequentialGuid" Version="4.0.4" />
 		<PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
 		<PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Wheel.Core\Wheel.Core.csproj" />
+	  <ProjectReference Include="..\Wheel.Data\Wheel.Data.csproj" />
+	  <ProjectReference Include="..\Wheel.Domain\Wheel.Domain.csproj" />
+	  <ProjectReference Include="..\Wheel.Shared\Wheel.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

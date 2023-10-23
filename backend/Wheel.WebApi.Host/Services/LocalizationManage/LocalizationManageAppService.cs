@@ -88,7 +88,8 @@ namespace Wheel.Services.LocalizationManage
         public async Task<R> UpdateLocalizationResourceAsync(UpdateLocalizationResourceDto input)
         {
             await _localizationResourceRepository.UpdateAsync(a => a.Id == input.Id,
-                a => a.SetProperty(b => b.Key, b => input.Key).SetProperty(b => b.Value, b => input.Value));
+                a => a.SetProperty(b => b.Key, b => input.Key)
+                .SetProperty(b => b.Value, b => input.Value));
             await UnitOfWork.SaveChangesAsync();
             return new R();
         }

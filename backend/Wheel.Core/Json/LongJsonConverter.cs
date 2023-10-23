@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Wheel.Json
 {
-    internal class LongJsonConverter : JsonConverter<long>
+    public class LongJsonConverter : JsonConverter<long>
     {
         public LongJsonConverter()
         {

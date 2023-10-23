@@ -1,5 +1,4 @@
-﻿using Castle.Core.Resource;
-using Wheel.Domain.Common;
+﻿using Wheel.Domain.Common;
 
 namespace Wheel.Domain.Localization
 {

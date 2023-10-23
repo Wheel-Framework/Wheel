@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
-using Wheel.DependencyInjection;
 
 namespace Wheel.Domain
 {
-    public interface IBasicRepository<TEntity, TKey> where TEntity : class 
+    public interface IBasicRepository<TEntity, TKey> where TEntity : class
     {
         Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
         Task InsertManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default);

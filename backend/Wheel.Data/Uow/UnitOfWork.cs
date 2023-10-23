@@ -1,17 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Wheel.DependencyInjection;
-using Wheel.EntityFrameworkCore;
+﻿using Wheel.EntityFrameworkCore;
 
 namespace Wheel.Uow
 {
-    public interface IUnitOfWork : IScopeDependency, IDisposable, IAsyncDisposable
-    {
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default); 
-        Task<IDbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
-        Task CommitAsync(CancellationToken cancellationToken = default);
-        Task RollbackAsync(CancellationToken cancellationToken = default);
-    }
+
     public class UnitOfWork : IUnitOfWork
     {
         private readonly WheelDbContext _dbContext;
@@ -34,7 +25,7 @@ namespace Wheel.Uow
         }
         public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            if(Transaction == null) 
+            if (Transaction == null)
             {
                 throw new Exception("Transaction is null, Please BeginTransaction");
             }
@@ -51,7 +42,7 @@ namespace Wheel.Uow
         }
         public void Dispose()
         {
-            if(Transaction != null)
+            if (Transaction != null)
                 Transaction.Dispose();
             _dbContext.Dispose();
         }
