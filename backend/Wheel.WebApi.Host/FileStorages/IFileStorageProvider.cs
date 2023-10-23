@@ -1,5 +1,4 @@
-﻿using Minio;
-using Wheel.DependencyInjection;
+﻿using Wheel.DependencyInjection;
 
 namespace Wheel.FileStorages
 {

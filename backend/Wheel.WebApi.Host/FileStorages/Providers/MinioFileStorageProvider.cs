@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using Minio;
+﻿using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
-using System.Security.AccessControl;
-using Wheel.Migrations;
 using Wheel.Settings;
 
 namespace Wheel.FileStorages.Providers
@@ -106,7 +103,7 @@ namespace Wheel.FileStorages.Providers
                 client.WithRegion(minioSetting["Region"]);
             }
 
-            if(Configure != null)
+            if (Configure != null)
             {
                 Configure.Invoke(client);
             }
