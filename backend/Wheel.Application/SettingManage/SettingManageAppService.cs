@@ -4,6 +4,7 @@ using Wheel.Domain;
 using Wheel.Enums;
 using Wheel.Services.SettingManage.Dtos;
 using Wheel.Settings;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Wheel.Services.SettingManage
 {

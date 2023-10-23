@@ -1,11 +1,11 @@
-﻿using Castle.Core.Internal;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Runtime.ConstrainedExecution;
 using System.Text.Json;
@@ -123,7 +123,7 @@ namespace Wheel.Services.PermissionManage
                     var permissionGroup = new GetAllPermissionDto();
                     var controllerTypeInfo = apiDescriptions.Key;
 
-                    var controllerAllowAnonymous = controllerTypeInfo.GetAttribute<AllowAnonymousAttribute>();
+                    var controllerAllowAnonymous = controllerTypeInfo.GetCustomAttribute<AllowAnonymousAttribute>();
 
                     var controllerComment = _xmlCommentHelper.GetTypeComment(controllerTypeInfo);
 
@@ -132,8 +132,8 @@ namespace Wheel.Services.PermissionManage
                     foreach (var apiDescription in apiDescriptions)
                     {
                         var method = controllerTypeInfo.GetMethod(apiDescription.ActionDescriptor.RouteValues["action"]);
-                        var actionAllowAnonymous = method.GetAttribute<AllowAnonymousAttribute>();
-                        var actionAuthorize = method.GetAttribute<AuthorizeAttribute>();
+                        var actionAllowAnonymous = method.GetCustomAttribute<AllowAnonymousAttribute>();
+                        var actionAuthorize = method.GetCustomAttribute<AuthorizeAttribute>();
                         if ((controllerAllowAnonymous == null && actionAllowAnonymous == null) || actionAuthorize != null)
                         {
                             var methodComment = _xmlCommentHelper.GetMethodComment(method);

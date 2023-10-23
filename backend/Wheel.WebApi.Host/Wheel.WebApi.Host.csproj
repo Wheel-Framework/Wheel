@@ -45,6 +45,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Wheel.Api\Wheel.Api.csproj" />
+	  <ProjectReference Include="..\Wheel.Application\Wheel.Application.csproj" />
 	  <ProjectReference Include="..\Wheel.Core\Wheel.Core.csproj" />
 	  <ProjectReference Include="..\Wheel.Data\Wheel.Data.csproj" />
 	  <ProjectReference Include="..\Wheel.Domain\Wheel.Domain.csproj" />

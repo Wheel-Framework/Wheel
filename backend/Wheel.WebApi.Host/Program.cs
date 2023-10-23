@@ -18,6 +18,7 @@ using System.Text.Json.Serialization;
 using Wheel;
 using Wheel.AutoMapper;
 using Wheel.Const;
+using Wheel.Controllers;
 using Wheel.Core.Dto;
 using Wheel.Core.Exceptions;
 using Wheel.DataSeeders;
@@ -127,6 +128,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 builder.Services.AddControllers()
+    .AddApplicationPart(typeof(WheelControllerBase).Assembly)
     .AddControllersAsServices()
     .AddJsonOptions(configure =>
     {

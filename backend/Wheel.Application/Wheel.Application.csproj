@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Wheel</RootNamespace>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<InvariantGlobalization>false</InvariantGlobalization>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0-rc.2.23480.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Wheel.Core\Wheel.Core.csproj" />
+		<ProjectReference Include="..\Wheel.Data\Wheel.Data.csproj" />
+		<ProjectReference Include="..\Wheel.Domain\Wheel.Domain.csproj" />
+	</ItemGroup>
+
+</Project>
