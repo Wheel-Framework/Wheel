@@ -1,5 +1,4 @@
-﻿using Wheel.Domain.Settings;
-using Wheel.Enums;
+﻿using Wheel.Enums;
 
 namespace Wheel.Settings
 {
