@@ -1,9 +1,11 @@
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using IdGen.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -35,6 +37,16 @@ using Role = Wheel.Domain.Identity.Role;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// kestrel
+builder.Host.ConfigureWebHostDefaults(webBuilder =>
+{
+    webBuilder.ConfigureKestrel((context, options) =>
+    {
+        // Handle requests up to 50 MB
+        options.Limits.MaxRequestBodySize = 1024 * 1024 * 50;
+    });
+});
+
 // logging
 Log.Logger = new LoggerConfiguration()
 #if DEBUG
@@ -54,6 +66,12 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 {
     builder.RegisterModule<WheelAutofacModule>();
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    // Set the limit to 256 MB
+    options.MultipartBodyLengthLimit = 1024 * 1024 * 256;
 });
 
 // Add services to the container.
