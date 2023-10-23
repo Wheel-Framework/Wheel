@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Shared", "backend\Whe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Data", "backend\Wheel.Data\Wheel.Data.csproj", "{C4BA4237-0758-49E2-9B72-5F618A94B19E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Application", "backend\Wheel.Application\Wheel.Application.csproj", "{CF10B9C4-6908-47AF-AF5F-BA0DB363A805}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Api", "backend\Wheel.Api\Wheel.Api.csproj", "{5BD28DB0-F122-42A4-B212-AC7E17D6D471}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{C4BA4237-0758-49E2-9B72-5F618A94B19E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4BA4237-0758-49E2-9B72-5F618A94B19E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4BA4237-0758-49E2-9B72-5F618A94B19E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF10B9C4-6908-47AF-AF5F-BA0DB363A805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF10B9C4-6908-47AF-AF5F-BA0DB363A805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF10B9C4-6908-47AF-AF5F-BA0DB363A805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF10B9C4-6908-47AF-AF5F-BA0DB363A805}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BD28DB0-F122-42A4-B212-AC7E17D6D471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BD28DB0-F122-42A4-B212-AC7E17D6D471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BD28DB0-F122-42A4-B212-AC7E17D6D471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BD28DB0-F122-42A4-B212-AC7E17D6D471}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
