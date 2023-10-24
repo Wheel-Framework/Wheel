@@ -10,7 +10,8 @@
 	<ItemGroup>
 		<PackageReference Include="MediatR" Version="12.1.1" />
 	</ItemGroup>
+
 	<ItemGroup>
-	  <ProjectReference Include="..\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj" />
+		<ProjectReference Include="..\Wheel.EventBus\Wheel.EventBus.csproj" />
 	</ItemGroup>
 </Project>

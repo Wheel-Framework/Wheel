@@ -44,6 +44,9 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\framework\Wheel.Authorization\Wheel.Authorization.csproj" />
+	  <ProjectReference Include="..\..\framework\Wheel.EventBus.Cap\Wheel.EventBus.Cap.csproj" />
+	  <ProjectReference Include="..\..\framework\Wheel.EventBus.MediatR\Wheel.EventBus.MediatR.csproj" />
+	  <ProjectReference Include="..\..\framework\Wheel.FileStorages.Minio\Wheel.FileStorages.Minio.csproj" />
 	  <ProjectReference Include="..\..\framework\Wheel.Graphql\Wheel.Graphql.csproj" />
 	  <ProjectReference Include="..\Wheel.Api\Wheel.Api.csproj" />
 	</ItemGroup>

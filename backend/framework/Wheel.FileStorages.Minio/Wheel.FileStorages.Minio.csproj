@@ -8,9 +8,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MediatR" Version="12.1.1" />
+	  <ProjectReference Include="..\Wheel.FileStorages\Wheel.FileStorages.csproj" />
+	  <ProjectReference Include="..\Wheel.Settings\Wheel.Settings.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj" />
-	</ItemGroup>
+
 </Project>

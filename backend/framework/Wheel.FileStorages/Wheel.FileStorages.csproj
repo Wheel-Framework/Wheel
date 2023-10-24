@@ -12,7 +12,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj" />
 		<ProjectReference Include="..\Wheel.Extensions\Wheel.Extensions.csproj" />
-		<ProjectReference Include="..\Wheel.Settings\Wheel.Settings.csproj" />
 	</ItemGroup>
 
 </Project>

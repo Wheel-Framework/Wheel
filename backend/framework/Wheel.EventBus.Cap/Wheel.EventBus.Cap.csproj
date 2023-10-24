@@ -8,9 +8,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MediatR" Version="12.1.1" />
+		<PackageReference Include="DotNetCore.CAP" Version="7.2.1" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj" />
+	  <ProjectReference Include="..\Wheel.EventBus\Wheel.EventBus.csproj" />
 	</ItemGroup>
+
 </Project>
