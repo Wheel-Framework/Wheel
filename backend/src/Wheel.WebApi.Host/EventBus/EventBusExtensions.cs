@@ -8,7 +8,7 @@ namespace Wheel.EventBus
 {
     public static class EventBusExtensions
     {
-        public static IServiceCollection AddLocalEventBus(this IServiceCollection services)
+        public static IServiceCollection AddMediatRLocalEventBus(this IServiceCollection services)
         {
             services.AddMediatR(cfg =>
             {
@@ -20,7 +20,7 @@ namespace Wheel.EventBus
             });
             return services;
         }
-        public static IServiceCollection AddDistributedEventBus(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCapDistributedEventBus(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IConsumerServiceSelector, WheelConsumerServiceSelector>();
             services.AddCap(x =>

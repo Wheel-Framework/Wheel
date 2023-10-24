@@ -71,8 +71,8 @@ builder.Services.Configure<FormOptions>(options =>
 
 // Add services to the container.
 builder.Services.AddMailKit(builder.Configuration);
-builder.Services.AddLocalEventBus();
-builder.Services.AddDistributedEventBus(builder.Configuration);
+builder.Services.AddMediatRLocalEventBus();
+builder.Services.AddCapDistributedEventBus(builder.Configuration);
 builder.Services.AddAutoMapper();
 builder.Services.AddIdGen(0);
 
