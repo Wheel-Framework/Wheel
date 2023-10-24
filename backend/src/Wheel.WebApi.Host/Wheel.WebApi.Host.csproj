@@ -11,12 +11,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="DotNetCore.CAP" Version="7.2.1" />
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.2.1" />
 		<PackageReference Include="DotNetCore.CAP.RedisStreams" Version="7.2.1" />
 		<PackageReference Include="DotNetCore.CAP.Sqlite" Version="7.2.0" />
-		<PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
 		<PackageReference Include="MailKit" Version="4.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0-rc.2.23480.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0-rc.2.23480.2" />
