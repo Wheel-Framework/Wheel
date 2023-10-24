@@ -1,4 +1,5 @@
-﻿using Minio;
+﻿using Microsoft.Extensions.Logging;
+using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
 using Wheel.Settings;

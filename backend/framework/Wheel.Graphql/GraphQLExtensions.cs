@@ -1,4 +1,5 @@
 ﻿using HotChocolate.Execution.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Wheel.Graphql

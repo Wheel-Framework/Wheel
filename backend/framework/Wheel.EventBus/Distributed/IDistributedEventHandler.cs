@@ -1,6 +1,4 @@
-﻿using Wheel.DependencyInjection;
-
-namespace Wheel.EventBus.Distributed
+﻿namespace Wheel.EventBus.Distributed
 {
     public interface IDistributedEventHandler<in TEventData> : IEventHandler
     {

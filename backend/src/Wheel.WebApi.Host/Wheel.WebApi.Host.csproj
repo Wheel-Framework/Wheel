@@ -16,8 +16,6 @@
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.2.1" />
 		<PackageReference Include="DotNetCore.CAP.RedisStreams" Version="7.2.1" />
 		<PackageReference Include="DotNetCore.CAP.Sqlite" Version="7.2.0" />
-		<PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1" />
-		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.5.1" />
 		<PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
 		<PackageReference Include="MailKit" Version="4.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0-rc.2.23480.2" />
@@ -37,7 +35,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0-rc.2.23480.2" />
-		<PackageReference Include="Minio" Version="6.0.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
 		<PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
@@ -46,6 +43,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\framework\Wheel.Authorization\Wheel.Authorization.csproj" />
+	  <ProjectReference Include="..\..\framework\Wheel.Graphql\Wheel.Graphql.csproj" />
 	  <ProjectReference Include="..\Wheel.Api\Wheel.Api.csproj" />
 	</ItemGroup>
 

@@ -1,5 +1,6 @@
 ﻿using DotNetCore.CAP;
 using DotNetCore.CAP.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TopicAttribute = DotNetCore.CAP.Internal.TopicAttribute;
 

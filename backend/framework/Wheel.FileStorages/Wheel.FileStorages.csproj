@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Wheel</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Minio" Version="6.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj" />
+		<ProjectReference Include="..\Wheel.Extensions\Wheel.Extensions.csproj" />
+		<ProjectReference Include="..\Wheel.Settings\Wheel.Settings.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Wheel</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1" />
+		<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.5.1" />
+	</ItemGroup>
+</Project>
