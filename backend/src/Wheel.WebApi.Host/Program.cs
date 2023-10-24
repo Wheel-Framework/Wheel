@@ -36,17 +36,12 @@ using Path = System.IO.Path;
 using Role = Wheel.Domain.Identity.Role;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// kestrel
-builder.Host.ConfigureWebHostDefaults(webBuilder =>
+// Kestrel
+builder.WebHost.ConfigureKestrel(options => 
 {
-    webBuilder.ConfigureKestrel((context, options) =>
-    {
-        // Handle requests up to 50 MB
-        options.Limits.MaxRequestBodySize = 1024 * 1024 * 50;
-    });
+    // Handle requests up to 50 MB
+    options.Limits.MaxRequestBodySize = 1024 * 1024 * 50;
 });
-
 // logging
 Log.Logger = new LoggerConfiguration()
 #if DEBUG
@@ -217,6 +212,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseReDoc(options => options.RoutePrefix = "doc");
 
 app.UseRequestLocalization(new RequestLocalizationOptions
 {

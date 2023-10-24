@@ -19,7 +19,4 @@
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.5" />
 		<PackageReference Include="MediatR" Version="12.1.1" />
 	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\Wheel.Shared\Wheel.Shared.csproj" />
-	</ItemGroup>
 </Project>

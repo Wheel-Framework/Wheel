@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Wheel.Core\Wheel.Core.csproj" />
+	  <ProjectReference Include="..\..\framework\Wheel.Core\Wheel.Core.csproj" />
 	  <ProjectReference Include="..\Wheel.Shared\Wheel.Shared.csproj" />
 	</ItemGroup>
 

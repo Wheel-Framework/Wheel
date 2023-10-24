@@ -15,7 +15,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Wheel.Core\Wheel.Core.csproj" />
 		<ProjectReference Include="..\Wheel.Data\Wheel.Data.csproj" />
 		<ProjectReference Include="..\Wheel.Domain\Wheel.Domain.csproj" />
 	</ItemGroup>
