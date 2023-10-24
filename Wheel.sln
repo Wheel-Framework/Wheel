@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Graphql", "backend\fr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Authorization", "backend\framework\Wheel.Authorization\Wheel.Authorization.csproj", "{F1770487-F830-49EF-9B13-4C5DE2FDF531}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Json", "backend\framework\Wheel.Json\Wheel.Json.csproj", "{C29C8C37-0CEF-4E23-9248-BB754EE8EB72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{F1770487-F830-49EF-9B13-4C5DE2FDF531}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1770487-F830-49EF-9B13-4C5DE2FDF531}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1770487-F830-49EF-9B13-4C5DE2FDF531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C29C8C37-0CEF-4E23-9248-BB754EE8EB72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29C8C37-0CEF-4E23-9248-BB754EE8EB72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C29C8C37-0CEF-4E23-9248-BB754EE8EB72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C29C8C37-0CEF-4E23-9248-BB754EE8EB72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,6 +136,7 @@ Global
 		{D1715F0C-9218-4312-98F6-8F57D240AF46} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 		{2408B9EA-32C3-406F-BACE-CCC79D961AF6} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 		{F1770487-F830-49EF-9B13-4C5DE2FDF531} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
+		{C29C8C37-0CEF-4E23-9248-BB754EE8EB72} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6607487D-21D3-4B63-B592-66C4D200D035}
