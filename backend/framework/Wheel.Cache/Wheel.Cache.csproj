@@ -6,8 +6,8 @@
 		<Nullable>enable</Nullable>
 		<RootNamespace>Wheel</RootNamespace>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App"></FrameworkReference>
+	  <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0-rc.2.23479.6" />
 	</ItemGroup>
 </Project>
