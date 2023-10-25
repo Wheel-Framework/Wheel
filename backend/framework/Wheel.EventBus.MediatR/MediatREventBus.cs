@@ -3,7 +3,7 @@ using Wheel.DependencyInjection;
 
 namespace Wheel.EventBus.Local.MediatR
 {
-    public class MediatREventBus : ILocalEventBus, ITransientDependency
+    public class MediatREventBus : ILocalEventBus
     {
         private readonly IMediator _mediator;
 

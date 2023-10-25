@@ -71,8 +71,17 @@ builder.Services.Configure<FormOptions>(options =>
 
 // Add services to the container.
 builder.Services.AddMailKit(builder.Configuration);
+builder.Services.AddChannelRLoacalEventBus();
 //builder.Services.AddMediatRLocalEventBus();
-builder.Services.AddCapDistributedEventBus(builder.Configuration);
+builder.Services.AddCapDistributedEventBus(x =>
+{
+    x.UseEntityFramework<WheelDbContext>();
+
+    x.UseSqlite(builder.Configuration.GetConnectionString("Default"));
+
+    //x.UseRabbitMQ(configuration["RabbitMQ:ConnectionString"]);
+    x.UseRedis(builder.Configuration["Cache:Redis"]);
+});
 builder.Services.AddAutoMapper();
 builder.Services.AddIdGen(0);
 

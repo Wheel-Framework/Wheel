@@ -1,4 +1,5 @@
-﻿using System.Threading.Channels;
+﻿using Microsoft.Extensions.Options;
+using System.Threading.Channels;
 using Wheel.DependencyInjection;
 
 namespace Wheel
@@ -7,9 +8,16 @@ namespace Wheel
     {
         private readonly Channel<EventBusChannelData> _channel;
 
-        public EventBusChannel()
+        public EventBusChannel(IOptions<EventBusChannelOptions> options)
         {
-            _channel = Channel.CreateUnbounded<EventBusChannelData>();
+            var eventBusChannelOptions = options.Value;
+            if(eventBusChannelOptions.ChannelType == ChannelType.Unbounded)
+                _channel = Channel.CreateUnbounded<EventBusChannelData>();
+            else
+                _channel = Channel.CreateBounded<EventBusChannelData>(new BoundedChannelOptions(eventBusChannelOptions.Capacity)
+                {
+                    FullMode = eventBusChannelOptions.FullMode
+                });
         }
 
         public async Task Publish(EventBusChannelData data, CancellationToken cancellationToken = default)

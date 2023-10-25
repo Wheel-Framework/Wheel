@@ -4,7 +4,7 @@ using Wheel.DependencyInjection;
 
 namespace Wheel.EventBus.Distributed.Cap
 {
-    public class CapDistributedEventBus : IDistributedEventBus, ITransientDependency
+    public class CapDistributedEventBus : IDistributedEventBus
     {
         private readonly ICapPublisher _capBus;
 
