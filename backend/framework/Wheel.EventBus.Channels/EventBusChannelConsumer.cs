@@ -18,9 +18,9 @@ namespace Wheel
         {
             _eventBusChannel = eventBusChannel;
             _serviceProvider = serviceProvider;
+            _logger = logger;
             InitHandlers();
             _ = Task.Factory.StartNew(async () => await Handle());
-            _logger = logger;
         }
 
         public async Task Handle(CancellationToken cancellationToken = default)
