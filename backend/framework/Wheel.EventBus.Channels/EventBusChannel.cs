@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Threading.Channels;
-using Wheel.DependencyInjection;
 
 namespace Wheel
 {
-    public class EventBusChannel : ISingletonDependency
+    public class EventBusChannel
     {
         private readonly Channel<EventBusChannelData> _channel;
 

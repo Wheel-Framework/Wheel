@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Wheel.DependencyInjection;
-using Wheel.EventBus.Local;
+﻿using Wheel.EventBus.Local;
 
 namespace Wheel
 {
-    public class ChannelLocalEventBus : ILocalEventBus, ITransientDependency
+    public class ChannelLocalEventBus : ILocalEventBus
     {
         private readonly EventBusChannelProducer _eventBusChannelProducer;
         private readonly EventBusChannelConsumer _eventBusChannelConsumer;

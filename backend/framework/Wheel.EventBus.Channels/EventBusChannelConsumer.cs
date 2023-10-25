@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
-using Wheel.DependencyInjection;
 using Wheel.EventBus;
 using Wheel.EventBus.Local;
 
 namespace Wheel
 {
-    public class EventBusChannelConsumer : ISingletonDependency
+    public class EventBusChannelConsumer
     {
         private readonly EventBusChannel _eventBusChannel;
         private readonly IServiceProvider _serviceProvider;
@@ -50,7 +49,8 @@ namespace Wheel
                             }
                         }
                     }
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
                 }

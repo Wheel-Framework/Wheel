@@ -1,8 +1,6 @@
-﻿using Wheel.DependencyInjection;
-
-namespace Wheel
+﻿namespace Wheel
 {
-    public class EventBusChannelProducer : ISingletonDependency
+    public class EventBusChannelProducer
     {
         private readonly EventBusChannel _eventBusChannel;
 
