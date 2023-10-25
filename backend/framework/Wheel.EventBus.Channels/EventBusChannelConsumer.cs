@@ -42,7 +42,7 @@ namespace Wheel
                             );
                         foreach (var handler in handlers)
                         {
-                            var handleMethod = (Task)method.Invoke(handler, new object[] { eventData.Data, cancellationToken });
+                            var handleMethod = method?.Invoke(handler, new object[] { eventData.Data, cancellationToken }) as Task;
                             if (handleMethod != null)
                             {
                                 await handleMethod;
