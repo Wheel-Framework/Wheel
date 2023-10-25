@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.EventBus.Cap", "backe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.EventBus.MediatR", "backend\framework\Wheel.EventBus.MediatR\Wheel.EventBus.MediatR.csproj", "{B4627D6A-4D20-40D8-8C95-61927307C59E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.EventBus.Channels", "backend\framework\Wheel.EventBus.Channels\Wheel.EventBus.Channels.csproj", "{816A5BA7-FA64-4CC3-AB76-29B1D8506215}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,6 +135,10 @@ Global
 		{B4627D6A-4D20-40D8-8C95-61927307C59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4627D6A-4D20-40D8-8C95-61927307C59E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4627D6A-4D20-40D8-8C95-61927307C59E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{816A5BA7-FA64-4CC3-AB76-29B1D8506215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{816A5BA7-FA64-4CC3-AB76-29B1D8506215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{816A5BA7-FA64-4CC3-AB76-29B1D8506215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{816A5BA7-FA64-4CC3-AB76-29B1D8506215}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,6 +164,7 @@ Global
 		{3EE4DD03-3823-4173-9478-C5A123CBE918} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 		{DFD7C66E-FF22-4051-ACDE-8BD0FB2D401B} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 		{B4627D6A-4D20-40D8-8C95-61927307C59E} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
+		{816A5BA7-FA64-4CC3-AB76-29B1D8506215} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6607487D-21D3-4B63-B592-66C4D200D035}
