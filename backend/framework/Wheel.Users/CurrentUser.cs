@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace Wheel.Core.Users
+namespace Wheel.Users
 {
     public class CurrentUser : ICurrentUser
     {

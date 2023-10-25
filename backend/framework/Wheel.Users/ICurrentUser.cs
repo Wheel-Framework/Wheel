@@ -1,6 +1,6 @@
 ﻿using Wheel.DependencyInjection;
 
-namespace Wheel.Core.Users
+namespace Wheel.Users
 {
     public interface ICurrentUser : IScopeDependency
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
-using Wheel.Core.Users;
+using Wheel.Users;
 using Wheel.Domain.Settings;
 using Wheel.Enums;
 

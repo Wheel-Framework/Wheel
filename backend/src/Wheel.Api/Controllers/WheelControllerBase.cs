@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Wheel.Core.Users;
+using Wheel.Users;
 using Wheel.EventBus.Distributed;
 using Wheel.EventBus.Local;
 using Wheel.Settings;

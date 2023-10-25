@@ -19,6 +19,7 @@
 	  <ProjectReference Include="..\Wheel.FileStorages\Wheel.FileStorages.csproj" />
 	  <ProjectReference Include="..\Wheel.Json\Wheel.Json.csproj" />
 	  <ProjectReference Include="..\Wheel.Settings\Wheel.Settings.csproj" />
+	  <ProjectReference Include="..\Wheel.Users\Wheel.Users.csproj" />
 	  <ProjectReference Include="..\Wheel.Utilities\Wheel.Utilities.csproj" />
 	</ItemGroup>
 </Project>

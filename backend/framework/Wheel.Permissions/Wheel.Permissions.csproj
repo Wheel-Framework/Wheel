@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wheel.Authorization\Wheel.Authorization.csproj" />
+    <ProjectReference Include="..\Wheel.Cache\Wheel.Cache.csproj" />
+    <ProjectReference Include="..\Wheel.Users\Wheel.Users.csproj" />
+  </ItemGroup>
+
+</Project>

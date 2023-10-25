@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Wheel.Authorization;
-using Wheel.Core.Users;
+using Wheel.Users;
 using Wheel.DependencyInjection;
 
 namespace Wheel.Permission
