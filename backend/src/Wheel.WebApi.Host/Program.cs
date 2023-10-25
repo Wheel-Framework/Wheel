@@ -32,6 +32,7 @@ using Wheel.Graphql;
 using Wheel.Hubs;
 using Wheel.Json;
 using Wheel.Localization;
+using Wheel.Settings;
 using static System.Net.Mime.MediaTypeNames;
 using Path = System.IO.Path;
 using Role = Wheel.Domain.Identity.Role;
@@ -123,6 +124,8 @@ builder.Services.AddIdentityCore<User>()
                 .AddApiEndpoints();
 
 builder.Services.AddWheelGraphQL();
+
+builder.Services.AddSetting(typeof(WheelSettingSotre));
 
 // Localizer
 builder.Services.AddEFStringLocalizer<EFStringLocalizerStore>();

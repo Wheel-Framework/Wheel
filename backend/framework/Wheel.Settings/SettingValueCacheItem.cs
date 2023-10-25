@@ -2,7 +2,7 @@
 
 namespace Wheel.Settings
 {
-    public class SettingValueCacheItem
+    public class SettingValueItem
     {
         public string Key { get; set; }
         public string Value { get; set; }

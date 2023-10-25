@@ -1,15 +1,10 @@
 ﻿using Wheel.DependencyInjection;
+using Wheel.Enums;
 
 namespace Wheel.Settings
 {
-    public interface ISettingProvider : ITransientDependency
+    public interface ISettingProvider
     {
-        public Task<Dictionary<string, string>> GetGolbalSettings(string groupKey, CancellationToken cancellationToken = default);
-        public Task<string> GetGolbalSetting(string groupKey, string settingKey, CancellationToken cancellationToken = default);
-        public Task<T> GetGolbalSetting<T>(string groupKey, string settingKey, CancellationToken cancellationToken = default) where T : struct;
-
-        public Task<Dictionary<string, string>> GetUserSettings(string groupKey, CancellationToken cancellationToken = default);
-        public Task<string> GetUserSetting(string groupKey, string settingKey, CancellationToken cancellationToken = default);
-        public Task<T> GetUserSetting<T>(string groupKey, string settingKey, CancellationToken cancellationToken = default) where T : struct;
+        public Task<Dictionary<string, string>> GetSettings(string settingGroupName, SettingScope settingScope = SettingScope.Global, string? settingScopeKey = null, CancellationToken cancellationToken = default);
     }
 }

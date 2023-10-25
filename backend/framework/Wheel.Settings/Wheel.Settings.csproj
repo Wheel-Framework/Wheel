@@ -8,7 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Wheel.Cache\Wheel.Cache.csproj" />
 		<ProjectReference Include="..\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj" />
+		<ProjectReference Include="..\Wheel.Extensions\Wheel.Extensions.csproj" />
 	</ItemGroup>
 
 </Project>
