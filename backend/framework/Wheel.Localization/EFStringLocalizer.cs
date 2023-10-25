@@ -1,19 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
-using Wheel.EntityFrameworkCore;
 
 namespace Wheel.Localization
 {
     public class EFStringLocalizer : IStringLocalizer
     {
-        private readonly WheelDbContext _db;
+        private readonly IStringLocalizerStore _localizerStore;
         private readonly IMemoryCache _memoryCache;
-        public EFStringLocalizer(WheelDbContext db, IMemoryCache memoryCache)
+        public EFStringLocalizer(IMemoryCache memoryCache, IStringLocalizerStore localizerStore)
         {
-            _db = db;
             _memoryCache = memoryCache;
+            _localizerStore = localizerStore;
         }
 
         public LocalizedString this[string name]
@@ -38,15 +36,12 @@ namespace Wheel.Localization
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             CultureInfo.DefaultThreadCurrentCulture = culture;
-            return new EFStringLocalizer(_db, _memoryCache);
+            return new EFStringLocalizer(_memoryCache, _localizerStore);
         }
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeAncestorCultures)
         {
-            return _db.Resources
-                .Include(r => r.Culture)
-                .Where(r => r.Culture.Name == CultureInfo.CurrentCulture.Name)
-                .Select(r => new LocalizedString(r.Key, r.Value, r.Value == null));
+            return _localizerStore.GetAllStrings();
         }
 
         private string? GetString(string name)
@@ -57,10 +52,7 @@ namespace Wheel.Localization
             }
             else
             {
-                value = _db.Resources
-                .Include(r => r.Culture)
-                .Where(r => r.Culture.Name == CultureInfo.CurrentCulture.Name)
-                .FirstOrDefault(r => r.Key == name)?.Value;
+                value = _localizerStore.GetString(name);
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     _memoryCache.Set($"{CultureInfo.CurrentCulture.Name}:{name}", value, TimeSpan.FromMinutes(1));
@@ -72,12 +64,12 @@ namespace Wheel.Localization
 
     public class EFStringLocalizer<T> : IStringLocalizer<T>
     {
-        private readonly WheelDbContext _db;
+        private readonly IStringLocalizerStore _localizerStore;
         private readonly IMemoryCache _memoryCache;
-        public EFStringLocalizer(WheelDbContext db, IMemoryCache memoryCache)
+        public EFStringLocalizer(IMemoryCache memoryCache, IStringLocalizerStore localizerStore)
         {
-            _db = db;
             _memoryCache = memoryCache;
+            _localizerStore = localizerStore;
         }
 
         public LocalizedString this[string name]
@@ -102,15 +94,12 @@ namespace Wheel.Localization
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             CultureInfo.DefaultThreadCurrentCulture = culture;
-            return new EFStringLocalizer(_db, _memoryCache);
+            return new EFStringLocalizer(_memoryCache, _localizerStore);
         }
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeAncestorCultures)
         {
-            return _db.Resources
-                .Include(r => r.Culture)
-                .Where(r => r.Culture.Name == CultureInfo.CurrentCulture.Name)
-                .Select(r => new LocalizedString(r.Key, r.Value, true));
+            return _localizerStore.GetAllStrings();
         }
 
         private string? GetString(string name)
@@ -121,10 +110,7 @@ namespace Wheel.Localization
             }
             else
             {
-                value = _db.Resources
-                .Include(r => r.Culture)
-                .Where(r => r.Culture.Name == CultureInfo.CurrentCulture.Name)
-                .FirstOrDefault(r => r.Key == name)?.Value;
+                value = _localizerStore.GetString(name);
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     _memoryCache.Set($"{CultureInfo.CurrentCulture.Name}:{name}", value, TimeSpan.FromMinutes(1));

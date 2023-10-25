@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Users", "backend\fram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Permissions", "backend\framework\Wheel.Permissions\Wheel.Permissions.csproj", "{9E95C35D-028B-4F7F-B2D6-5FA1C74EA1E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Localization", "backend\framework\Wheel.Localization\Wheel.Localization.csproj", "{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,10 @@ Global
 		{9E95C35D-028B-4F7F-B2D6-5FA1C74EA1E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E95C35D-028B-4F7F-B2D6-5FA1C74EA1E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E95C35D-028B-4F7F-B2D6-5FA1C74EA1E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -179,6 +185,7 @@ Global
 		{816A5BA7-FA64-4CC3-AB76-29B1D8506215} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 		{81F1088E-E94C-478E-A602-F56C61E18EDE} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 		{9E95C35D-028B-4F7F-B2D6-5FA1C74EA1E9} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
+		{D0C8A2C3-C033-4454-97B5-36C1AC971F4A} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6607487D-21D3-4B63-B592-66C4D200D035}

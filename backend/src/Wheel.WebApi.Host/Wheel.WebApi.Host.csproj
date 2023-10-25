@@ -46,6 +46,7 @@
 	  <ProjectReference Include="..\..\framework\Wheel.EventBus.Channels\Wheel.EventBus.Channels.csproj" />
 	  <ProjectReference Include="..\..\framework\Wheel.FileStorages.Minio\Wheel.FileStorages.Minio.csproj" />
 	  <ProjectReference Include="..\..\framework\Wheel.Graphql\Wheel.Graphql.csproj" />
+	  <ProjectReference Include="..\..\framework\Wheel.Localization\Wheel.Localization.csproj" />
 	  <ProjectReference Include="..\..\framework\Wheel.Permissions\Wheel.Permissions.csproj" />
 	  <ProjectReference Include="..\Wheel.Api\Wheel.Api.csproj" />
 	</ItemGroup>

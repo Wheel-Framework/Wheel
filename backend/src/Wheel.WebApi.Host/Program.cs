@@ -31,6 +31,7 @@ using Wheel.EventBus;
 using Wheel.Graphql;
 using Wheel.Hubs;
 using Wheel.Json;
+using Wheel.Localization;
 using static System.Net.Mime.MediaTypeNames;
 using Path = System.IO.Path;
 using Role = Wheel.Domain.Identity.Role;
@@ -122,6 +123,9 @@ builder.Services.AddIdentityCore<User>()
                 .AddApiEndpoints();
 
 builder.Services.AddWheelGraphQL();
+
+// Localizer
+builder.Services.AddEFStringLocalizer<EFStringLocalizerStore>();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
