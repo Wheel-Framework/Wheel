@@ -11,7 +11,7 @@ namespace Wheel
         public EventBusChannel(IOptions<EventBusChannelOptions> options)
         {
             var eventBusChannelOptions = options.Value;
-            if(eventBusChannelOptions.ChannelType == ChannelType.Unbounded)
+            if (eventBusChannelOptions.ChannelType == ChannelType.Unbounded)
                 _channel = Channel.CreateUnbounded<EventBusChannelData>();
             else
                 _channel = Channel.CreateBounded<EventBusChannelData>(new BoundedChannelOptions(eventBusChannelOptions.Capacity)
