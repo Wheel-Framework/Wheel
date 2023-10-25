@@ -128,7 +128,7 @@ builder.Services.AddWheelGraphQL();
 builder.Services.AddSetting(typeof(WheelSettingSotre));
 
 // Localizer
-builder.Services.AddEFStringLocalizer<EFStringLocalizerStore>();
+builder.Services.AddEFStringLocalizer(typeof(EFStringLocalizerStore));
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
