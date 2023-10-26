@@ -20,33 +20,33 @@ namespace Wheel
             _serviceProvider = serviceProvider;
             _logger = logger;
             InitHandlers();
-            _ = Task.Factory.StartNew(async () => await Handle());
+            _ = Task.Factory.StartNew(async () =>
+            {
+                await Parallel.ForEachAsync(HandlerDic, async (typeHandler, cancellationToken) =>
+                    {
+                        MethodInfo handleMethod = typeof(EventBusChannelConsumer).GetMethod(nameof(this.Handle));
+                        MethodInfo genericMethod = handleMethod.MakeGenericMethod(typeHandler.Key);
+                        var handle = genericMethod.Invoke(this, new object[] { cancellationToken }) as Task;
+                        await handle;
+                    });
+            });
         }
 
-        public async Task Handle(CancellationToken cancellationToken = default)
+        public async Task Handle<T>(CancellationToken cancellationToken = default)
         {
             while (true)
             {
-                var eventData = await _eventBusChannel.Subscribe(cancellationToken);
-                _logger.LogInformation($"EventBusChannelConsumer Handle Start: {eventData.DataType.FullName}");
+                var eventData = await _eventBusChannel.Subscribe<T>(cancellationToken);
+                _logger.LogInformation($"EventBusChannelConsumer Handle Start: {eventData.DataType.FullName} .");
                 try
                 {
                     if (HandlerDic.TryGetValue(eventData.DataType, out var handlerType))
                     {
-                        var handlers = _serviceProvider.GetServices(handlerType);
-                        var serviceTypeInfo = typeof(ILocalEventHandler<>)
-                            .MakeGenericType(eventData.DataType);
-                        var method = handlerType
-                            .GetMethod(
-                                nameof(ILocalEventHandler<object>.Handle)
-                            );
+                        var handlers = _serviceProvider.GetServices<ILocalEventHandler<T>>();
                         foreach (var handler in handlers)
                         {
-                            var handleMethod = method?.Invoke(handler, new object[] { eventData.Data, cancellationToken }) as Task;
-                            if (handleMethod != null)
-                            {
-                                await handleMethod;
-                            }
+                            _logger.LogInformation($"{handler.GetType().FullName} Handle.");
+                            await handler.Handle(eventData.Data, cancellationToken);
                         }
                     }
                 }

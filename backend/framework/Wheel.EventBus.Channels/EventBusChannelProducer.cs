@@ -11,7 +11,7 @@
 
         public async Task Publish<T>(T data, CancellationToken cancellationToken)
         {
-            await _eventBusChannel.Publish(new EventBusChannelData { Data = data, DataType = data.GetType() }, cancellationToken);
+            await _eventBusChannel.Publish(new EventBusChannelData<T> { Data = data, DataType = data.GetType() }, cancellationToken);
         }
     }
 }

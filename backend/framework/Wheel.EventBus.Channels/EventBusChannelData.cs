@@ -1,8 +1,8 @@
 ﻿namespace Wheel
 {
-    public class EventBusChannelData
+    public class EventBusChannelData<T>
     {
         public Type DataType { get; set; }
-        public object Data { get; set; }
+        public T Data { get; set; }
     }
 }

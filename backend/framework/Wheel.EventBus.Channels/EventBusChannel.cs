@@ -1,31 +1,44 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Collections.Concurrent;
 using System.Threading.Channels;
 
 namespace Wheel
 {
     public class EventBusChannel
     {
-        private readonly Channel<EventBusChannelData> _channel;
+        private readonly ConcurrentDictionary<Type, object> _channelDic = new();
+        private readonly EventBusChannelOptions eventBusChannelOptions;
 
         public EventBusChannel(IOptions<EventBusChannelOptions> options)
         {
-            var eventBusChannelOptions = options.Value;
-            if (eventBusChannelOptions.ChannelType == ChannelType.Unbounded)
-                _channel = Channel.CreateUnbounded<EventBusChannelData>();
-            else
-                _channel = Channel.CreateBounded<EventBusChannelData>(new BoundedChannelOptions(eventBusChannelOptions.Capacity)
-                {
-                    FullMode = eventBusChannelOptions.FullMode
-                });
+            eventBusChannelOptions = options.Value;
         }
 
-        public async Task Publish(EventBusChannelData data, CancellationToken cancellationToken = default)
+        public async Task Publish<T>(EventBusChannelData<T> data, CancellationToken cancellationToken = default)
         {
-            await _channel.Writer.WriteAsync(data, cancellationToken);
+            var channel = GetChannel<T>();
+            await channel.Writer.WriteAsync(data, cancellationToken);
         }
-        public async Task<EventBusChannelData> Subscribe(CancellationToken cancellationToken = default)
+        public async Task<EventBusChannelData<T>> Subscribe<T>(CancellationToken cancellationToken = default)
         {
-            return await _channel.Reader.ReadAsync(cancellationToken);
+            var channel = GetChannel<T>();
+            return await channel.Reader.ReadAsync(cancellationToken);
+        }
+
+        private Channel<EventBusChannelData<T>> GetChannel<T>()
+        {
+            if (!_channelDic.TryGetValue(typeof(T), out var value) || value is not Channel<EventBusChannelData<T>> channel)
+            {
+                if (eventBusChannelOptions.ChannelType == ChannelType.Unbounded)
+                    channel = Channel.CreateUnbounded<EventBusChannelData<T>>();
+                else
+                    channel = Channel.CreateBounded<EventBusChannelData<T>>(new BoundedChannelOptions(eventBusChannelOptions.Capacity)
+                    {
+                        FullMode = eventBusChannelOptions.FullMode
+                    });
+                _channelDic.TryAdd(typeof(T), channel);
+            }
+            return channel;
         }
     }
 }
