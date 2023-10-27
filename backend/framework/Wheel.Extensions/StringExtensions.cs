@@ -329,6 +329,12 @@ namespace System
                 return sb.ToString();
             }
         }
+        public static string ToMd5_HexConvert_Static(string input)
+        {
+            var inputBytes = Encoding.UTF8.GetBytes(input);
+            var hashBytes = MD5.HashData(inputBytes);
+            return Convert.ToHexString(hashBytes);
+        }
 
         [ContractAnnotation("null <= str:null")]
         public static string ToPascalCase(this string str, bool useCurrentCulture = false)
