@@ -30,7 +30,7 @@ namespace Wheel.Services.FileStorageManage
                     (!string.IsNullOrWhiteSpace(request.Provider), f => f.Provider.Equals(request.Provider)),
                     (request.FileStorageType.HasValue, f => f.FileStorageType.Equals(request.FileStorageType))
                     ),
-                (request.PageIndex -1) * request.PageSize,
+                (request.PageIndex - 1) * request.PageSize,
                 request.PageSize,
                 request.OrderBy
                 );
@@ -53,12 +53,12 @@ namespace Wheel.Services.FileStorageManage
                 fileStorageProvider = fileStorageProviders.First(a => a.Name == uploadFileDto.Provider);
             }
             var fileStorages = new List<FileStorage>();
-            foreach (var file in files) 
+            foreach (var file in files)
             {
                 var fileName = uploadFileDto.Cover ? file.FileName : $"{Path.GetFileNameWithoutExtension(file.FileName)}-{SnowflakeIdGenerator.Create()}{Path.GetExtension(file.FileName)}";
                 var fileStream = file.OpenReadStream();
                 var fileStorageType = FileStorageTypeChecker.CheckFileType(file.ContentType);
-                var uploadFileArgs = new UploadFileArgs 
+                var uploadFileArgs = new UploadFileArgs
                 {
                     BucketName = fileStorageType switch
                     {
@@ -76,7 +76,7 @@ namespace Wheel.Services.FileStorageManage
 
                 if (uploadFileResult.Success)
                 {
-                    var fileStorage = await _fileStorageRepository.InsertAsync(new FileStorage 
+                    var fileStorage = await _fileStorageRepository.InsertAsync(new FileStorage
                     {
                         Id = SnowflakeIdGenerator.Create(),
                         ContentType = file.ContentType,
@@ -96,12 +96,12 @@ namespace Wheel.Services.FileStorageManage
         public async Task<R<DownloadFileResonse>> DownloadFile(long id)
         {
             var fileStorage = await _fileStorageRepository.FindAsync(id);
-            if(fileStorage == null) 
+            if (fileStorage == null)
             {
                 throw new BusinessException(ErrorCode.FileNotExist, "FileNotExist")
                     .WithMessageDataData(id.ToString());
             }
-            var fileStorageProvider = ServiceProvider.GetServices<IFileStorageProvider>().First(a=>a.Name == fileStorage.Provider);
+            var fileStorageProvider = ServiceProvider.GetServices<IFileStorageProvider>().First(a => a.Name == fileStorage.Provider);
 
             var downloadResult = await fileStorageProvider.Download(new DownloadFileArgs { Path = fileStorage.Path });
             if (downloadResult.Success)

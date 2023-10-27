@@ -11,7 +11,7 @@
 
         public IDictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
 
-        public NotificationData WithData(string name, object value) 
+        public NotificationData WithData(string name, object value)
         {
             Data.Add(name, value);
             return this;

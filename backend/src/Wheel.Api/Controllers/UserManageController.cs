@@ -34,7 +34,7 @@ namespace Wheel.Controllers
         /// <param name="pageRequest"></param>
         /// <returns></returns>
         [HttpGet]
-        public Task<Page<UserDto>> GetUserPageList([FromQuery]UserPageRequest pageRequest)
+        public Task<Page<UserDto>> GetUserPageList([FromQuery] UserPageRequest pageRequest)
         {
             return _userManageAppService.GetUserPageList(pageRequest);
         }

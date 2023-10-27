@@ -8,7 +8,7 @@ namespace Wheel.Hubs
     {
         public string? GetUserId(HubConnectionContext connection)
         {
-            return connection.User?.Claims?.FirstOrDefault(a=> a.Type == ClaimTypes.NameIdentifier)?.Value;
+            return connection.User?.Claims?.FirstOrDefault(a => a.Type == ClaimTypes.NameIdentifier)?.Value;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Wheel.DataSeeders.Localization
             if (!(await _localizationCultureRepository.AnyAsync(cancellationToken)))
             {
                 await _localizationCultureRepository.InsertAsync(new LocalizationCulture() { Name = "en" }, true);
-                await _localizationCultureRepository.InsertAsync(new LocalizationCulture() { Name = "zh-CN"}, true);
+                await _localizationCultureRepository.InsertAsync(new LocalizationCulture() { Name = "zh-CN" }, true);
             }
         }
     }

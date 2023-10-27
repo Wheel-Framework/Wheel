@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Wheel.DependencyInjection;
 
 namespace Wheel.EventBus.Local.MediatR
 {

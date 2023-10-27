@@ -15,7 +15,7 @@ namespace Wheel.Settings
         public async Task<List<SettingValueItem>?> GetSettingValues(string settingGroupName, SettingScope settingScope = SettingScope.Global, string? settingScopeKey = null, CancellationToken cancellationToken = default)
         {
             var dbData = await _settingManager.GetSettingValues(settingGroupName, SettingScope.User, settingScopeKey: settingScopeKey, cancellationToken: cancellationToken); ;
-            if(dbData == null)
+            if (dbData == null)
             {
                 return null;
             }

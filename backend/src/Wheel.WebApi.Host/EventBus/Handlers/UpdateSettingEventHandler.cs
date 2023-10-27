@@ -25,7 +25,7 @@ namespace Wheel.EventBus.Handlers
         public async Task Handle(UpdateSettingEventData eventData, CancellationToken cancellationToken = default)
         {
             var settings = await _settingManager.GetSettingValues(eventData.GroupName, eventData.SettingScope, eventData.SettingScopeKey, cancellationToken);
-            
+
             await _distributedCache.SetAsync($"Setting:{eventData.GroupName}:{eventData.SettingScope}" + (eventData.SettingScope == Enums.SettingScope.Global ? "" : $":{eventData.SettingScopeKey}"), _mapper.Map<List<SettingValueDto>>(settings));
         }
     }

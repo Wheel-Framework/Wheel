@@ -15,7 +15,7 @@ namespace Wheel.Json
             if (reader.TokenType == JsonTokenType.Number)
                 return reader.GetInt64();
 
-            if(reader.TokenType == JsonTokenType.String &&  long.TryParse(reader.GetString(), out var value))
+            if (reader.TokenType == JsonTokenType.String && long.TryParse(reader.GetString(), out var value))
                 return value;
 
             throw new JsonException();

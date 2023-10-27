@@ -1,5 +1,4 @@
 using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using IdGen.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.BearerToken;
@@ -27,7 +26,6 @@ using Wheel.DataSeeders;
 using Wheel.Domain.Identity;
 using Wheel.Email;
 using Wheel.EntityFrameworkCore;
-using Wheel.EventBus;
 using Wheel.Graphql;
 using Wheel.Hubs;
 using Wheel.Json;
@@ -39,7 +37,7 @@ using Role = Wheel.Domain.Identity.Role;
 
 var builder = WebApplication.CreateBuilder(args);
 // Kestrel
-builder.WebHost.ConfigureKestrel(options => 
+builder.WebHost.ConfigureKestrel(options =>
 {
     // Handle requests up to 50 MB
     options.Limits.MaxRequestBodySize = 1024 * 1024 * 50;

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Wheel.Core.Dto;
+﻿using Wheel.Core.Dto;
 
 namespace Wheel.Services.Users.Dtos
 {

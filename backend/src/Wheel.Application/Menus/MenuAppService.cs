@@ -1,8 +1,5 @@
-﻿using StackExchange.Redis;
-using System.Diagnostics;
-using Wheel.Core.Dto;
+﻿using Wheel.Core.Dto;
 using Wheel.Domain;
-using Wheel.Domain.Identity;
 using Wheel.Domain.Menus;
 using Wheel.Services.Menus.Dtos;
 using Role = Wheel.Domain.Identity.Role;
@@ -28,10 +25,10 @@ namespace Wheel.Services.Menus
             return new R();
         }
 
-        public async Task<R> Update(Guid id,CreateOrUpdateMenuDto dto)
+        public async Task<R> Update(Guid id, CreateOrUpdateMenuDto dto)
         {
             var menu = await _menuRepository.FindAsync(id);
-            if(menu != null) 
+            if (menu != null)
             {
                 Mapper.Map(dto, menu);
                 await _menuRepository.UpdateAsync(menu, true);
@@ -54,7 +51,7 @@ namespace Wheel.Services.Menus
         {
             var items = await _menuRepository.GetListAsync(
                 a => a.ParentId == null,
-                propertySelectors: a=>a.Children
+                propertySelectors: a => a.Children
                 );
             items.ForEach(a => a.Children = a.Children.OrderBy(b => b.Sort).ToList());
             items = items.OrderBy(a => a.Sort).ToList();
@@ -69,7 +66,7 @@ namespace Wheel.Services.Menus
                 {
                     await _roleMenuRepository.DeleteAsync(a => a.RoleId == roleId);
                 }
-                if(dto.MenuIds.Any())
+                if (dto.MenuIds.Any())
                 {
                     var roleMenus = dto.MenuIds.Select(a => new RoleMenu { RoleId = roleId, MenuId = a });
                     await _roleMenuRepository.InsertManyAsync(roleMenus.ToList());
@@ -99,7 +96,7 @@ namespace Wheel.Services.Menus
                 var roleIds = await _roleRepository.SelectListAsync(a => CurrentUser.Roles.Contains(a.Name), a => a.Id);
                 var menus = await _roleMenuRepository.SelectListAsync(a => roleIds.Contains(a.RoleId) && a.Menu.ParentId == null, a => a.Menu, propertySelectors: a => a.Menu.Children);
 
-                return new R<List<AntdMenuDto>>(MaptoAntdMenu(menus.DistinctBy(a=>a.Id).ToList()));
+                return new R<List<AntdMenuDto>>(MaptoAntdMenu(menus.DistinctBy(a => a.Id).ToList()));
             }
         }
 
@@ -114,7 +111,7 @@ namespace Wheel.Services.Menus
                     Path = m.Path,
                     Access = m.Permission
                 };
-                if(m.Children != null && m.Children.Count > 0)
+                if (m.Children != null && m.Children.Count > 0)
                 {
                     result.Children = MaptoAntdMenu(m.Children);
                 }

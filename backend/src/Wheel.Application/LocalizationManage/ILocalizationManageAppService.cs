@@ -1,6 +1,5 @@
 ﻿using Wheel.Core.Dto;
 using Wheel.DependencyInjection;
-using Wheel.Domain.Localization;
 using Wheel.Services.LocalizationManage.Dtos;
 
 namespace Wheel.Services.LocalizationManage

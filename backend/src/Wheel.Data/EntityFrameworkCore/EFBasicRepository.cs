@@ -2,12 +2,9 @@
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using Wheel.Domain;
-using Wheel.Domain.Common;
 
 namespace Wheel.EntityFrameworkCore
 {
@@ -68,7 +65,7 @@ namespace Wheel.EntityFrameworkCore
         public async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var entity = await _dbContext.Set<TEntity>().FindAsync(id, cancellationToken);
-            if(entity != null)
+            if (entity != null)
                 _dbContext.Set<TEntity>().Remove(entity);
             if (autoSave)
             {
@@ -150,7 +147,7 @@ namespace Wheel.EntityFrameworkCore
                 .ToListAsync(cancellationToken);
             return (items, total);
         }
-        public async Task<(List<TEntity> items, long total)> GetPageListAsync(Expression<Func<TEntity, bool>> predicate, 
+        public async Task<(List<TEntity> items, long total)> GetPageListAsync(Expression<Func<TEntity, bool>> predicate,
             int skip, int take, string orderby = "Id", CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] propertySelectors)
         {
             var query = GetQueryableWithIncludes(propertySelectors).Where(predicate);
@@ -185,7 +182,7 @@ namespace Wheel.EntityFrameworkCore
 
         public Expression<Func<TEntity, bool>> BuildPredicate(params (bool condition, Expression<Func<TEntity, bool>> predicate)[] conditionPredicates)
         {
-            if(conditionPredicates == null || conditionPredicates.Length == 0)
+            if (conditionPredicates == null || conditionPredicates.Length == 0)
             {
                 throw new ArgumentNullException("conditionPredicates can not be null.");
             }
@@ -196,11 +193,11 @@ namespace Wheel.EntityFrameworkCore
                 {
                     if (buildPredicate == null)
                         buildPredicate = predicate;
-                    else if(predicate != null)
+                    else if (predicate != null)
                         buildPredicate = buildPredicate.And(predicate);
                 }
             }
-            if(buildPredicate == null)
+            if (buildPredicate == null)
             {
                 buildPredicate = (o) => true;
             }

@@ -44,7 +44,7 @@ namespace Wheel.Controllers
         /// <param name="pageRequest"></param>
         /// <returns></returns>
         [HttpGet("Page")]
-        public async Task<Page<RoleDto>> GetRolePageList([FromQuery]PageRequest pageRequest)
+        public async Task<Page<RoleDto>> GetRolePageList([FromQuery] PageRequest pageRequest)
         {
             return await _roleManageAppService.GetRolePageList(pageRequest);
         }

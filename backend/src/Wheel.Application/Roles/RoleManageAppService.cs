@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Wheel.Const;
-using Wheel.Core.Exceptions;
 using Wheel.Core.Dto;
+using Wheel.Core.Exceptions;
+using Wheel.Domain;
 using Wheel.Domain.Identity;
 using Wheel.Services.Roles.Dtos;
-using Wheel.Domain;
 
 namespace Wheel.Services.Roles
 {
@@ -38,7 +38,7 @@ namespace Wheel.Services.Roles
                 throw new BusinessException(ErrorCode.RoleExist, "RoleExist");
             }
             var result = await _roleManager.CreateAsync(new Role(dto.Name, dto.RoleType));
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return new R();
             }

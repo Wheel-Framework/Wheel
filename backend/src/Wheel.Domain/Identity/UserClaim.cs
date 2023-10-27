@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 using Wheel.Domain.Common;
 
 namespace Wheel.Domain.Identity

@@ -1,6 +1,4 @@
-﻿using DotNetCore.CAP.Messages;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using Wheel.DependencyInjection;

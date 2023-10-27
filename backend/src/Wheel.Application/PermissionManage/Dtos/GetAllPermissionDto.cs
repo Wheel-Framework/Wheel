@@ -2,11 +2,11 @@
 {
     public class GetAllPermissionDto
     {
-        public string Group { get; set; } 
-        public string Summary { get; set; } 
+        public string Group { get; set; }
+        public string Summary { get; set; }
 
-        public List<PermissionDto> Permissions { get; set; } = new ();
-        
+        public List<PermissionDto> Permissions { get; set; } = new();
+
     }
     public class PermissionDto
     {

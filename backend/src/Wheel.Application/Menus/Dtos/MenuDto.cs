@@ -1,5 +1,4 @@
-﻿using Wheel.Domain.Menus;
-using Wheel.Enums;
+﻿using Wheel.Enums;
 
 namespace Wheel.Services.Menus.Dtos
 {

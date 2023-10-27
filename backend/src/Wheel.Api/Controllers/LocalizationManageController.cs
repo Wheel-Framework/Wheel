@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Wheel.Core.Dto;
 using Wheel.Services.LocalizationManage;
 using Wheel.Services.LocalizationManage.Dtos;
-using Wheel.Utilities;
 
 namespace Wheel.Controllers
 {
@@ -59,7 +57,7 @@ namespace Wheel.Controllers
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpGet("Culture")]
-        public async Task<Page<LocalizationCultureDto>> GetCulturePageList([FromQuery]PageRequest input)
+        public async Task<Page<LocalizationCultureDto>> GetCulturePageList([FromQuery] PageRequest input)
         {
             return await _localizationManageAppService.GetLocalizationCulturePageListAsync(input);
         }
@@ -102,7 +100,7 @@ namespace Wheel.Controllers
         [AllowAnonymous]
         public Task<R<Dictionary<string, string>>> GetResources()
         {
-            var resources = L.GetAllStrings().ToDictionary(a=>a.Name, a=>a.Value);
+            var resources = L.GetAllStrings().ToDictionary(a => a.Name, a => a.Value);
             return Task.FromResult(new R<Dictionary<string, string>>(resources));
         }
     }

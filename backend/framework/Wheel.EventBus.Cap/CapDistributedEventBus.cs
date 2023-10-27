@@ -1,6 +1,5 @@
 ﻿using DotNetCore.CAP;
 using System.Reflection;
-using Wheel.DependencyInjection;
 
 namespace Wheel.EventBus.Distributed.Cap
 {

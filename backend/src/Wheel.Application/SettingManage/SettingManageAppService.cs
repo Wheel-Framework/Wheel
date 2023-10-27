@@ -1,10 +1,10 @@
-﻿using Wheel.Core.Dto;
-using Wheel.Domain.Settings;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Wheel.Core.Dto;
 using Wheel.Domain;
+using Wheel.Domain.Settings;
 using Wheel.Enums;
 using Wheel.Services.SettingManage.Dtos;
 using Wheel.Settings;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Wheel.Services.SettingManage
 {
@@ -39,7 +39,7 @@ namespace Wheel.Services.SettingManage
                     };
                     foreach (var settings in settingDefinition.Define())
                     {
-                        group.SettingValues.Add(new SettingValue 
+                        group.SettingValues.Add(new SettingValue
                         {
                             Key = settings.Key,
                             Value = settings.Value.DefalutValue,

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Wheel.DependencyInjection;
+﻿using Wheel.DependencyInjection;
 using Wheel.Enums;
 using Wheel.EventBus.Distributed;
 using Wheel.EventBus.EventDatas;
@@ -41,7 +39,7 @@ namespace Wheel.Domain.Settings
             if (settingValue is null)
                 return default;
 
-            if(settingValue.ValueType == SettingValueType.JsonObject)
+            if (settingValue.ValueType == SettingValueType.JsonObject)
                 return settingValue.Value.ToObject<T>();
 
             return (T)Convert.ChangeType(settingValue, typeof(T));
@@ -57,7 +55,7 @@ namespace Wheel.Domain.Settings
             }
 
             var settingValue = settingGroup?.SettingValues.FirstOrDefault(a => a.Key == settingKey && a.SettingScope == settingScope && a.SettingScopeKey == settingScopeKey);
-            
+
             return settingValue;
         }
 
@@ -84,12 +82,12 @@ namespace Wheel.Domain.Settings
                     var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
                     if (settingGroup is null)
                         settingGroup = await _settingGroupRepository.InsertAsync(new SettingGroup { Id = _snowflakeIdGenerator.Create(), Name = settingGroupName, NormalizedName = settingGroupName.ToUpper() }, cancellationToken: cancellationToken);
-                    
+
 
                     CheckSettingValueType(settingValue.Value, settingValue.ValueType);
 
-                    var sv = await _settingValueRepository.FindAsync(a=> a.SettingGroupId == settingGroup.Id && a.Id == settingValue.Id, cancellationToken);
-                    if(sv is null)
+                    var sv = await _settingValueRepository.FindAsync(a => a.SettingGroupId == settingGroup.Id && a.Id == settingValue.Id, cancellationToken);
+                    if (sv is null)
                     {
                         settingValue.Id = _snowflakeIdGenerator.Create();
                         settingValue.SettingGroupId = settingGroup.Id;
@@ -97,11 +95,11 @@ namespace Wheel.Domain.Settings
                     }
                     else
                         await _settingValueRepository.UpdateAsync(settingValue, cancellationToken: cancellationToken);
-                    
+
                     await uow.CommitAsync(cancellationToken);
                     await _distributedEventBus.PublishAsync(new UpdateSettingEventData() { GroupName = settingGroupName, SettingScope = settingValue.SettingScope, SettingScopeKey = settingValue.SettingScopeKey });
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     await uow.RollbackAsync(cancellationToken);
                     ex.ReThrow();
@@ -132,7 +130,7 @@ namespace Wheel.Domain.Settings
                         else
                             await _settingValueRepository.UpdateAsync(settingValue, cancellationToken: cancellationToken);
                     }
-                    
+
                     await uow.CommitAsync(cancellationToken);
                     await _distributedEventBus.PublishAsync(new UpdateSettingEventData() { GroupName = settingGroupName, SettingScope = settingValues.First().SettingScope, SettingScopeKey = settingValues.First().SettingScopeKey });
                 }
@@ -152,7 +150,7 @@ namespace Wheel.Domain.Settings
                 case SettingValueType.JsonObject:
                     return;
                 case SettingValueType.Bool:
-                    if(bool.TryParse(settingValue, out var _))
+                    if (bool.TryParse(settingValue, out var _))
                     {
                         return;
                     }

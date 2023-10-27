@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wheel.Core.Dto;
-using Wheel.Users;
 using Wheel.Services.Menus;
 using Wheel.Services.Menus.Dtos;
+using Wheel.Users;
 
 namespace Wheel.Controllers
 {

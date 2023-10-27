@@ -11,16 +11,16 @@ namespace Wheel.Domain.Identity
         /// </summary>
         public RoleType RoleType { get; set; }
 
-        public Role(string roleName, RoleType roleType) : base (roleName)
+        public Role(string roleName, RoleType roleType) : base(roleName)
         {
             RoleType = roleType;
         }
 
-        public Role(string roleName) : base (roleName)
+        public Role(string roleName) : base(roleName)
         {
         }
 
-        public Role() : base ()
+        public Role() : base()
         {
         }
 

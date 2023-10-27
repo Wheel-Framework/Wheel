@@ -1,10 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Wheel.Enums;
+﻿using Wheel.Enums;
 
 namespace Wheel.Settings
 {
@@ -42,7 +36,7 @@ namespace Wheel.Settings
         public static async Task<Dictionary<string, string>> GetUserSettings(this ISettingProvider provider, string groupKey, string userId, CancellationToken cancellationToken = default)
         {
             return await provider.GetSettings(groupKey, SettingScope.User, userId, cancellationToken: cancellationToken);
-            
+
         }
     }
 }

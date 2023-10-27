@@ -1,19 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using System.Runtime.ConstrainedExecution;
-using System.Text.Json;
-using System.Xml;
 using Wheel.Const;
 using Wheel.Core.Dto;
 using Wheel.Core.Exceptions;
-using Wheel.DependencyInjection;
 using Wheel.Domain;
 using Wheel.Domain.Identity;
 using Wheel.Domain.Permissions;
@@ -83,7 +78,7 @@ namespace Wheel.Services.PermissionManage
         }
         public async Task<R> UpdatePermission(UpdatePermissionDto dto)
         {
-            if(dto.Type == "R") 
+            if (dto.Type == "R")
             {
                 var exsit = await _roleManager.RoleExistsAsync(dto.Value);
                 if (!exsit)
@@ -93,7 +88,7 @@ namespace Wheel.Services.PermissionManage
             using (var tran = await UnitOfWork.BeginTransactionAsync())
             {
                 await _permissionGrantRepository.DeleteAsync(a => a.GrantType == dto.Type && a.GrantValue == dto.Value);
-                await _permissionGrantRepository.InsertManyAsync(dto.Permissions.Select(a=> new PermissionGrant 
+                await _permissionGrantRepository.InsertManyAsync(dto.Permissions.Select(a => new PermissionGrant
                 {
                     Id = GuidGenerator.Create(),
                     GrantType = dto.Type,

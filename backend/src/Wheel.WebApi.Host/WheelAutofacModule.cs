@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using Wheel.DependencyInjection;

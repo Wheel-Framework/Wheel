@@ -4,11 +4,11 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Wheel.Users;
 using Wheel.EventBus.Distributed;
 using Wheel.EventBus.Local;
 using Wheel.Settings;
 using Wheel.Uow;
+using Wheel.Users;
 using Wheel.Utilities;
 
 namespace Wheel.Services
@@ -22,7 +22,7 @@ namespace Wheel.Services
 
         public IUnitOfWork UnitOfWork => LazyGetService<IUnitOfWork>();
 
-        public IMapper Mapper =>  LazyGetService<IMapper>();
+        public IMapper Mapper => LazyGetService<IMapper>();
         public IMemoryCache MemoryCache => LazyGetService<IMemoryCache>();
 
         public IDistributedCache DistributedCache => LazyGetService<IDistributedCache>();
@@ -34,7 +34,8 @@ namespace Wheel.Services
 
         private IStringLocalizer _stringLocalizer = null;
 
-        public IStringLocalizer L { 
+        public IStringLocalizer L
+        {
             get
             {
                 if (_stringLocalizer == null)

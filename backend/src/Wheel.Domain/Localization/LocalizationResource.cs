@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Wheel.Domain.Common;
+﻿using Wheel.Domain.Common;
 
 namespace Wheel.Domain.Localization
 {

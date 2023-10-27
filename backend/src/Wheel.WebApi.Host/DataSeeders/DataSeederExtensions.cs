@@ -2,7 +2,7 @@
 {
     public static class DataSeederExtensions
     {
-        public static async Task<IApplicationBuilder> SeedData(this IApplicationBuilder app) 
+        public static async Task<IApplicationBuilder> SeedData(this IApplicationBuilder app)
         {
             var dataSeeders = app.ApplicationServices.GetServices<IDataSeeder>();
 
