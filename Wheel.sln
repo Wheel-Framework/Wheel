@@ -21,39 +21,41 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Api", "backend\src\Wh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.WebApi.Host", "backend\src\Wheel.WebApi.Host\Wheel.WebApi.Host.csproj", "{7CD4228C-F884-45DC-AE92-00C5E3F4064D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.DependencyInjection", "backend\framework\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj", "{FD8732DC-994E-4F77-AB0E-9022765649AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.DependencyInjection", "backend\framework\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj", "{FD8732DC-994E-4F77-AB0E-9022765649AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Cache", "backend\framework\Wheel.Cache\Wheel.Cache.csproj", "{1CFB955F-9080-4F4E-A85A-AC680BC503FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Cache", "backend\framework\Wheel.Cache\Wheel.Cache.csproj", "{1CFB955F-9080-4F4E-A85A-AC680BC503FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.EventBus", "backend\framework\Wheel.EventBus\Wheel.EventBus.csproj", "{ED344295-0270-4086-894C-71802A7702EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.EventBus", "backend\framework\Wheel.EventBus\Wheel.EventBus.csproj", "{ED344295-0270-4086-894C-71802A7702EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Settings", "backend\framework\Wheel.Settings\Wheel.Settings.csproj", "{E30FDCAF-5513-49EE-BD94-6B37F1FD5846}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Settings", "backend\framework\Wheel.Settings\Wheel.Settings.csproj", "{E30FDCAF-5513-49EE-BD94-6B37F1FD5846}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.FileStorages", "backend\framework\Wheel.FileStorages\Wheel.FileStorages.csproj", "{B75C9181-D431-4A70-A16F-D3D9BE4EFE9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.FileStorages", "backend\framework\Wheel.FileStorages\Wheel.FileStorages.csproj", "{B75C9181-D431-4A70-A16F-D3D9BE4EFE9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Extensions", "backend\framework\Wheel.Extensions\Wheel.Extensions.csproj", "{8EBED27F-668B-4F9F-86F7-6A93190EB853}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Extensions", "backend\framework\Wheel.Extensions\Wheel.Extensions.csproj", "{8EBED27F-668B-4F9F-86F7-6A93190EB853}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Utilities", "backend\framework\Wheel.Utilities\Wheel.Utilities.csproj", "{D1715F0C-9218-4312-98F6-8F57D240AF46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Utilities", "backend\framework\Wheel.Utilities\Wheel.Utilities.csproj", "{D1715F0C-9218-4312-98F6-8F57D240AF46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Graphql", "backend\framework\Wheel.Graphql\Wheel.Graphql.csproj", "{2408B9EA-32C3-406F-BACE-CCC79D961AF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Graphql", "backend\framework\Wheel.Graphql\Wheel.Graphql.csproj", "{2408B9EA-32C3-406F-BACE-CCC79D961AF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Authorization", "backend\framework\Wheel.Authorization\Wheel.Authorization.csproj", "{F1770487-F830-49EF-9B13-4C5DE2FDF531}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Authorization", "backend\framework\Wheel.Authorization\Wheel.Authorization.csproj", "{F1770487-F830-49EF-9B13-4C5DE2FDF531}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Json", "backend\framework\Wheel.Json\Wheel.Json.csproj", "{C29C8C37-0CEF-4E23-9248-BB754EE8EB72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Json", "backend\framework\Wheel.Json\Wheel.Json.csproj", "{C29C8C37-0CEF-4E23-9248-BB754EE8EB72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.FileStorages.Minio", "backend\framework\Wheel.FileStorages.Minio\Wheel.FileStorages.Minio.csproj", "{3EE4DD03-3823-4173-9478-C5A123CBE918}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.FileStorages.Minio", "backend\framework\Wheel.FileStorages.Minio\Wheel.FileStorages.Minio.csproj", "{3EE4DD03-3823-4173-9478-C5A123CBE918}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.EventBus.Cap", "backend\framework\Wheel.EventBus.Cap\Wheel.EventBus.Cap.csproj", "{DFD7C66E-FF22-4051-ACDE-8BD0FB2D401B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.EventBus.Cap", "backend\framework\Wheel.EventBus.Cap\Wheel.EventBus.Cap.csproj", "{DFD7C66E-FF22-4051-ACDE-8BD0FB2D401B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.EventBus.MediatR", "backend\framework\Wheel.EventBus.MediatR\Wheel.EventBus.MediatR.csproj", "{B4627D6A-4D20-40D8-8C95-61927307C59E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.EventBus.MediatR", "backend\framework\Wheel.EventBus.MediatR\Wheel.EventBus.MediatR.csproj", "{B4627D6A-4D20-40D8-8C95-61927307C59E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.EventBus.Channels", "backend\framework\Wheel.EventBus.Channels\Wheel.EventBus.Channels.csproj", "{816A5BA7-FA64-4CC3-AB76-29B1D8506215}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.EventBus.Channels", "backend\framework\Wheel.EventBus.Channels\Wheel.EventBus.Channels.csproj", "{816A5BA7-FA64-4CC3-AB76-29B1D8506215}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Users", "backend\framework\Wheel.Users\Wheel.Users.csproj", "{81F1088E-E94C-478E-A602-F56C61E18EDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Users", "backend\framework\Wheel.Users\Wheel.Users.csproj", "{81F1088E-E94C-478E-A602-F56C61E18EDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Permissions", "backend\framework\Wheel.Permissions\Wheel.Permissions.csproj", "{9E95C35D-028B-4F7F-B2D6-5FA1C74EA1E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Permissions", "backend\framework\Wheel.Permissions\Wheel.Permissions.csproj", "{9E95C35D-028B-4F7F-B2D6-5FA1C74EA1E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Localization", "backend\framework\Wheel.Localization\Wheel.Localization.csproj", "{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Localization", "backend\framework\Wheel.Localization\Wheel.Localization.csproj", "{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wheel.Hangfire", "backend\framework\Wheel.Hangfire\Wheel.Hangfire.csproj", "{657775ED-38BE-4232-BA95-CA59C98F3784}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,6 +159,10 @@ Global
 		{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0C8A2C3-C033-4454-97B5-36C1AC971F4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{657775ED-38BE-4232-BA95-CA59C98F3784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{657775ED-38BE-4232-BA95-CA59C98F3784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{657775ED-38BE-4232-BA95-CA59C98F3784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{657775ED-38BE-4232-BA95-CA59C98F3784}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,6 +192,7 @@ Global
 		{81F1088E-E94C-478E-A602-F56C61E18EDE} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 		{9E95C35D-028B-4F7F-B2D6-5FA1C74EA1E9} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 		{D0C8A2C3-C033-4454-97B5-36C1AC971F4A} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
+		{657775ED-38BE-4232-BA95-CA59C98F3784} = {AA18328A-2BF1-4391-876D-EB5E6836721B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6607487D-21D3-4B63-B592-66C4D200D035}
