@@ -1,13 +1,8 @@
 ﻿namespace Wheel.Notifications
 {
-    public class NotificationData
+    public class NotificationData(NotificationType type)
     {
-        public NotificationData(NotificationType type)
-        {
-            Type = type;
-        }
-
-        public NotificationType Type { get; set; }
+        public NotificationType Type { get; set; } = type;
 
         public IDictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
 

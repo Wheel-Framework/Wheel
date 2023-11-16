@@ -11,15 +11,8 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class SettingManageController : WheelControllerBase
+    public class SettingManageController(ISettingManageAppService settingManageAppService) : WheelControllerBase
     {
-        private readonly ISettingManageAppService _settingManageAppService;
-
-        public SettingManageController(ISettingManageAppService settingManageAppService)
-        {
-            _settingManageAppService = settingManageAppService;
-        }
-
         /// <summary>
         /// 获取所有设置
         /// </summary>
@@ -28,7 +21,7 @@ namespace Wheel.Controllers
         [HttpGet()]
         public Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Global)
         {
-            return _settingManageAppService.GetAllSettingGroup(settingScope);
+            return settingManageAppService.GetAllSettingGroup(settingScope);
         }
         /// <summary>
         /// 更新设置
@@ -39,7 +32,7 @@ namespace Wheel.Controllers
         [HttpPut("{settingScope}")]
         public Task<R> UpdateSettings(SettingGroupDto settingGroupDto, SettingScope settingScope)
         {
-            return _settingManageAppService.UpdateSettings(settingGroupDto, settingScope);
+            return settingManageAppService.UpdateSettings(settingGroupDto, settingScope);
         }
     }
 }

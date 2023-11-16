@@ -13,7 +13,7 @@ using Wheel.Domain.Settings;
 
 namespace Wheel.EntityFrameworkCore
 {
-    public class WheelDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public class WheelDbContext(DbContextOptions<WheelDbContext> options) : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>(options)
     {
         #region Localization
         public DbSet<LocalizationCulture> Cultures { get; set; }
@@ -41,10 +41,6 @@ namespace Wheel.EntityFrameworkCore
                             .FirstOrDefault()?.ApplicationServiceProvider
                             ?.GetService<IOptions<IdentityOptions>>()
                             ?.Value?.Stores;
-
-        public WheelDbContext(DbContextOptions<WheelDbContext> options) : base(options)
-        {
-        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

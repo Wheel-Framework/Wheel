@@ -7,27 +7,14 @@ using Wheel.Utilities;
 
 namespace Wheel.Domain.Settings
 {
-    public class SettingManager : ITransientDependency
+    public class SettingManager(IBasicRepository<SettingGroup, long> settingGroupRepository,
+            IBasicRepository<SettingValue, long> settingValueRepository, IUnitOfWork unitOfWork,
+            SnowflakeIdGenerator snowflakeIdGenerator, IDistributedEventBus distributedEventBus)
+        : ITransientDependency
     {
-        private readonly IBasicRepository<SettingGroup, long> _settingGroupRepository;
-        private readonly IBasicRepository<SettingValue, long> _settingValueRepository;
-
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly SnowflakeIdGenerator _snowflakeIdGenerator;
-        private readonly IDistributedEventBus _distributedEventBus;
-
-        public SettingManager(IBasicRepository<SettingGroup, long> settingGroupRepository, IBasicRepository<SettingValue, long> settingValueRepository, IUnitOfWork unitOfWork, SnowflakeIdGenerator snowflakeIdGenerator, IDistributedEventBus distributedEventBus)
-        {
-            _settingGroupRepository = settingGroupRepository;
-            _settingValueRepository = settingValueRepository;
-            _unitOfWork = unitOfWork;
-            _snowflakeIdGenerator = snowflakeIdGenerator;
-            _distributedEventBus = distributedEventBus;
-        }
-
         public async Task<T?> GetSettingValue<T>(string settingGroupName, string settingKey, SettingScope settingScope = SettingScope.Global, string? settingScopeKey = null, CancellationToken cancellationToken = default)
         {
-            var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
+            var settingGroup = await settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
 
             if (settingGroup is null)
             {
@@ -47,7 +34,7 @@ namespace Wheel.Domain.Settings
 
         public async Task<SettingValue?> GetSettingValue(string settingGroupName, string settingKey, SettingScope settingScope = SettingScope.Global, string? settingScopeKey = null, CancellationToken cancellationToken = default)
         {
-            var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
+            var settingGroup = await settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
 
             if (settingGroup is null)
             {
@@ -61,7 +48,7 @@ namespace Wheel.Domain.Settings
 
         public async Task<List<SettingValue>?> GetSettingValues(string settingGroupName, SettingScope settingScope = SettingScope.Global, string? settingScopeKey = null, CancellationToken cancellationToken = default)
         {
-            var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
+            var settingGroup = await settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
 
             if (settingGroup is null)
             {
@@ -75,29 +62,29 @@ namespace Wheel.Domain.Settings
 
         public async Task SetSettingValue(string settingGroupName, SettingValue settingValue, CancellationToken cancellationToken = default)
         {
-            using (var uow = await _unitOfWork.BeginTransactionAsync(cancellationToken))
+            using (var uow = await unitOfWork.BeginTransactionAsync(cancellationToken))
             {
                 try
                 {
-                    var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
+                    var settingGroup = await settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
                     if (settingGroup is null)
-                        settingGroup = await _settingGroupRepository.InsertAsync(new SettingGroup { Id = _snowflakeIdGenerator.Create(), Name = settingGroupName, NormalizedName = settingGroupName.ToUpper() }, cancellationToken: cancellationToken);
+                        settingGroup = await settingGroupRepository.InsertAsync(new SettingGroup { Id = snowflakeIdGenerator.Create(), Name = settingGroupName, NormalizedName = settingGroupName.ToUpper() }, cancellationToken: cancellationToken);
 
 
                     CheckSettingValueType(settingValue.Value, settingValue.ValueType);
 
-                    var sv = await _settingValueRepository.FindAsync(a => a.SettingGroupId == settingGroup.Id && a.Id == settingValue.Id, cancellationToken);
+                    var sv = await settingValueRepository.FindAsync(a => a.SettingGroupId == settingGroup.Id && a.Id == settingValue.Id, cancellationToken);
                     if (sv is null)
                     {
-                        settingValue.Id = _snowflakeIdGenerator.Create();
+                        settingValue.Id = snowflakeIdGenerator.Create();
                         settingValue.SettingGroupId = settingGroup.Id;
-                        await _settingValueRepository.InsertAsync(settingValue, cancellationToken: cancellationToken);
+                        await settingValueRepository.InsertAsync(settingValue, cancellationToken: cancellationToken);
                     }
                     else
-                        await _settingValueRepository.UpdateAsync(settingValue, cancellationToken: cancellationToken);
+                        await settingValueRepository.UpdateAsync(settingValue, cancellationToken: cancellationToken);
 
                     await uow.CommitAsync(cancellationToken);
-                    await _distributedEventBus.PublishAsync(new UpdateSettingEventData() { GroupName = settingGroupName, SettingScope = settingValue.SettingScope, SettingScopeKey = settingValue.SettingScopeKey });
+                    await distributedEventBus.PublishAsync(new UpdateSettingEventData() { GroupName = settingGroupName, SettingScope = settingValue.SettingScope, SettingScopeKey = settingValue.SettingScopeKey });
                 }
                 catch (Exception ex)
                 {
@@ -108,31 +95,31 @@ namespace Wheel.Domain.Settings
         }
         public async Task SetSettingValues(string settingGroupName, List<SettingValue> settingValues, CancellationToken cancellationToken = default)
         {
-            using (var uow = await _unitOfWork.BeginTransactionAsync(cancellationToken))
+            using (var uow = await unitOfWork.BeginTransactionAsync(cancellationToken))
             {
                 try
                 {
-                    var settingGroup = await _settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
+                    var settingGroup = await settingGroupRepository.FindAsync(a => a.Name == settingGroupName, cancellationToken);
                     if (settingGroup is null)
-                        settingGroup = await _settingGroupRepository.InsertAsync(new SettingGroup { Id = _snowflakeIdGenerator.Create(), Name = settingGroupName, NormalizedName = settingGroupName.ToUpper() }, true, cancellationToken: cancellationToken);
+                        settingGroup = await settingGroupRepository.InsertAsync(new SettingGroup { Id = snowflakeIdGenerator.Create(), Name = settingGroupName, NormalizedName = settingGroupName.ToUpper() }, true, cancellationToken: cancellationToken);
 
                     foreach (var settingValue in settingValues)
                     {
                         CheckSettingValueType(settingValue.Value, settingValue.ValueType);
 
-                        var sv = await _settingValueRepository.FindAsync(a => a.SettingGroupId == settingGroup.Id && a.Id == settingValue.Id, cancellationToken);
+                        var sv = await settingValueRepository.FindAsync(a => a.SettingGroupId == settingGroup.Id && a.Id == settingValue.Id, cancellationToken);
                         if (sv is null)
                         {
-                            settingValue.Id = _snowflakeIdGenerator.Create();
+                            settingValue.Id = snowflakeIdGenerator.Create();
                             settingValue.SettingGroupId = settingGroup.Id;
-                            await _settingValueRepository.InsertAsync(settingValue, cancellationToken: cancellationToken);
+                            await settingValueRepository.InsertAsync(settingValue, cancellationToken: cancellationToken);
                         }
                         else
-                            await _settingValueRepository.UpdateAsync(settingValue, cancellationToken: cancellationToken);
+                            await settingValueRepository.UpdateAsync(settingValue, cancellationToken: cancellationToken);
                     }
 
                     await uow.CommitAsync(cancellationToken);
-                    await _distributedEventBus.PublishAsync(new UpdateSettingEventData() { GroupName = settingGroupName, SettingScope = settingValues.First().SettingScope, SettingScopeKey = settingValues.First().SettingScopeKey });
+                    await distributedEventBus.PublishAsync(new UpdateSettingEventData() { GroupName = settingGroupName, SettingScope = settingValues.First().SettingScope, SettingScopeKey = settingValues.First().SettingScopeKey });
                 }
                 catch (Exception ex)
                 {

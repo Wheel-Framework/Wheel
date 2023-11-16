@@ -3,41 +3,35 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Wheel.Uow
 {
-    public class DbTransaction : IDbTransaction
+    public class DbTransaction(DbContext dbContext) : IDbTransaction
     {
-        private readonly DbContext _dbContext;
-
         IDbContextTransaction? CurrentDbContextTransaction;
 
         bool isCommit = false;
         bool isRollback = false;
-        public DbTransaction(DbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
 
         public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
-            CurrentDbContextTransaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+            CurrentDbContextTransaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         }
 
         public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            await _dbContext.SaveChangesAsync();
-            await _dbContext.Database.CommitTransactionAsync();
+            await dbContext.SaveChangesAsync();
+            await dbContext.Database.CommitTransactionAsync();
             isCommit = true;
             CurrentDbContextTransaction = null;
         }
         public void Commit()
         {
-            _dbContext.Database.CommitTransaction();
+            dbContext.Database.CommitTransaction();
             isCommit = true;
             CurrentDbContextTransaction = null;
         }
 
         public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
-            await _dbContext.Database.RollbackTransactionAsync(cancellationToken);
+            await dbContext.Database.RollbackTransactionAsync(cancellationToken);
             isRollback = true;
             CurrentDbContextTransaction = null;
         }

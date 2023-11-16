@@ -10,14 +10,8 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class MenuController : WheelControllerBase
+    public class MenuController(IMenuAppService menuAppService) : WheelControllerBase
     {
-        private readonly IMenuAppService _menuAppService;
-
-        public MenuController(IMenuAppService menuAppService)
-        {
-            _menuAppService = menuAppService;
-        }
         /// <summary>
         /// 新增菜单
         /// </summary>
@@ -26,7 +20,7 @@ namespace Wheel.Controllers
         [HttpPost()]
         public Task<R> Create(CreateOrUpdateMenuDto dto)
         {
-            return _menuAppService.Create(dto);
+            return menuAppService.Create(dto);
         }
         /// <summary>
         /// 删除菜单
@@ -36,7 +30,7 @@ namespace Wheel.Controllers
         [HttpDelete("{id}")]
         public Task<R> Delete(Guid id)
         {
-            return _menuAppService.Delete(id);
+            return menuAppService.Delete(id);
         }
         /// <summary>
         /// 获取单个菜单详情
@@ -46,7 +40,7 @@ namespace Wheel.Controllers
         [HttpGet("{id}")]
         public Task<R<MenuDto>> GetById(Guid id)
         {
-            return _menuAppService.GetById(id);
+            return menuAppService.GetById(id);
         }
         /// <summary>
         /// 查询菜单列表
@@ -55,7 +49,7 @@ namespace Wheel.Controllers
         [HttpGet]
         public Task<R<List<MenuDto>>> GetList()
         {
-            return _menuAppService.GetList();
+            return menuAppService.GetList();
         }
         /// <summary>
         /// 修改菜单
@@ -66,7 +60,7 @@ namespace Wheel.Controllers
         [HttpPut("{id}")]
         public Task<R> Update(Guid id, CreateOrUpdateMenuDto dto)
         {
-            return _menuAppService.Update(id, dto);
+            return menuAppService.Update(id, dto);
         }
         /// <summary>
         /// 修改角色菜单
@@ -77,7 +71,7 @@ namespace Wheel.Controllers
         [HttpPut("role/{roleId}")]
         public Task<R> UpdateRoleMenu(string roleId, UpdateRoleMenuDto dto)
         {
-            return _menuAppService.UpdateRoleMenu(roleId, dto);
+            return menuAppService.UpdateRoleMenu(roleId, dto);
         }
         /// <summary>
         /// 获取角色菜单列表
@@ -87,7 +81,7 @@ namespace Wheel.Controllers
         [HttpGet("role/{roleId}")]
         public Task<R<List<MenuDto>>> GetRoleMenuList(string roleId)
         {
-            return _menuAppService.GetRoleMenuList(roleId);
+            return menuAppService.GetRoleMenuList(roleId);
         }
     }
 }

@@ -12,15 +12,9 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class LocalizationManageController : WheelControllerBase
+    public class LocalizationManageController
+        (ILocalizationManageAppService localizationManageAppService) : WheelControllerBase
     {
-        private readonly ILocalizationManageAppService _localizationManageAppService;
-
-        public LocalizationManageController(ILocalizationManageAppService localizationManageAppService)
-        {
-            _localizationManageAppService = localizationManageAppService;
-        }
-
         /// <summary>
         /// 获取地区多语言详情
         /// </summary>
@@ -29,7 +23,7 @@ namespace Wheel.Controllers
         [HttpGet("Culture/{id}")]
         public async Task<R<LocalizationCultureDto>> GetCulture(int id)
         {
-            return await _localizationManageAppService.GetLocalizationCultureAsync(id);
+            return await localizationManageAppService.GetLocalizationCultureAsync(id);
         }
         /// <summary>
         /// 创建地区多语言
@@ -39,7 +33,7 @@ namespace Wheel.Controllers
         [HttpPost("Culture")]
         public async Task<R<LocalizationCultureDto>> CreateCulture(CreateLocalizationCultureDto input)
         {
-            return await _localizationManageAppService.CreateLocalizationCultureAsync(input);
+            return await localizationManageAppService.CreateLocalizationCultureAsync(input);
         }
         /// <summary>
         /// 删除地区多语言
@@ -49,7 +43,7 @@ namespace Wheel.Controllers
         [HttpDelete("Culture/{id}")]
         public async Task<R> DeleteCulture(int id)
         {
-            return await _localizationManageAppService.DeleteLocalizationCultureAsync(id);
+            return await localizationManageAppService.DeleteLocalizationCultureAsync(id);
         }
         /// <summary>
         /// 分页获取地区多语言列表
@@ -59,7 +53,7 @@ namespace Wheel.Controllers
         [HttpGet("Culture")]
         public async Task<Page<LocalizationCultureDto>> GetCulturePageList([FromQuery] PageRequest input)
         {
-            return await _localizationManageAppService.GetLocalizationCulturePageListAsync(input);
+            return await localizationManageAppService.GetLocalizationCulturePageListAsync(input);
         }
         /// <summary>
         /// 创建多语言资源
@@ -69,7 +63,7 @@ namespace Wheel.Controllers
         [HttpPost("Resource")]
         public async Task<R<LocalizationResourceDto>> CreateResource(CreateLocalizationResourceDto input)
         {
-            return await _localizationManageAppService.CreateLocalizationResourceAsync(input);
+            return await localizationManageAppService.CreateLocalizationResourceAsync(input);
         }
         /// <summary>
         /// 修改多语言资源
@@ -79,7 +73,7 @@ namespace Wheel.Controllers
         [HttpPut("Resource")]
         public async Task<R> UpdateResource(UpdateLocalizationResourceDto input)
         {
-            return await _localizationManageAppService.UpdateLocalizationResourceAsync(input);
+            return await localizationManageAppService.UpdateLocalizationResourceAsync(input);
         }
         /// <summary>
         /// 删除多语言资源
@@ -89,7 +83,7 @@ namespace Wheel.Controllers
         [HttpDelete("Resource/{id}")]
         public async Task<R> DeleteResource(int id)
         {
-            return await _localizationManageAppService.DeleteLocalizationResourceAsync(id);
+            return await localizationManageAppService.DeleteLocalizationResourceAsync(id);
         }
         /// <summary>
         /// 获取多语言资源列表

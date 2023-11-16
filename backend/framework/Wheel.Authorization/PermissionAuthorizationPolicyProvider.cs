@@ -4,11 +4,9 @@ using Wheel.DependencyInjection;
 
 namespace Wheel.Authorization
 {
-    public class PermissionAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider, ITransientDependency
+    public class PermissionAuthorizationPolicyProvider
+        (IOptions<AuthorizationOptions> options) : DefaultAuthorizationPolicyProvider(options), ITransientDependency
     {
-        public PermissionAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options) : base(options)
-        {
-        }
         public override async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
         {
             var policy = await base.GetPolicyAsync(policyName);

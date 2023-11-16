@@ -12,13 +12,8 @@ namespace Wheel.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class SupportDataController : ControllerBase
+    public class SupportDataController(ISupportDataAppService supportDataAppService) : ControllerBase
     {
-        private readonly ISupportDataAppService _supportDataAppService;
-        public SupportDataController(ISupportDataAppService supportDataAppService)
-        {
-            _supportDataAppService = supportDataAppService;
-        }
         /// <summary>
         /// 获取枚举键值对数据
         /// </summary>
@@ -28,7 +23,7 @@ namespace Wheel.Controllers
         [HttpGet("Enums/{type}")]
         public ValueTask<R<List<LabelValueDto>>> GetEnums(string type, string? nameSpace)
         {
-            return _supportDataAppService.GetEnums(type, nameSpace);
+            return supportDataAppService.GetEnums(type, nameSpace);
         }
 
     }

@@ -3,20 +3,13 @@ using Wheel.Domain.Menus;
 
 namespace Wheel.DataSeeders.Identity
 {
-    public class MenuDataSeeder : IDataSeeder
+    public class MenuDataSeeder(IBasicRepository<Menu, Guid> menuRepository) : IDataSeeder
     {
-        private readonly IBasicRepository<Menu, Guid> _menuRepository;
-
-        public MenuDataSeeder(IBasicRepository<Menu, Guid> menuRepository)
-        {
-            _menuRepository = menuRepository;
-        }
-
         public async Task Seed(CancellationToken cancellationToken = default)
         {
-            if (!(await _menuRepository.AnyAsync(cancellationToken)))
+            if (!(await menuRepository.AnyAsync(cancellationToken)))
             {
-                await _menuRepository.InsertAsync(new Menu
+                await menuRepository.InsertAsync(new Menu
                 {
                     Name = "SystemManage",
                     DisplayName = "系统管理",

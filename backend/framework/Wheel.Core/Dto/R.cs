@@ -16,24 +16,13 @@
         public string Message { get; set; } = "success";
 
     }
-    public class R<TData> : R
+    public class R<TData>(TData data) : R
     {
-        public R(TData data) : base()
-        {
-            Data = data;
-        }
-
-        public TData Data { get; set; }
+        public TData Data { get; set; } = data;
     }
-    public class Page<TData> : R
+    public class Page<TData>(List<TData> data, long total) : R
     {
-        public Page(List<TData> data, long total) : base()
-        {
-            Data = data;
-            Total = total;
-        }
-
-        public List<TData> Data { get; set; }
-        public long Total { get; set; }
+        public List<TData> Data { get; set; } = data;
+        public long Total { get; set; } = total;
     }
 }

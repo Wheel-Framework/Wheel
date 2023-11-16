@@ -3,14 +3,9 @@
 namespace Wheel.EventBus
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class EventNameAttribute : Attribute
+    public class EventNameAttribute([NotNull] string name) : Attribute
     {
-        public string Name { get; set; }
-
-        public EventNameAttribute([NotNull] string name)
-        {
-            Name = name;
-        }
+        public string Name { get; set; } = name;
 
         public static string? GetNameOrDefault<TEvent>()
         {

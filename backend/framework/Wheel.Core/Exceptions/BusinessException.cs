@@ -1,15 +1,10 @@
 ﻿namespace Wheel.Core.Exceptions
 {
-    public class BusinessException : Exception
+    public class BusinessException(string code, string? message = "") : Exception(message)
     {
-        public string Code { get; set; }
+        public string Code { get; set; } = code;
 
         public string[]? MessageData { get; set; }
-
-        public BusinessException(string code, string? message = "") : base(message)
-        {
-            Code = code;
-        }
 
         public BusinessException WithMessageDataData(params string[] messageData)
         {

@@ -4,16 +4,9 @@ using System.Globalization;
 
 namespace Wheel.Localization
 {
-    public class EFStringLocalizer : IStringLocalizer
+    public class EFStringLocalizer(IMemoryCache memoryCache, IStringLocalizerStore localizerStore)
+        : IStringLocalizer
     {
-        private readonly IStringLocalizerStore _localizerStore;
-        private readonly IMemoryCache _memoryCache;
-        public EFStringLocalizer(IMemoryCache memoryCache, IStringLocalizerStore localizerStore)
-        {
-            _memoryCache = memoryCache;
-            _localizerStore = localizerStore;
-        }
-
         public LocalizedString this[string name]
         {
             get
@@ -36,42 +29,35 @@ namespace Wheel.Localization
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             CultureInfo.DefaultThreadCurrentCulture = culture;
-            return new EFStringLocalizer(_memoryCache, _localizerStore);
+            return new EFStringLocalizer(memoryCache, localizerStore);
         }
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeAncestorCultures)
         {
-            return _localizerStore.GetAllStrings();
+            return localizerStore.GetAllStrings();
         }
 
         private string? GetString(string name)
         {
-            if (_memoryCache.TryGetValue<string>($"{CultureInfo.CurrentCulture.Name}:{name}", out var value))
+            if (memoryCache.TryGetValue<string>($"{CultureInfo.CurrentCulture.Name}:{name}", out var value))
             {
                 return value;
             }
             else
             {
-                value = _localizerStore.GetString(name);
+                value = localizerStore.GetString(name);
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    _memoryCache.Set($"{CultureInfo.CurrentCulture.Name}:{name}", value, TimeSpan.FromMinutes(1));
+                    memoryCache.Set($"{CultureInfo.CurrentCulture.Name}:{name}", value, TimeSpan.FromMinutes(1));
                 }
                 return value;
             }
         }
     }
 
-    public class EFStringLocalizer<T> : IStringLocalizer<T>
+    public class EFStringLocalizer<T>(IMemoryCache memoryCache, IStringLocalizerStore localizerStore)
+        : IStringLocalizer<T>
     {
-        private readonly IStringLocalizerStore _localizerStore;
-        private readonly IMemoryCache _memoryCache;
-        public EFStringLocalizer(IMemoryCache memoryCache, IStringLocalizerStore localizerStore)
-        {
-            _memoryCache = memoryCache;
-            _localizerStore = localizerStore;
-        }
-
         public LocalizedString this[string name]
         {
             get
@@ -94,26 +80,26 @@ namespace Wheel.Localization
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             CultureInfo.DefaultThreadCurrentCulture = culture;
-            return new EFStringLocalizer(_memoryCache, _localizerStore);
+            return new EFStringLocalizer(memoryCache, localizerStore);
         }
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeAncestorCultures)
         {
-            return _localizerStore.GetAllStrings();
+            return localizerStore.GetAllStrings();
         }
 
         private string? GetString(string name)
         {
-            if (_memoryCache.TryGetValue<string>($"{CultureInfo.CurrentCulture.Name}:{name}", out var value))
+            if (memoryCache.TryGetValue<string>($"{CultureInfo.CurrentCulture.Name}:{name}", out var value))
             {
                 return value;
             }
             else
             {
-                value = _localizerStore.GetString(name);
+                value = localizerStore.GetString(name);
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    _memoryCache.Set($"{CultureInfo.CurrentCulture.Name}:{name}", value, TimeSpan.FromMinutes(1));
+                    memoryCache.Set($"{CultureInfo.CurrentCulture.Name}:{name}", value, TimeSpan.FromMinutes(1));
                 }
                 return value;
             }

@@ -3,13 +3,9 @@ using System.Security.Claims;
 
 namespace Wheel.Users
 {
-    public class CurrentUser : ICurrentUser
+    public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUser
     {
-        private ClaimsPrincipal User;
-        public CurrentUser(IHttpContextAccessor httpContextAccessor)
-        {
-            User = httpContextAccessor.HttpContext.User;
-        }
+        private ClaimsPrincipal User = httpContextAccessor.HttpContext.User;
 
         public bool IsAuthenticated => User.Identity.IsAuthenticated;
         public string? Id => User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;

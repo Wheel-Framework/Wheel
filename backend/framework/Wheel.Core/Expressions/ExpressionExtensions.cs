@@ -25,21 +25,13 @@
             return new ParameterRebinder(oldParameter, newParameter).Visit(expression);
         }
 
-        private class ParameterRebinder : ExpressionVisitor
+        private class ParameterRebinder(ParameterExpression oldParameter, ParameterExpression newParameter)
+            : ExpressionVisitor
         {
-            private readonly ParameterExpression _oldParameter;
-            private readonly ParameterExpression _newParameter;
-
-            public ParameterRebinder(ParameterExpression oldParameter, ParameterExpression newParameter)
-            {
-                _oldParameter = oldParameter;
-                _newParameter = newParameter;
-            }
-
             protected override Expression VisitParameter(ParameterExpression node)
             {
-                if (node == _oldParameter)
-                    return _newParameter;
+                if (node == oldParameter)
+                    return newParameter;
 
                 return base.VisitParameter(node);
             }

@@ -8,25 +8,15 @@ using Wheel.Services.SettingManage.Dtos;
 
 namespace Wheel.EventBus.Handlers
 {
-    public class UpdateSettingEventHandler : IDistributedEventHandler<UpdateSettingEventData>, ITransientDependency
+    public class UpdateSettingEventHandler(SettingManager settingManager, IDistributedCache distributedCache,
+            IMapper mapper)
+        : IDistributedEventHandler<UpdateSettingEventData>, ITransientDependency
     {
-
-        private readonly SettingManager _settingManager;
-        private readonly IDistributedCache _distributedCache;
-        private readonly IMapper _mapper;
-
-        public UpdateSettingEventHandler(SettingManager settingManager, IDistributedCache distributedCache, IMapper mapper)
-        {
-            _settingManager = settingManager;
-            _distributedCache = distributedCache;
-            _mapper = mapper;
-        }
-
         public async Task Handle(UpdateSettingEventData eventData, CancellationToken cancellationToken = default)
         {
-            var settings = await _settingManager.GetSettingValues(eventData.GroupName, eventData.SettingScope, eventData.SettingScopeKey, cancellationToken);
+            var settings = await settingManager.GetSettingValues(eventData.GroupName, eventData.SettingScope, eventData.SettingScopeKey, cancellationToken);
 
-            await _distributedCache.SetAsync($"Setting:{eventData.GroupName}:{eventData.SettingScope}" + (eventData.SettingScope == Enums.SettingScope.Global ? "" : $":{eventData.SettingScopeKey}"), _mapper.Map<List<SettingValueDto>>(settings));
+            await distributedCache.SetAsync($"Setting:{eventData.GroupName}:{eventData.SettingScope}" + (eventData.SettingScope == Enums.SettingScope.Global ? "" : $":{eventData.SettingScopeKey}"), mapper.Map<List<SettingValueDto>>(settings));
         }
     }
 }

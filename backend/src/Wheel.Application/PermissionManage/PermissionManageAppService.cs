@@ -17,17 +17,10 @@ using Wheel.Utilities;
 
 namespace Wheel.Services.PermissionManage
 {
-    public class PermissionManageAppService : WheelServiceBase, IPermissionManageAppService
+    public class PermissionManageAppService(XmlCommentHelper xmlCommentHelper,
+            IBasicRepository<PermissionGrant, Guid> permissionGrantRepository, RoleManager<Role> roleManager)
+        : WheelServiceBase, IPermissionManageAppService
     {
-        private readonly IBasicRepository<PermissionGrant, Guid> _permissionGrantRepository;
-        private readonly RoleManager<Role> _roleManager;
-        private readonly XmlCommentHelper _xmlCommentHelper;
-        public PermissionManageAppService(XmlCommentHelper xmlCommentHelper, IBasicRepository<PermissionGrant, Guid> permissionGrantRepository, RoleManager<Role> roleManager)
-        {
-            _xmlCommentHelper = xmlCommentHelper;
-            _permissionGrantRepository = permissionGrantRepository;
-            _roleManager = roleManager;
-        }
         public async Task<R<List<GetAllPermissionDto>>> GetPermission()
         {
             var result = await GetAllDefinePermission();
@@ -38,7 +31,7 @@ namespace Wheel.Services.PermissionManage
             }
             else
             {
-                var grantPermissions = (await _permissionGrantRepository
+                var grantPermissions = (await permissionGrantRepository
                     .SelectListAsync(a => a.GrantType == "R" && CurrentUser.Roles.Contains(a.GrantValue), a => a.Permission))
                     .Distinct().ToList();
 
@@ -59,7 +52,7 @@ namespace Wheel.Services.PermissionManage
         {
             var result = await GetAllDefinePermission();
 
-            var grantPermissions = (await _permissionGrantRepository
+            var grantPermissions = (await permissionGrantRepository
                 .SelectListAsync(a => a.GrantType == "R" && RoleName == a.GrantValue, a => a.Permission))
                 .Distinct().ToList();
 
@@ -80,15 +73,15 @@ namespace Wheel.Services.PermissionManage
         {
             if (dto.Type == "R")
             {
-                var exsit = await _roleManager.RoleExistsAsync(dto.Value);
+                var exsit = await roleManager.RoleExistsAsync(dto.Value);
                 if (!exsit)
                     throw new BusinessException(ErrorCode.RoleNotExist, "RoleNotExist")
                         .WithMessageDataData(dto.Value);
             }
             using (var tran = await UnitOfWork.BeginTransactionAsync())
             {
-                await _permissionGrantRepository.DeleteAsync(a => a.GrantType == dto.Type && a.GrantValue == dto.Value);
-                await _permissionGrantRepository.InsertManyAsync(dto.Permissions.Select(a => new PermissionGrant
+                await permissionGrantRepository.DeleteAsync(a => a.GrantType == dto.Type && a.GrantValue == dto.Value);
+                await permissionGrantRepository.InsertManyAsync(dto.Permissions.Select(a => new PermissionGrant
                 {
                     Id = GuidGenerator.Create(),
                     GrantType = dto.Type,
@@ -120,7 +113,7 @@ namespace Wheel.Services.PermissionManage
 
                     var controllerAllowAnonymous = controllerTypeInfo.GetCustomAttribute<AllowAnonymousAttribute>();
 
-                    var controllerComment = _xmlCommentHelper.GetTypeComment(controllerTypeInfo);
+                    var controllerComment = xmlCommentHelper.GetTypeComment(controllerTypeInfo);
 
                     permissionGroup.Group = controllerTypeInfo.Name;
                     permissionGroup.Summary = controllerComment;
@@ -131,7 +124,7 @@ namespace Wheel.Services.PermissionManage
                         var actionAuthorize = method.GetCustomAttribute<AuthorizeAttribute>();
                         if ((controllerAllowAnonymous == null && actionAllowAnonymous == null) || actionAuthorize != null)
                         {
-                            var methodComment = _xmlCommentHelper.GetMethodComment(method);
+                            var methodComment = xmlCommentHelper.GetMethodComment(method);
                             permissionGroup.Permissions.Add(new PermissionDto { Name = method.Name, Summary = methodComment });
                         }
                     }

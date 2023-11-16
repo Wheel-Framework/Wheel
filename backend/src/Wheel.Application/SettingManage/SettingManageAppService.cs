@@ -8,23 +8,16 @@ using Wheel.Settings;
 
 namespace Wheel.Services.SettingManage
 {
-    public class SettingManageAppService : WheelServiceBase, ISettingManageAppService
+    public class SettingManageAppService(IBasicRepository<SettingGroup, long> settingGroupRepository,
+            IBasicRepository<SettingValue, long> settingValueRepository, SettingManager settingManager)
+        : WheelServiceBase, ISettingManageAppService
     {
-        private readonly IBasicRepository<SettingGroup, long> _settingGroupRepository;
-        private readonly IBasicRepository<SettingValue, long> _settingValueRepository;
-        private readonly SettingManager _settingManager;
-
-        public SettingManageAppService(IBasicRepository<SettingGroup, long> settingGroupRepository, IBasicRepository<SettingValue, long> settingValueRepository, SettingManager settingManager)
-        {
-            _settingGroupRepository = settingGroupRepository;
-            _settingValueRepository = settingValueRepository;
-            _settingManager = settingManager;
-        }
+        private readonly IBasicRepository<SettingValue, long> _settingValueRepository = settingValueRepository;
 
         public async Task<R<List<SettingGroupDto>>> GetAllSettingGroup(SettingScope settingScope = SettingScope.Global)
         {
             var settingDefinitions = ServiceProvider.GetServices<ISettingDefinition>().Where(a => a.SettingScope == settingScope);
-            var settingGroups = await _settingGroupRepository.GetListAsync(a => a.SettingValues.Any(a => a.SettingScope == settingScope && (settingScope == SettingScope.User ? a.SettingScopeKey == CurrentUser.Id : a.SettingScopeKey == null)));
+            var settingGroups = await settingGroupRepository.GetListAsync(a => a.SettingValues.Any(a => a.SettingScope == settingScope && (settingScope == SettingScope.User ? a.SettingScopeKey == CurrentUser.Id : a.SettingScopeKey == null)));
             foreach (var settingDefinition in settingDefinitions)
             {
                 if (settingGroups.Any(a => a.Name == settingDefinition.GroupName))
@@ -63,7 +56,7 @@ namespace Wheel.Services.SettingManage
                 a.SettingScope = settingScope;
                 a.SettingScopeKey = settingScope == SettingScope.User ? CurrentUser.Id : null;
             });
-            await _settingManager.SetSettingValues(settingGroupDto.Name, settings);
+            await settingManager.SetSettingValues(settingGroupDto.Name, settings);
             return new R();
         }
     }

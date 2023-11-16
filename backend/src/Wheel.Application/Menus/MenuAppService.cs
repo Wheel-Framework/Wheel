@@ -6,50 +6,44 @@ using Role = Wheel.Domain.Identity.Role;
 
 namespace Wheel.Services.Menus
 {
-    public class MenuAppService : WheelServiceBase, IMenuAppService
+    public class MenuAppService(IBasicRepository<Menu, Guid> menuRepository) : WheelServiceBase, IMenuAppService
     {
-        private readonly IBasicRepository<Menu, Guid> _menuRepository;
         private readonly IBasicRepository<Role, string> _roleRepository;
         private readonly IBasicRepository<RoleMenu> _roleMenuRepository;
-
-        public MenuAppService(IBasicRepository<Menu, Guid> menuRepository)
-        {
-            _menuRepository = menuRepository;
-        }
 
         public async Task<R> Create(CreateOrUpdateMenuDto dto)
         {
             var menu = Mapper.Map<Menu>(dto);
             menu.Id = GuidGenerator.Create();
-            await _menuRepository.InsertAsync(menu, true);
+            await menuRepository.InsertAsync(menu, true);
             return new R();
         }
 
         public async Task<R> Update(Guid id, CreateOrUpdateMenuDto dto)
         {
-            var menu = await _menuRepository.FindAsync(id);
+            var menu = await menuRepository.FindAsync(id);
             if (menu != null)
             {
                 Mapper.Map(dto, menu);
-                await _menuRepository.UpdateAsync(menu, true);
+                await menuRepository.UpdateAsync(menu, true);
             }
             return new R();
         }
         public async Task<R> Delete(Guid id)
         {
-            await _menuRepository.DeleteAsync(id, true);
+            await menuRepository.DeleteAsync(id, true);
             return new R();
         }
         public async Task<R<MenuDto>> GetById(Guid id)
         {
-            var menu = await _menuRepository.FindAsync(id);
+            var menu = await menuRepository.FindAsync(id);
 
             var dto = Mapper.Map<MenuDto>(menu);
             return new R<MenuDto>(dto);
         }
         public async Task<R<List<MenuDto>>> GetList()
         {
-            var items = await _menuRepository.GetListAsync(
+            var items = await menuRepository.GetListAsync(
                 a => a.ParentId == null,
                 propertySelectors: a => a.Children
                 );
@@ -88,7 +82,7 @@ namespace Wheel.Services.Menus
         {
             if (CurrentUser.IsInRoles("admin"))
             {
-                var menus = await _menuRepository.GetListAsync(a => a.ParentId == null);
+                var menus = await menuRepository.GetListAsync(a => a.ParentId == null);
                 return new R<List<AntdMenuDto>>(MaptoAntdMenu(menus));
             }
             else

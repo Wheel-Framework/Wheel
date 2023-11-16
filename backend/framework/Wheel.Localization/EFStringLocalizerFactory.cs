@@ -4,17 +4,11 @@ using Microsoft.Extensions.Localization;
 
 namespace Wheel.Localization
 {
-    public class EFStringLocalizerFactory : IStringLocalizerFactory
+    public class EFStringLocalizerFactory(IServiceProvider serviceProvider) : IStringLocalizerFactory
     {
-        IServiceProvider _serviceProvider;
-        public EFStringLocalizerFactory(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
         public IStringLocalizer Create(Type resourceSource)
         {
-            var scope = _serviceProvider.CreateScope();
+            var scope = serviceProvider.CreateScope();
             var store = scope.ServiceProvider.GetRequiredService<IStringLocalizerStore>();
             var cahce = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
             return new EFStringLocalizer(cahce, store);
@@ -22,7 +16,7 @@ namespace Wheel.Localization
 
         public IStringLocalizer Create(string baseName, string location)
         {
-            var scope = _serviceProvider.CreateScope();
+            var scope = serviceProvider.CreateScope();
             var store = scope.ServiceProvider.GetRequiredService<IStringLocalizerStore>();
             var cahce = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
             return new EFStringLocalizer(cahce, store);

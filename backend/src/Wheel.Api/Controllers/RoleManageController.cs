@@ -10,14 +10,8 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class RoleManageController : WheelControllerBase
+    public class RoleManageController(IRoleManageAppService roleManageAppService) : WheelControllerBase
     {
-        private readonly IRoleManageAppService _roleManageAppService;
-
-        public RoleManageController(IRoleManageAppService roleManageAppService)
-        {
-            _roleManageAppService = roleManageAppService;
-        }
         /// <summary>
         /// 创建角色
         /// </summary>
@@ -26,7 +20,7 @@ namespace Wheel.Controllers
         [HttpPost]
         public async Task<R> CreateRole(CreateRoleDto dto)
         {
-            return await _roleManageAppService.CreateRole(dto);
+            return await roleManageAppService.CreateRole(dto);
         }
         /// <summary>
         /// 删除角色
@@ -36,7 +30,7 @@ namespace Wheel.Controllers
         [HttpDelete]
         public async Task<R> DeleteRole(string roleName)
         {
-            return await _roleManageAppService.DeleteRole(roleName);
+            return await roleManageAppService.DeleteRole(roleName);
         }
         /// <summary>
         /// 角色分页查询
@@ -46,7 +40,7 @@ namespace Wheel.Controllers
         [HttpGet("Page")]
         public async Task<Page<RoleDto>> GetRolePageList([FromQuery] PageRequest pageRequest)
         {
-            return await _roleManageAppService.GetRolePageList(pageRequest);
+            return await roleManageAppService.GetRolePageList(pageRequest);
         }
     }
 }

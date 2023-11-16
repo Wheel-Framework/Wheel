@@ -3,23 +3,17 @@
 namespace Wheel.Uow
 {
 
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(WheelDbContext dbContext) : IUnitOfWork
     {
-        private readonly WheelDbContext _dbContext;
         private IDbTransaction? Transaction = null;
-
-        public UnitOfWork(WheelDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            return await dbContext.SaveChangesAsync(cancellationToken);
         }
         public async Task<IDbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
-            Transaction = new DbTransaction(_dbContext);
+            Transaction = new DbTransaction(dbContext);
             await Transaction.BeginTransactionAsync(cancellationToken);
             return Transaction;
         }
@@ -44,14 +38,14 @@ namespace Wheel.Uow
         {
             if (Transaction != null)
                 Transaction.Dispose();
-            _dbContext.Dispose();
+            dbContext.Dispose();
         }
 
         public async ValueTask DisposeAsync()
         {
             if (Transaction != null)
                 await Transaction.DisposeAsync();
-            await _dbContext.DisposeAsync();
+            await dbContext.DisposeAsync();
         }
     }
 }

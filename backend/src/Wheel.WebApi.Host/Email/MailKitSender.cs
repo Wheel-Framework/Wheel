@@ -5,20 +5,13 @@ using Wheel.DependencyInjection;
 
 namespace Wheel.Email
 {
-    public class MailKitSender : IEmailSender, ITransientDependency
+    public class MailKitSender(IOptions<MailKitOptions> mailKitOptions) : IEmailSender, ITransientDependency
     {
-        private readonly IOptions<MailKitOptions> _mailKitOptions;
-
-        public MailKitSender(IOptions<MailKitOptions> mailKitOptions)
-        {
-            _mailKitOptions = mailKitOptions;
-        }
-
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             MimeMessage message = new MimeMessage();
             //发件人
-            message.From.Add(new MailboxAddress(_mailKitOptions.Value.SenderName, _mailKitOptions.Value.UserName));
+            message.From.Add(new MailboxAddress(mailKitOptions.Value.SenderName, mailKitOptions.Value.UserName));
             //收件人
             message.To.Add(new MailboxAddress(subject, email));
 
@@ -33,9 +26,9 @@ namespace Wheel.Email
             using (var client = new MailKit.Net.Smtp.SmtpClient())
             {
                 //Smtp服务器
-                client.Connect(_mailKitOptions.Value.Host, _mailKitOptions.Value.Prot, _mailKitOptions.Value.UseSsl);
+                client.Connect(mailKitOptions.Value.Host, mailKitOptions.Value.Prot, mailKitOptions.Value.UseSsl);
                 //登录，发送
-                client.Authenticate(_mailKitOptions.Value.UserName, _mailKitOptions.Value.Password);
+                client.Authenticate(mailKitOptions.Value.UserName, mailKitOptions.Value.Password);
                 await client.SendAsync(message);
                 //断开
                 client.Disconnect(true);

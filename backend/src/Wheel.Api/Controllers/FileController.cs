@@ -10,14 +10,8 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class FileController : WheelControllerBase
+    public class FileController(IFileStorageManageAppService fileStorageManageAppService) : WheelControllerBase
     {
-        private readonly IFileStorageManageAppService _fileStorageManageAppService;
-
-        public FileController(IFileStorageManageAppService fileStorageManageAppService)
-        {
-            _fileStorageManageAppService = fileStorageManageAppService;
-        }
         /// <summary>
         /// 分页查询列表
         /// </summary>
@@ -26,7 +20,7 @@ namespace Wheel.Controllers
         [HttpGet]
         public Task<Page<FileStorageDto>> GetFileStoragePageList([FromQuery] FileStoragePageRequest request)
         {
-            return _fileStorageManageAppService.GetFileStoragePageList(request);
+            return fileStorageManageAppService.GetFileStoragePageList(request);
         }
         /// <summary>
         /// 上传文件
@@ -36,7 +30,7 @@ namespace Wheel.Controllers
         [HttpPost]
         public Task<R<List<FileStorageDto>>> UploadFiles(UploadFileDto uploadFileDto)
         {
-            return _fileStorageManageAppService.UploadFiles(uploadFileDto);
+            return fileStorageManageAppService.UploadFiles(uploadFileDto);
         }
         /// <summary>
         /// 下载文件
@@ -46,7 +40,7 @@ namespace Wheel.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> DownloadFile(long id)
         {
-            var result = await _fileStorageManageAppService.DownloadFile(id);
+            var result = await fileStorageManageAppService.DownloadFile(id);
             return File(result.Data.Stream, result.Data.ContentType, result.Data.FileName);
         }
     }

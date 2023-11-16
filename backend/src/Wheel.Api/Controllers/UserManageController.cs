@@ -10,14 +10,8 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class UserManageController : WheelControllerBase
+    public class UserManageController(IUserManageAppService userManageAppService) : WheelControllerBase
     {
-        private readonly IUserManageAppService _userManageAppService;
-
-        public UserManageController(IUserManageAppService userManageAppService)
-        {
-            _userManageAppService = userManageAppService;
-        }
         /// <summary>
         /// 创建用户
         /// </summary>
@@ -26,7 +20,7 @@ namespace Wheel.Controllers
         [HttpPost]
         public Task<R> CreateUser(CreateUserDto userDto)
         {
-            return _userManageAppService.CreateUser(userDto);
+            return userManageAppService.CreateUser(userDto);
         }
         /// <summary>
         /// 用户分页查询
@@ -36,7 +30,7 @@ namespace Wheel.Controllers
         [HttpGet]
         public Task<Page<UserDto>> GetUserPageList([FromQuery] UserPageRequest pageRequest)
         {
-            return _userManageAppService.GetUserPageList(pageRequest);
+            return userManageAppService.GetUserPageList(pageRequest);
         }
         /// <summary>
         /// 修改用户
@@ -47,7 +41,7 @@ namespace Wheel.Controllers
         [HttpPut("{userId}")]
         public Task<R> UpdateUser(string userId, UpdateUserDto updateUserDto)
         {
-            return _userManageAppService.UpdateUser(userId, updateUserDto);
+            return userManageAppService.UpdateUser(userId, updateUserDto);
         }
     }
 }

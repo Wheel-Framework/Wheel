@@ -4,14 +4,9 @@ using Wheel.Notifications;
 
 namespace Wheel.Hubs
 {
-    public class NotificationHub : Hub
+    public class NotificationHub(IStringLocalizerFactory localizerFactory) : Hub
     {
-        protected IStringLocalizer L;
-
-        public NotificationHub(IStringLocalizerFactory localizerFactory)
-        {
-            L = localizerFactory.Create(null);
-        }
+        protected IStringLocalizer L = localizerFactory.Create(null);
 
         public override async Task OnConnectedAsync()
         {

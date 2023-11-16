@@ -4,15 +4,10 @@ using System.Threading.Channels;
 
 namespace Wheel
 {
-    public class EventBusChannel
+    public class EventBusChannel(IOptions<EventBusChannelOptions> options)
     {
         private readonly ConcurrentDictionary<Type, object> _channelDic = new();
-        private readonly EventBusChannelOptions eventBusChannelOptions;
-
-        public EventBusChannel(IOptions<EventBusChannelOptions> options)
-        {
-            eventBusChannelOptions = options.Value;
-        }
+        private readonly EventBusChannelOptions eventBusChannelOptions = options.Value;
 
         public async Task Publish<T>(EventBusChannelData<T> data, CancellationToken cancellationToken = default)
         {

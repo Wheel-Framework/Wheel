@@ -8,105 +8,99 @@ using Wheel.Domain;
 
 namespace Wheel.EntityFrameworkCore
 {
-    public class EFBasicRepository<TEntity, TKey> : IBasicRepository<TEntity, TKey> where TEntity : class
+    public class EFBasicRepository<TEntity, TKey>(WheelDbContext dbContext) : IBasicRepository<TEntity, TKey>
+        where TEntity : class
     {
-        private readonly WheelDbContext _dbContext;
-
-        private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
-
-        public EFBasicRepository(WheelDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        private DbSet<TEntity> DbSet => dbContext.Set<TEntity>();
 
         public async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var savedEntity = (await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken)).Entity;
+            var savedEntity = (await dbContext.Set<TEntity>().AddAsync(entity, cancellationToken)).Entity;
             if (autoSave)
             {
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
             return savedEntity;
         }
         public async Task InsertManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            await _dbContext.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
+            await dbContext.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
             if (autoSave)
             {
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
         public async Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var savedEntity = _dbContext.Set<TEntity>().Update(entity).Entity;
+            var savedEntity = dbContext.Set<TEntity>().Update(entity).Entity;
 
             if (autoSave)
             {
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
             return savedEntity;
         }
         public async Task UpdateAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            await _dbContext.Set<TEntity>().Where(predicate).ExecuteUpdateAsync(setPropertyCalls, cancellationToken);
+            await dbContext.Set<TEntity>().Where(predicate).ExecuteUpdateAsync(setPropertyCalls, cancellationToken);
             if (autoSave)
             {
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
         public async Task UpdateManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            _dbContext.Set<TEntity>().UpdateRange(entities);
+            dbContext.Set<TEntity>().UpdateRange(entities);
             if (autoSave)
             {
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
         public async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entity = await _dbContext.Set<TEntity>().FindAsync(id, cancellationToken);
+            var entity = await dbContext.Set<TEntity>().FindAsync(id, cancellationToken);
             if (entity != null)
-                _dbContext.Set<TEntity>().Remove(entity);
+                dbContext.Set<TEntity>().Remove(entity);
             if (autoSave)
             {
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
         public async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            _dbContext.Set<TEntity>().Remove(entity);
+            dbContext.Set<TEntity>().Remove(entity);
             if (autoSave)
             {
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
         public async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            await _dbContext.Set<TEntity>().Where(predicate).ExecuteDeleteAsync(cancellationToken);
+            await dbContext.Set<TEntity>().Where(predicate).ExecuteDeleteAsync(cancellationToken);
             if (autoSave)
             {
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
         public async Task DeleteManyAsync(List<TEntity> entities, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            _dbContext.Set<TEntity>().RemoveRange(entities);
+            dbContext.Set<TEntity>().RemoveRange(entities);
             if (autoSave)
             {
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
         public async Task<TEntity?> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Set<TEntity>().FindAsync(id, cancellationToken);
+            return await dbContext.Set<TEntity>().FindAsync(id, cancellationToken);
         }
         public async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken);
+            return await dbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken);
         }
         public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync(cancellationToken);
+            return await dbContext.Set<TEntity>().Where(predicate).ToListAsync(cancellationToken);
         }
         public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] propertySelectors)
         {
@@ -171,9 +165,9 @@ namespace Wheel.EntityFrameworkCore
         {
             if (noTracking)
             {
-                return _dbContext.Set<TEntity>().AsNoTracking();
+                return dbContext.Set<TEntity>().AsNoTracking();
             }
-            return _dbContext.Set<TEntity>();
+            return dbContext.Set<TEntity>();
         }
         public IQueryable<TEntity> GetQueryableWithIncludes(params Expression<Func<TEntity, object>>[] propertySelectors)
         {
@@ -218,31 +212,28 @@ namespace Wheel.EntityFrameworkCore
         }
         public async Task<int> SaveChangeAsync(CancellationToken cancellationToken = default)
         {
-            return await _dbContext.SaveChangesAsync(cancellationToken);
+            return await dbContext.SaveChangesAsync(cancellationToken);
         }
 
         protected DbSet<TEntity> GetDbSet()
         {
-            return _dbContext.Set<TEntity>();
+            return dbContext.Set<TEntity>();
         }
 
         protected IDbConnection GetDbConnection()
         {
-            return _dbContext.Database.GetDbConnection();
+            return dbContext.Database.GetDbConnection();
         }
 
         protected IDbTransaction? GetDbTransaction()
         {
-            return _dbContext.Database.CurrentTransaction?.GetDbTransaction();
+            return dbContext.Database.CurrentTransaction?.GetDbTransaction();
         }
 
     }
 
 
-    public class EFBasicRepository<TEntity> : EFBasicRepository<TEntity, object>, IBasicRepository<TEntity> where TEntity : class
-    {
-        public EFBasicRepository(WheelDbContext dbContext) : base(dbContext)
-        {
-        }
-    }
+    public class EFBasicRepository<TEntity>(WheelDbContext dbContext) : EFBasicRepository<TEntity, object>(dbContext),
+        IBasicRepository<TEntity>
+        where TEntity : class;
 }

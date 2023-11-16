@@ -2,20 +2,15 @@
 
 namespace Wheel
 {
-    public class ChannelLocalEventBus : ILocalEventBus
+    public class ChannelLocalEventBus(EventBusChannelProducer eventBusChannelProducer,
+            EventBusChannelConsumer eventBusChannelConsumer)
+        : ILocalEventBus
     {
-        private readonly EventBusChannelProducer _eventBusChannelProducer;
-        private readonly EventBusChannelConsumer _eventBusChannelConsumer;
-
-        public ChannelLocalEventBus(EventBusChannelProducer eventBusChannelProducer, EventBusChannelConsumer eventBusChannelConsumer)
-        {
-            _eventBusChannelProducer = eventBusChannelProducer;
-            _eventBusChannelConsumer = eventBusChannelConsumer;
-        }
+        private readonly EventBusChannelConsumer _eventBusChannelConsumer = eventBusChannelConsumer;
 
         public async Task PublishAsync<TEventData>(TEventData eventData, CancellationToken cancellationToken = default)
         {
-            await _eventBusChannelProducer.Publish(eventData, cancellationToken).ConfigureAwait(false);
+            await eventBusChannelProducer.Publish(eventData, cancellationToken).ConfigureAwait(false);
         }
     }
 }

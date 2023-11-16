@@ -6,17 +6,9 @@ using Wheel.Settings;
 
 namespace Wheel.FileStorages.Providers
 {
-    public class MinioFileStorageProvider : IFileStorageProvider
+    public class MinioFileStorageProvider(ISettingProvider settingProvider, ILogger<MinioFileStorageProvider> logger)
+        : IFileStorageProvider
     {
-        private readonly ISettingProvider _settingProvider;
-        private readonly ILogger<MinioFileStorageProvider> _logger;
-
-        public MinioFileStorageProvider(ISettingProvider settingProvider, ILogger<MinioFileStorageProvider> logger)
-        {
-            _settingProvider = settingProvider;
-            _logger = logger;
-        }
-
         public string Name => "Minio";
         internal Action<IMinioClient>? Configure { get; private set; }
         public async Task<UploadFileResult> Upload(UploadFileArgs uploadFileArgs, CancellationToken cancellationToken = default)
@@ -43,12 +35,12 @@ namespace Wheel.FileStorages.Providers
                     .WithContentType(uploadFileArgs.ContentType);
                 await client.PutObjectAsync(putObjectArgs, cancellationToken).ConfigureAwait(false);
                 var path = BuildPath(uploadFileArgs.BucketName, uploadFileArgs.FileName);
-                _logger.LogInformation("Successfully Uploaded " + path);
+                logger.LogInformation("Successfully Uploaded " + path);
                 return new UploadFileResult { FilePath = path, Success = true };
             }
             catch (MinioException e)
             {
-                _logger.LogError("File Upload Error: {0}", e.Message);
+                logger.LogError("File Upload Error: {0}", e.Message);
                 return new UploadFileResult { Success = false };
             }
         }
@@ -66,13 +58,13 @@ namespace Wheel.FileStorages.Providers
                     ;
                 var response = await client.GetObjectAsync(getObjectArgs, cancellationToken).ConfigureAwait(false);
 
-                _logger.LogInformation("Successfully Download " + downloadFileArgs.Path);
+                logger.LogInformation("Successfully Download " + downloadFileArgs.Path);
                 stream.Position = 0;
                 return new DownFileResult { Stream = stream, Success = true, FileName = response.ObjectName, ContentType = response.ContentType };
             }
             catch (MinioException e)
             {
-                _logger.LogError("File Download Error: {0}", e.Message);
+                logger.LogError("File Download Error: {0}", e.Message);
                 return new DownFileResult { Success = false };
             }
         }
@@ -113,7 +105,7 @@ namespace Wheel.FileStorages.Providers
 
         private async Task<Dictionary<string, string>> GetSettings()
         {
-            var settings = await _settingProvider.GetGolbalSettings("FileProvider");
+            var settings = await settingProvider.GetGolbalSettings("FileProvider");
 
             return settings.Where(a => a.Key.StartsWith("Minio")).ToDictionary(a => a.Key.RemovePreFix("Minio."), a => a.Value);
         }

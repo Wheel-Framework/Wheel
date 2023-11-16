@@ -11,19 +11,13 @@ using Path = System.IO.Path;
 
 namespace Wheel.Services.FileStorageManage
 {
-    public class FileStorageManageAppService : WheelServiceBase, IFileStorageManageAppService
+    public class FileStorageManageAppService
+        (IBasicRepository<FileStorage, long> fileStorageRepository) : WheelServiceBase, IFileStorageManageAppService
     {
-        private readonly IBasicRepository<FileStorage, long> _fileStorageRepository;
-
-        public FileStorageManageAppService(IBasicRepository<FileStorage, long> fileStorageRepository)
-        {
-            _fileStorageRepository = fileStorageRepository;
-        }
-
         public async Task<Page<FileStorageDto>> GetFileStoragePageList(FileStoragePageRequest request)
         {
-            var (items, total) = await _fileStorageRepository.GetPageListAsync(
-                _fileStorageRepository.BuildPredicate(
+            var (items, total) = await fileStorageRepository.GetPageListAsync(
+                fileStorageRepository.BuildPredicate(
                     (!string.IsNullOrWhiteSpace(request.FileName), f => f.FileName.Contains(request.FileName!)),
                     (!string.IsNullOrWhiteSpace(request.ContentType), f => f.ContentType.Equals(request.ContentType)),
                     (!string.IsNullOrWhiteSpace(request.Path), f => f.Path.StartsWith(request.Path!)),
@@ -76,7 +70,7 @@ namespace Wheel.Services.FileStorageManage
 
                 if (uploadFileResult.Success)
                 {
-                    var fileStorage = await _fileStorageRepository.InsertAsync(new FileStorage
+                    var fileStorage = await fileStorageRepository.InsertAsync(new FileStorage
                     {
                         Id = SnowflakeIdGenerator.Create(),
                         ContentType = file.ContentType,
@@ -86,7 +80,7 @@ namespace Wheel.Services.FileStorageManage
                         Provider = fileStorageProvider.Name,
                         Size = fileStream.Length
                     });
-                    await _fileStorageRepository.SaveChangeAsync();
+                    await fileStorageRepository.SaveChangeAsync();
                     fileStorages.Add(fileStorage);
                 }
             }
@@ -95,7 +89,7 @@ namespace Wheel.Services.FileStorageManage
 
         public async Task<R<DownloadFileResonse>> DownloadFile(long id)
         {
-            var fileStorage = await _fileStorageRepository.FindAsync(id);
+            var fileStorage = await fileStorageRepository.FindAsync(id);
             if (fileStorage == null)
             {
                 throw new BusinessException(ErrorCode.FileNotExist, "FileNotExist")

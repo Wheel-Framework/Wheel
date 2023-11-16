@@ -10,13 +10,9 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class PermissionManageController : WheelControllerBase
+    public class PermissionManageController
+        (IPermissionManageAppService permissionManageAppService) : WheelControllerBase
     {
-        private readonly IPermissionManageAppService _permissionManageAppService;
-        public PermissionManageController(IPermissionManageAppService permissionManageAppService)
-        {
-            _permissionManageAppService = permissionManageAppService;
-        }
         /// <summary>
         /// 获取所有权限
         /// </summary>
@@ -24,7 +20,7 @@ namespace Wheel.Controllers
         [HttpGet()]
         public Task<R<List<GetAllPermissionDto>>> GetPermission()
         {
-            return _permissionManageAppService.GetPermission();
+            return permissionManageAppService.GetPermission();
         }
         /// <summary>
         /// 获取指定角色权限
@@ -33,7 +29,7 @@ namespace Wheel.Controllers
         [HttpGet("{role}")]
         public Task<R<List<GetAllPermissionDto>>> GetRolePermission(string role)
         {
-            return _permissionManageAppService.GetRolePermission(role);
+            return permissionManageAppService.GetRolePermission(role);
         }
         /// <summary>
         /// 修改权限
@@ -43,7 +39,7 @@ namespace Wheel.Controllers
         [HttpPut]
         public async Task<R> UpdatePermission(UpdatePermissionDto dto)
         {
-            return await _permissionManageAppService.UpdatePermission(dto);
+            return await permissionManageAppService.UpdatePermission(dto);
         }
     }
 }

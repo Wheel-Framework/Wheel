@@ -8,19 +8,12 @@ using Wheel.Services.Roles.Dtos;
 
 namespace Wheel.Services.Roles
 {
-    public class RoleManageAppService : WheelServiceBase, IRoleManageAppService
+    public class RoleManageAppService(RoleManager<Role> roleManager, IBasicRepository<Role, string> roleRepository)
+        : WheelServiceBase, IRoleManageAppService
     {
-        private readonly RoleManager<Role> _roleManager;
-        private readonly IBasicRepository<Role, string> _roleRepository;
-
-        public RoleManageAppService(RoleManager<Role> roleManager, IBasicRepository<Role, string> roleRepository)
-        {
-            _roleManager = roleManager;
-            _roleRepository = roleRepository;
-        }
         public async Task<Page<RoleDto>> GetRolePageList(PageRequest pageRequest)
         {
-            var (items, total) = await _roleRepository.SelectPageListAsync(
+            var (items, total) = await roleRepository.SelectPageListAsync(
                 a => true,
                 a => new RoleDto { Id = a.Id, Name = a.Name },
                 (pageRequest.PageIndex - 1) * pageRequest.PageSize,
@@ -32,12 +25,12 @@ namespace Wheel.Services.Roles
 
         public async Task<R> CreateRole(CreateRoleDto dto)
         {
-            var exist = await _roleManager.RoleExistsAsync(dto.Name);
+            var exist = await roleManager.RoleExistsAsync(dto.Name);
             if (exist)
             {
                 throw new BusinessException(ErrorCode.RoleExist, "RoleExist");
             }
-            var result = await _roleManager.CreateAsync(new Role(dto.Name, dto.RoleType));
+            var result = await roleManager.CreateAsync(new Role(dto.Name, dto.RoleType));
             if (result.Succeeded)
             {
                 return new R();
@@ -50,11 +43,11 @@ namespace Wheel.Services.Roles
 
         public async Task<R> DeleteRole(string roleName)
         {
-            var exist = await _roleManager.RoleExistsAsync(roleName);
+            var exist = await roleManager.RoleExistsAsync(roleName);
             if (exist)
             {
-                var role = await _roleManager.FindByNameAsync(roleName);
-                await _roleManager.DeleteAsync(role);
+                var role = await roleManager.FindByNameAsync(roleName);
+                await roleManager.DeleteAsync(role);
             }
             else
             {

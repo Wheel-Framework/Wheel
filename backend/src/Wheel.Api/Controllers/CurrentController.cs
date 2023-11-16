@@ -12,15 +12,8 @@ namespace Wheel.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class CurrentController : WheelControllerBase
+    public class CurrentController(IMenuAppService menuAppService) : WheelControllerBase
     {
-        private readonly IMenuAppService _menuAppService;
-
-        public CurrentController(IMenuAppService menuAppService)
-        {
-            _menuAppService = menuAppService;
-        }
-
         /// <summary>
         /// 获取当前用户信息
         /// </summary>
@@ -39,7 +32,7 @@ namespace Wheel.Controllers
         [HttpGet("menu")]
         public Task<R<List<AntdMenuDto>>> GetCurrentMenu()
         {
-            return _menuAppService.GetCurrentMenu();
+            return menuAppService.GetCurrentMenu();
         }
     }
 }
