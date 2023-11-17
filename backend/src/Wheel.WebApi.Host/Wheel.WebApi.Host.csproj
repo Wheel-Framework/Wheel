@@ -10,6 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.0.0-preview.1.23557.2" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="DotNetCore.CAP" Version="7.2.2" />
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.2.2" />
@@ -41,6 +42,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Wheel.ServiceDefaults\Wheel.ServiceDefaults.csproj" />
 	  <ProjectReference Include="..\..\framework\Wheel.Authorization\Wheel.Authorization.csproj" />
 	  <ProjectReference Include="..\..\framework\Wheel.EventBus.Cap\Wheel.EventBus.Cap.csproj" />
 	  <ProjectReference Include="..\..\framework\Wheel.EventBus.Channels\Wheel.EventBus.Channels.csproj" />

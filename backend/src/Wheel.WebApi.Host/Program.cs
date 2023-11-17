@@ -36,6 +36,7 @@ using Path = System.IO.Path;
 using Role = Wheel.Domain.Identity.Role;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddServiceDefaults();
 // Kestrel
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -79,8 +80,8 @@ builder.Services.AddCapDistributedEventBus(x =>
 
     x.UseSqlite(builder.Configuration.GetConnectionString("Default"));
 
-    //x.UseRabbitMQ(configuration["RabbitMQ:ConnectionString"]);
-    x.UseRedis(builder.Configuration["Cache:Redis"]);
+    x.UseRabbitMQ(o => o.ConnectionFactoryOptions = (factory) => factory.Uri = new Uri(builder.Configuration["ConnectionStrings:RabbitMq"]));
+    //x.UseRedis(builder.Configuration["ConnectionStrings:Redis"]);
 });
 builder.Services.AddAutoMapper();
 builder.Services.AddIdGen(0);
@@ -131,7 +132,7 @@ builder.Services.AddEFStringLocalizer(typeof(EFStringLocalizerStore));
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddMemoryCache();
-var redis = await ConnectionMultiplexer.ConnectAsync(builder.Configuration["Cache:Redis"]);
+var redis = await ConnectionMultiplexer.ConnectAsync(builder.Configuration["ConnectionStrings:Redis"]);
 builder.Services.AddSingleton<IConnectionMultiplexer, ConnectionMultiplexer>(_ => redis);
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -145,7 +146,7 @@ builder.Services.AddDataProtection()
 builder.Services.AddSignalR()
     .AddJsonProtocol()
     .AddMessagePackProtocol()
-    .AddStackExchangeRedis(builder.Configuration["Cache:Redis"]);
+    .AddStackExchangeRedis(builder.Configuration["ConnectionStrings:Redis"]);
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
