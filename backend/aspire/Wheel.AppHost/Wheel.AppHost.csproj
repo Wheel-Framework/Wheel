@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\backend\src\Wheel.WebApi.Host\Wheel.WebApi.Host.csproj" />
+    <ProjectReference Include="..\..\src\Wheel.WebApi.Host\Wheel.WebApi.Host.csproj" />
   </ItemGroup>
 
 </Project>
