@@ -131,14 +131,13 @@ builder.Services.AddEFStringLocalizer(typeof(EFStringLocalizerStore));
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+builder.AddRabbitMQ("RabbitMq");
+builder.AddRedisDistributedCache("Redis");
+
+
 builder.Services.AddMemoryCache();
 var redis = await ConnectionMultiplexer.ConnectAsync(builder.Configuration["ConnectionStrings:Redis"]);
 builder.Services.AddSingleton<IConnectionMultiplexer, ConnectionMultiplexer>(_ => redis);
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.ConnectionMultiplexerFactory = async () => await Task.FromResult(redis);
-});
-
 builder.Services.AddDataProtection()
     .SetApplicationName("Wheel")
     .PersistKeysToStackExchangeRedis(redis);
