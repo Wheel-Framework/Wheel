@@ -20,5 +20,13 @@ namespace Wheel
             services.AddSingleton<IStringLocalizerFactory, EFStringLocalizerFactory>();
             return services;
         }
+
+        public static IServiceCollection AddEFStringLocalizer<TStringLocalizerStore>(this IServiceCollection services) where TStringLocalizerStore : class, IStringLocalizerStore
+        {
+            services.TryAddTransient<IStringLocalizerStore, TStringLocalizerStore>();
+            
+            services.AddSingleton<IStringLocalizerFactory, EFStringLocalizerFactory>();
+            return services;
+        }
     }
 }
