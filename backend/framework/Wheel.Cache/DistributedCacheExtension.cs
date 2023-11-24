@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Microsoft.Extensions.Caching.Distributed
@@ -15,6 +16,18 @@ namespace Microsoft.Extensions.Caching.Distributed
             if (string.IsNullOrWhiteSpace(value))
                 return default(T);
             return JsonSerializer.Deserialize<T>(value, JsonSerializerOptions);
+        }
+        public static async Task<T> GetOrCreateAsync<T>(this IDistributedCache cache, string key, Func<DistributedCacheEntryOptions, Task<T>> factory, CancellationToken cancellationToken = default)
+        {
+            var valueStr = await cache.GetStringAsync(key, cancellationToken);
+            if (string.IsNullOrWhiteSpace(valueStr))
+            {
+                var options = new DistributedCacheEntryOptions();
+                var value = await factory(options).ConfigureAwait(false);
+                await cache.SetStringAsync(key, JsonSerializer.Serialize(value, JsonSerializerOptions), options, cancellationToken);
+                return value;
+            }
+            return JsonSerializer.Deserialize<T>(valueStr, JsonSerializerOptions);
         }
         public static async Task SetAsync<T>(this IDistributedCache cache, string key, T value, CancellationToken cancellationToken = default)
         {
