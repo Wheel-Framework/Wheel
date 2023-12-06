@@ -5,6 +5,8 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Wheel.EventBus.Distributed;
 using Wheel.EventBus.Local;
 using Wheel.Settings;
@@ -31,6 +33,9 @@ namespace Wheel.Controllers
         public ISettingProvider SettingProvider => LazyGetService<ISettingProvider>();
         public IStringLocalizerFactory LocalizerFactory => LazyGetService<IStringLocalizerFactory>();
 
+        public ILoggerFactory LoggerFactory => LazyGetService<ILoggerFactory>();
+
+        public ILogger Logger => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance;
 
         private IStringLocalizer _stringLocalizer = null;
 
