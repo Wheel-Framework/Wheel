@@ -12,6 +12,7 @@ using Wheel.Settings;
 using Wheel.Uow;
 using Wheel.Users;
 using Wheel.Utilities;
+using Wheel.Core.Dto;
 
 namespace Wheel.Services
 {
@@ -53,6 +54,18 @@ namespace Wheel.Services
         public T LazyGetService<T>() where T : notnull
         {
             return new Lazy<T>(ServiceProvider.GetRequiredService<T>).Value;
+        }
+        protected R Success()
+        {
+            return new R();
+        }
+        protected R<T> Success<T>(T data)
+        {
+            return new R<T>(data);
+        }
+        protected Page<T> Page<T>(List<T> data, long total)
+        {
+            return new Page<T>(data, total);
         }
     }
 }
