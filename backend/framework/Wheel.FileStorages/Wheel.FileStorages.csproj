@@ -11,7 +11,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj" />
-		<ProjectReference Include="..\Wheel.Extensions\Wheel.Extensions.csproj" />
+		<ProjectReference Include="..\Wheel.Extensions\Wheel.Extension.csproj" />
 	</ItemGroup>
 
 </Project>

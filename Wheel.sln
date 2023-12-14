@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Settings", "backend\f
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.FileStorages", "backend\framework\Wheel.FileStorages\Wheel.FileStorages.csproj", "{B75C9181-D431-4A70-A16F-D3D9BE4EFE9F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Extensions", "backend\framework\Wheel.Extensions\Wheel.Extensions.csproj", "{8EBED27F-668B-4F9F-86F7-6A93190EB853}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Extension", "backend\framework\Wheel.Extensions\Wheel.Extension.csproj", "{8EBED27F-668B-4F9F-86F7-6A93190EB853}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheel.Utilities", "backend\framework\Wheel.Utilities\Wheel.Utilities.csproj", "{D1715F0C-9218-4312-98F6-8F57D240AF46}"
 EndProject
