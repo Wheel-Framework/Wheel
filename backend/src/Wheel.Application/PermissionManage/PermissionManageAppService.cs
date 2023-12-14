@@ -46,7 +46,7 @@ namespace Wheel.Services.PermissionManage
                     }
                 }
             }
-            return new R<List<GetAllPermissionDto>>(result);
+            return Success(result);
         }
         public async Task<R<List<GetAllPermissionDto>>> GetRolePermission(string RoleName)
         {
@@ -67,7 +67,7 @@ namespace Wheel.Services.PermissionManage
                 }
             }
 
-            return new R<List<GetAllPermissionDto>>(result);
+            return Success(result);
         }
         public async Task<R> UpdatePermission(UpdatePermissionDto dto)
         {
@@ -91,7 +91,7 @@ namespace Wheel.Services.PermissionManage
                 await DistributedCache.SetAsync($"Permission:{dto.Type}:{dto.Value}", dto.Permissions);
                 await tran.CommitAsync();
             }
-            return new R();
+            return Success();
         }
 
         private ValueTask<List<GetAllPermissionDto>> GetAllDefinePermission()

@@ -45,7 +45,7 @@ namespace Wheel.Services.SettingManage
                 }
             }
             var settingGroupDtos = Mapper.Map<List<SettingGroupDto>>(settingGroups);
-            return new R<List<SettingGroupDto>>(settingGroupDtos);
+            return Success(settingGroupDtos);
         }
 
         public async Task<R> UpdateSettings(SettingGroupDto settingGroupDto, SettingScope settingScope = SettingScope.Global)
@@ -57,7 +57,7 @@ namespace Wheel.Services.SettingManage
                 a.SettingScopeKey = settingScope == SettingScope.User ? CurrentUser.Id : null;
             });
             await settingManager.SetSettingValues(settingGroupDto.Name, settings);
-            return new R();
+            return Success();
         }
     }
 }

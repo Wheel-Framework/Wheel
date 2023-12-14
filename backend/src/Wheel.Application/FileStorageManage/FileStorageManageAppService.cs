@@ -29,7 +29,7 @@ namespace Wheel.Services.FileStorageManage
                 request.OrderBy
                 );
 
-            return new Page<FileStorageDto>(Mapper.Map<List<FileStorageDto>>(items), total);
+            return Page(Mapper.Map<List<FileStorageDto>>(items), total);
         }
         public async Task<R<List<FileStorageDto>>> UploadFiles(UploadFileDto uploadFileDto)
         {
@@ -84,7 +84,7 @@ namespace Wheel.Services.FileStorageManage
                     fileStorages.Add(fileStorage);
                 }
             }
-            return new R<List<FileStorageDto>>(Mapper.Map<List<FileStorageDto>>(fileStorages));
+            return Success(Mapper.Map<List<FileStorageDto>>(fileStorages));
         }
 
         public async Task<R<DownloadFileResonse>> DownloadFile(long id)
@@ -100,7 +100,7 @@ namespace Wheel.Services.FileStorageManage
             var downloadResult = await fileStorageProvider.Download(new DownloadFileArgs { Path = fileStorage.Path });
             if (downloadResult.Success)
             {
-                return new R<DownloadFileResonse>(new DownloadFileResonse { ContentType = downloadResult.ContentType, FileName = downloadResult.FileName, Stream = downloadResult.Stream });
+                return Success(new DownloadFileResonse { ContentType = downloadResult.ContentType, FileName = downloadResult.FileName, Stream = downloadResult.Stream });
             }
             else
             {

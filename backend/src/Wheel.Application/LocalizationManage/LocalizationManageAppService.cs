@@ -21,7 +21,7 @@ namespace Wheel.Services.LocalizationManage
         {
             var entity = await localizationCultureRepository.FindAsync(id);
 
-            return new R<LocalizationCultureDto>(Mapper.Map<LocalizationCultureDto>(entity));
+            return Success(Mapper.Map<LocalizationCultureDto>(entity));
         }
         /// <summary>
         /// 分页获取地区多语言列表
@@ -37,7 +37,7 @@ namespace Wheel.Services.LocalizationManage
                 propertySelectors: a => a.Resources
                 );
 
-            return new Page<LocalizationCultureDto>(Mapper.Map<List<LocalizationCultureDto>>(entities), total);
+            return Page(Mapper.Map<List<LocalizationCultureDto>>(entities), total);
         }
         /// <summary>
         /// 创建地区多语言
@@ -49,7 +49,7 @@ namespace Wheel.Services.LocalizationManage
             var entity = Mapper.Map<LocalizationCulture>(input);
             entity = await localizationCultureRepository.InsertAsync(entity);
             await UnitOfWork.SaveChangesAsync();
-            return new R<LocalizationCultureDto>(Mapper.Map<LocalizationCultureDto>(entity));
+            return Success(Mapper.Map<LocalizationCultureDto>(entity));
         }
         /// <summary>
         /// 删除地区多语言
@@ -60,7 +60,7 @@ namespace Wheel.Services.LocalizationManage
         {
             await localizationCultureRepository.DeleteAsync(id);
             await UnitOfWork.SaveChangesAsync();
-            return new R();
+            return Success();
         }
         /// <summary>
         /// 创建多语言资源
@@ -72,7 +72,7 @@ namespace Wheel.Services.LocalizationManage
             var entity = Mapper.Map<LocalizationResource>(input);
             entity = await localizationResourceRepository.InsertAsync(entity);
             await UnitOfWork.SaveChangesAsync();
-            return new R<LocalizationResourceDto>(Mapper.Map<LocalizationResourceDto>(entity));
+            return Success(Mapper.Map<LocalizationResourceDto>(entity));
         }
         /// <summary>
         /// 修改多语言资源
@@ -85,7 +85,7 @@ namespace Wheel.Services.LocalizationManage
                 a => a.SetProperty(b => b.Key, b => input.Key)
                 .SetProperty(b => b.Value, b => input.Value));
             await UnitOfWork.SaveChangesAsync();
-            return new R();
+            return Success();
         }
         /// <summary>
         /// 删除多语言资源
@@ -96,7 +96,7 @@ namespace Wheel.Services.LocalizationManage
         {
             await localizationResourceRepository.DeleteAsync(id);
             await UnitOfWork.SaveChangesAsync();
-            return new R();
+            return Success();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Wheel.Services.Roles
                 pageRequest.PageSize,
                 pageRequest.OrderBy
                 );
-            return new Page<RoleDto>(items, total);
+            return Page(items, total);
         }
 
         public async Task<R> CreateRole(CreateRoleDto dto)
@@ -33,7 +33,7 @@ namespace Wheel.Services.Roles
             var result = await roleManager.CreateAsync(new Role(dto.Name, dto.RoleType));
             if (result.Succeeded)
             {
-                return new R();
+                return Success();
             }
             else
             {
@@ -53,7 +53,7 @@ namespace Wheel.Services.Roles
             {
                 throw new BusinessException(ErrorCode.RoleNotExist, "RoleNotExist");
             }
-            return new R();
+            return Success();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Wheel.Services.Users
                 pageRequest.OrderBy
                 );
 
-            return new Page<UserDto>(items, total);
+            return Page(items, total);
         }
         public async Task<R> CreateUser(CreateUserDto userDto)
         {
@@ -57,7 +57,7 @@ namespace Wheel.Services.Users
                     await userManager.AddToRolesAsync(user, userDto.Roles);
                     await userManager.UpdateAsync(user);
                 }
-                return new R();
+                return Success();
             }
             else
                 throw new BusinessException(ErrorCode.CreateUserError, string.Join("\r\n", result.Errors.Select(a => a.Description)));
@@ -85,7 +85,7 @@ namespace Wheel.Services.Users
                 await userManager.AddToRolesAsync(user, updateUserDto.Roles);
             }
             await userManager.UpdateAsync(user);
-            return new R();
+            return Success();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Wheel.Services.Menus
             var menu = Mapper.Map<Menu>(dto);
             menu.Id = GuidGenerator.Create();
             await menuRepository.InsertAsync(menu, true);
-            return new R();
+            return Success();
         }
 
         public async Task<R> Update(Guid id, CreateOrUpdateMenuDto dto)
@@ -25,19 +25,19 @@ namespace Wheel.Services.Menus
                 Mapper.Map(dto, menu);
                 await menuRepository.UpdateAsync(menu, true);
             }
-            return new R();
+            return Success();
         }
         public async Task<R> Delete(Guid id)
         {
             await menuRepository.DeleteAsync(id, true);
-            return new R();
+            return Success();
         }
         public async Task<R<MenuDto>> GetById(Guid id)
         {
             var menu = await menuRepository.FindAsync(id);
 
             var dto = Mapper.Map<MenuDto>(menu);
-            return new R<MenuDto>(dto);
+            return Success(dto);
         }
         public async Task<R<List<MenuDto>>> GetList()
         {
@@ -48,7 +48,7 @@ namespace Wheel.Services.Menus
             items.ForEach(a => a.Children = a.Children.OrderBy(b => b.Sort).ToList());
             items = items.OrderBy(a => a.Sort).ToList();
             var resultItems = Mapper.Map<List<MenuDto>>(items);
-            return new R<List<MenuDto>>(resultItems);
+            return Success(resultItems);
         }
         public async Task<R> UpdateRoleMenu(string roleId, UpdateRoleMenuDto dto)
         {
@@ -65,7 +65,7 @@ namespace Wheel.Services.Menus
                 }
                 await uow.CommitAsync();
             }
-            return new R();
+            return Success();
         }
         public async Task<R<List<MenuDto>>> GetRoleMenuList(string roleId)
         {
@@ -73,7 +73,7 @@ namespace Wheel.Services.Menus
             items.ForEach(a => a.Children = a.Children.OrderBy(b => b.Sort).ToList());
             items = items.OrderBy(a => a.Sort).ToList();
             var resultItems = Mapper.Map<List<MenuDto>>(items);
-            return new R<List<MenuDto>>(resultItems);
+            return Success(resultItems);
         }
 
         public async Task<R<List<AntdMenuDto>>> GetCurrentMenu()
@@ -81,14 +81,14 @@ namespace Wheel.Services.Menus
             if (CurrentUser.IsInRoles("admin"))
             {
                 var menus = await menuRepository.GetListAsync(a => a.ParentId == null);
-                return new R<List<AntdMenuDto>>(MaptoAntdMenu(menus));
+                return Success(MaptoAntdMenu(menus));
             }
             else
             {
                 var roleIds = await roleRepository.SelectListAsync(a => CurrentUser.Roles.Contains(a.Name), a => a.Id);
                 var menus = await roleMenuRepository.SelectListAsync(a => roleIds.Contains(a.RoleId) && a.Menu.ParentId == null, a => a.Menu, propertySelectors: a => a.Menu.Children);
 
-                return new R<List<AntdMenuDto>>(MaptoAntdMenu(menus.DistinctBy(a => a.Id).ToList()));
+                return Success(MaptoAntdMenu(menus.DistinctBy(a => a.Id).ToList()));
             }
         }
 

@@ -11,13 +11,13 @@ namespace Wheel.Services.SupportData
             var enumType = Type.GetType($"{nameSpace ?? "Wheel.Enums"}.{type}");
             if (enumType is null)
             {
-                return ValueTask.FromResult(new R<List<LabelValueDto>>(new()));
+                return ValueTask.FromResult(Success<List<LabelValueDto>>(new()));
             }
             foreach (var e in Enum.GetValues(enumType))
             {
                 resultList.Add(new LabelValueDto { Label = e.ToString()!, Value = e.GetHashCode() });
             }
-            return ValueTask.FromResult(new R<List<LabelValueDto>>(resultList));
+            return ValueTask.FromResult(Success(resultList));
         }
     }
 }
