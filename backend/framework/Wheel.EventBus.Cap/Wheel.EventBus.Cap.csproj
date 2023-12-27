@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DotNetCore.CAP" Version="7.2.2" />
+		<PackageReference Include="DotNetCore.CAP" Version="8.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Wheel.EventBus\Wheel.EventBus.csproj" />
