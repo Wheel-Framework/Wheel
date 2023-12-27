@@ -8,7 +8,7 @@ namespace Wheel.EventBus.Distributed.Cap
         public Task PublishAsync<TEventData>(TEventData eventData, CancellationToken cancellationToken = default)
         {
             var sub = typeof(TEventData).GetCustomAttribute<EventNameAttribute>()?.Name;
-            return capBus.PublishAsync(sub ?? nameof(eventData), eventData, cancellationToken: cancellationToken);
+            return capBus.PublishAsync(sub ?? typeof(TEventData).FullName, eventData, cancellationToken: cancellationToken);
         }
     }
 }
