@@ -6,7 +6,7 @@
 
         public string[]? MessageData { get; set; }
 
-        public BusinessException WithMessageDataData(params string[] messageData)
+        public BusinessException WithMessageData(params string[] messageData)
         {
             MessageData = messageData;
             return this;

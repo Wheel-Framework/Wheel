@@ -93,7 +93,7 @@ namespace Wheel.Services.FileStorageManage
             if (fileStorage == null)
             {
                 throw new BusinessException(ErrorCode.FileNotExist, "FileNotExist")
-                    .WithMessageDataData(id.ToString());
+                    .WithMessageData(id.ToString());
             }
             var fileStorageProvider = ServiceProvider.GetServices<IFileStorageProvider>().First(a => a.Name == fileStorage.Provider);
 
@@ -105,7 +105,7 @@ namespace Wheel.Services.FileStorageManage
             else
             {
                 throw new BusinessException(ErrorCode.FileDownloadFail, "FileDownloadFail")
-                    .WithMessageDataData(id.ToString());
+                    .WithMessageData(id.ToString());
             }
         }
     }

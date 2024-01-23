@@ -76,7 +76,7 @@ namespace Wheel.Services.PermissionManage
                 var exsit = await roleManager.RoleExistsAsync(dto.Value);
                 if (!exsit)
                     throw new BusinessException(ErrorCode.RoleNotExist, "RoleNotExist")
-                        .WithMessageDataData(dto.Value);
+                        .WithMessageData(dto.Value);
             }
             using (var tran = await UnitOfWork.BeginTransactionAsync())
             {

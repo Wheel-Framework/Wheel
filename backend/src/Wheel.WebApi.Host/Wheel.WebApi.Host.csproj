@@ -13,10 +13,10 @@
 		<PackageReference Include="Aspire.RabbitMQ.Client" Version="8.0.0-preview.1.23557.2" />
 		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.0.0-preview.1.23557.2" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-		<PackageReference Include="DotNetCore.CAP" Version="7.2.2" />
-		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="7.2.2" />
-		<PackageReference Include="DotNetCore.CAP.RedisStreams" Version="7.2.2" />
-		<PackageReference Include="DotNetCore.CAP.Sqlite" Version="7.2.2" />
+		<PackageReference Include="DotNetCore.CAP" Version="8.0.0" />
+		<PackageReference Include="DotNetCore.CAP.RabbitMQ" Version="8.0.0" />
+		<PackageReference Include="DotNetCore.CAP.RedisStreams" Version="8.0.0" />
+		<PackageReference Include="DotNetCore.CAP.Sqlite" Version="8.0.0" />
 		<PackageReference Include="MailKit" Version="4.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />

@@ -5,7 +5,7 @@ namespace Wheel
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddChannelRLoacalEventBus(this IServiceCollection services, Action<EventBusChannelOptions> options = null)
+        public static IServiceCollection AddChannelLoacalEventBus(this IServiceCollection services, Action<EventBusChannelOptions> options = null)
         {
             EventBusChannelOptions eventBusChannelOptions = new();
             if (options != null)

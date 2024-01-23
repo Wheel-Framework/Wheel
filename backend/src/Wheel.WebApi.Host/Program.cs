@@ -72,7 +72,7 @@ builder.Services.Configure<FormOptions>(options =>
 
 // Add services to the container.
 builder.Services.AddMailKit(builder.Configuration);
-builder.Services.AddChannelRLoacalEventBus();
+builder.Services.AddChannelLoacalEventBus();
 //builder.Services.AddMediatRLocalEventBus();
 builder.Services.AddCapDistributedEventBus(x =>
 {
