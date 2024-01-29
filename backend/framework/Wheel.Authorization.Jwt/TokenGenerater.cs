@@ -20,7 +20,8 @@ namespace Wheel.Authorization.Jwt
         public async Task<TokenResult> GenerateJwtToken(GenerateJwtTokenModel generateJwtTokenModel)
         {
             //token到期时间
-            DateTime expires = DateTime.UtcNow.AddSeconds(generateJwtTokenModel.ExpireSeconds);
+            var authTime = DateTime.Now;
+            DateTime expires = authTime.AddSeconds(generateJwtTokenModel.ExpireSeconds);
             //取出配置文件的key
             byte[] keyBytes = Encoding.UTF8.GetBytes(generateJwtTokenModel.SecurityKey);
             //对称安全密钥
@@ -28,7 +29,7 @@ namespace Wheel.Authorization.Jwt
             //加密证书
             var credentials = new SigningCredentials(secKey, SecurityAlgorithms.HmacSha256Signature);
             //jwt安全token
-            var tokenDescriptor = new JwtSecurityToken(issuer: generateJwtTokenModel.Issuer, audience: generateJwtTokenModel.Audience, expires: expires, signingCredentials: credentials, claims: generateJwtTokenModel.Claims);
+            var tokenDescriptor = new JwtSecurityToken(issuer: generateJwtTokenModel.Issuer, audience: generateJwtTokenModel.Audience, notBefore: authTime, expires: expires, signingCredentials: credentials, claims: generateJwtTokenModel.Claims);
 
             var token = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
             var refreshToken = GenerateRefreshToken();
