@@ -134,12 +134,7 @@ JwtSettingOptions jwtSettingOptions = new JwtSettingOptions();
 builder.Configuration.GetSection("JwtSetting").Bind(jwtSettingOptions);
 builder.Services.Configure<JwtSettingOptions>(builder.Configuration.GetSection("JwtSetting"));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddCookie(IdentityConstants.ApplicationScheme, options =>
-{
-    options.ExpireTimeSpan = TimeSpan.FromSeconds(jwtSettingOptions.ExpireSeconds);
-    options.Cookie.Name = "user-session";
-    options.SlidingExpiration = true;
-})
+.AddCookie(IdentityConstants.ApplicationScheme)
 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters

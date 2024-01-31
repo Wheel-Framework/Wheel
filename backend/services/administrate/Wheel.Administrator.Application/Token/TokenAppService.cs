@@ -45,5 +45,18 @@ namespace Wheel.Administrator.Token
                 throw new BusinessException(ErrorCode.LoginError);
             }
         }
+
+        public async Task<R<TokenResult>> Refresh(RefreshTokenDto refreshTokenDto)
+        {
+            var tokenResult = await tokenGenerater.RefreshToken(refreshTokenDto.Token);
+            var claimsPrincipal = tokenGenerater.ValidateToken(tokenResult.AccessToken, jwtSettingOptions.CurrentValue.SecurityKey, jwtSettingOptions.CurrentValue.Issuer, jwtSettingOptions.CurrentValue.Audience);
+            var user = await userManager.FindByNameAsync(claimsPrincipal.Identity.Name);
+            if(user == null)
+            {
+                throw new BusinessException(ErrorCode.UserNotExist);
+            }
+            await signInManager.RefreshSignInAsync(user);
+            return Success(tokenResult);
+        }
     }
 }

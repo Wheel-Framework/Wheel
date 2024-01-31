@@ -8,5 +8,6 @@ namespace Wheel.Administrator.Token
     public interface ITokenAppService : ITransientDependency
     {
         Task<R<TokenResult>> Login(LoginDto loginDto);
+        Task<R<TokenResult>> Refresh(RefreshTokenDto refreshTokenDto);
     }
 }
