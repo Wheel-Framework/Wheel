@@ -100,8 +100,8 @@ builder.Services.AddCapDistributedEventBus(x =>
 
     x.UseSqlite(builder.Configuration.GetConnectionString("Default"));
 
-    //x.UseRabbitMQ(o => o.ConnectionFactoryOptions = (factory) => factory.Uri = new Uri(builder.Configuration["ConnectionStrings:RabbitMq"]));
-    x.UseRedis(builder.Configuration["ConnectionStrings:Redis"]);
+    x.UseRabbitMQ(o => o.ConnectionFactoryOptions = (factory) => factory.Uri = new Uri(builder.Configuration["ConnectionStrings:RabbitMq"]));
+    //x.UseRedis(builder.Configuration["ConnectionStrings:Redis"]);
 });
 
 builder.Services.AddAutoMapper();
@@ -114,11 +114,10 @@ builder.Services.AddStackExchangeRedisCache(a => a.Configuration = builder.Confi
 
 builder.Services.AddMemoryCache();
 
-//var redis = await ConnectionMultiplexer.ConnectAsync(builder.Configuration["ConnectionStrings:Redis"]);
-//builder.Services.AddSingleton<IConnectionMultiplexer, ConnectionMultiplexer>(_ => redis);
-//builder.Services.AddDataProtection()
-//    .SetApplicationName("Wheel")
-//    .PersistKeysToStackExchangeRedis(redis);
+builder.Services.AddSingleton<IConnectionMultiplexer, ConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(builder.Configuration["ConnectionStrings:Redis"]));
+builder.Services.AddDataProtection()
+    .SetApplicationName("Wheel-Administrator")
+    .PersistKeysToStackExchangeRedis(() => ConnectionMultiplexer.Connect(builder.Configuration["ConnectionStrings:Redis"]).GetDatabase(), "Administrator-DataProtection-Keys");
 
 // Localizer
 builder.Services.AddLinguaNexLocalization(options =>
