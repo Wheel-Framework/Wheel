@@ -9,6 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\framework\Wheel.Authorization.Jwt\Wheel.Authorization.Jwt.csproj" />
 	  <ProjectReference Include="..\Wheel.Administrator.Application\Wheel.Administrator.Application.csproj" />
 	</ItemGroup>
 

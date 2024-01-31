@@ -37,9 +37,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\Wheel.Authorization\Wheel.Authorization.csproj" />
 		<ProjectReference Include="..\..\..\framework\Wheel.EventBus.Cap\Wheel.EventBus.Cap.csproj" />
 		<ProjectReference Include="..\..\..\framework\Wheel.EventBus.Channels\Wheel.EventBus.Channels.csproj" />
 		<ProjectReference Include="..\..\..\framework\Wheel.FileStorages.Minio\Wheel.FileStorages.Minio.csproj" />
+		<ProjectReference Include="..\..\..\framework\Wheel.Permissions\Wheel.Permissions.csproj" />
 		<ProjectReference Include="..\Wheel.Administrator.Api\Wheel.Administrator.Api.csproj" />
 	</ItemGroup>
 

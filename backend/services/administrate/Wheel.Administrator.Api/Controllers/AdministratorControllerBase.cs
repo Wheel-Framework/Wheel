@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -16,6 +17,7 @@ using Wheel.Utilities;
 
 namespace Wheel.Administrator.Controllers
 {
+    [Authorize("Permission")]
     public abstract class AdministratorControllerBase : ControllerBase
     {
         public IServiceProvider ServiceProvider { get; set; }

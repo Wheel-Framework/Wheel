@@ -18,6 +18,8 @@
         public const string RoleExist = "40012";
         public const string CreateRoleError = "40013";
 
+        public const string LoginError = "41001";
+
 
         public const string FileNotExist = "40030";
         public const string FileDownloadFail = "40031";

@@ -28,6 +28,10 @@ using System.Text.Json.Serialization;
 using Wheel.Json;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
+using Wheel.Administrator.Identity;
+using Wheel.Authorization.Jwt;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +84,8 @@ builder.Services.AddIdentityCore<BackendUser>(o =>
                     o.Password.RequireLowercase = false;
                     o.Password.RequireUppercase = false;
                 })
+                .AddUserManager<BackendUserManager>()
+                .AddSignInManager<SignInManager<BackendUser>>()
                 .AddRoles<BackendRole>()
                 .AddUserStore<UserStore<BackendUser, BackendRole, AdministratorDbContext, string, BackendUserClaim, BackendUserRole, BackendUserLogin, BackendUserToken, BackendRoleClaim>>()
                 .AddRoleStore<RoleStore<BackendRole, AdministratorDbContext, string, BackendUserRole, BackendRoleClaim>>()
@@ -123,8 +129,17 @@ builder.Services.AddLinguaNexLocalization(options =>
 });
 builder.Services.AddLocalization();
 
-
-builder.Services.AddAuthentication()
+#region Authentication
+JwtSettingOptions jwtSettingOptions = new JwtSettingOptions();
+builder.Configuration.GetSection("JwtSetting").Bind(jwtSettingOptions);
+builder.Services.Configure<JwtSettingOptions>(builder.Configuration.GetSection("JwtSetting"));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddCookie(IdentityConstants.ApplicationScheme, options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromSeconds(jwtSettingOptions.ExpireSeconds);
+    options.Cookie.Name = "user-session";
+    options.SlidingExpiration = true;
+})
 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -132,16 +147,18 @@ builder.Services.AddAuthentication()
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "funshow", // 设置发行者
-        ValidAudience = "funshow",
+        ValidIssuer = jwtSettingOptions.Issuer, // 设置发行者
+        ValidAudience = jwtSettingOptions.Audience,
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("73bcde79bb78a0c47c109be6da1bdc66cea334931bb54acbc0f0d64477d907b8")) // 设置密钥
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettingOptions.SecurityKey)) // 设置密钥
     };
 })
 ;
 
 builder.Services.AddAuthorizationBuilder();
+# endregion Authentication
+
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -203,10 +220,13 @@ app.UseExceptionHandler(exceptionHandlerApp =>
         if (exceptionHandlerPathFeature?.Error is BusinessException businessException)
         {
             var L = context.RequestServices.GetRequiredService<IStringLocalizerFactory>().Create(null);
+            string message = string.Empty;
+            if (businessException.Message.IsNullOrWhiteSpace())
+                message = businessException.Code;
             if (businessException.MessageData != null)
-                await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message, businessException.MessageData] });
+                await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[message, businessException.MessageData] });
             else
-                await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[businessException.Message] });
+                await context.Response.WriteAsJsonAsync(new R { Code = businessException.Code, Message = L[message] });
         }
         else
         {

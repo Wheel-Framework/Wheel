@@ -9,6 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\Wheel.Authorization.Jwt\Wheel.Authorization.Jwt.csproj" />
 		<ProjectReference Include="..\..\..\framework\Wheel.AutoMapper\Wheel.AutoMapper.csproj" />
 		<ProjectReference Include="..\..\..\framework\Wheel.FileStorages\Wheel.FileStorages.csproj" />
 		<ProjectReference Include="..\Wheel.Administrator.Data\Wheel.Administrator.Data.csproj" />
