@@ -6,6 +6,7 @@
         public string Account { get; set; }
         public string Password { get; set; }
         public string? TwoFactorCode { get; set; }
+        public string? TwoFactorRecoveryCode { get; set; }
         public bool IsPersistent { get; set; } = false;
         public bool LockoutOnFailure { get; set; } = false;
     }

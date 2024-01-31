@@ -19,6 +19,9 @@
         public const string CreateRoleError = "40013";
 
         public const string LoginError = "41001";
+        public const string RequiresTwoFactor = "41002";
+        public const string IsLockedOut = "41003";
+        public const string IsNotAllowed = "41004";
 
 
         public const string FileNotExist = "40030";

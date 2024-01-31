@@ -26,24 +26,37 @@ namespace Wheel.Administrator.Token
                 throw new BusinessException(ErrorCode.UserNotExist);
             }
             var signInResult = await signInManager.PasswordSignInAsync(user, loginDto.Password, loginDto.IsPersistent, loginDto.LockoutOnFailure);
-            if (signInResult.Succeeded)
+            
+            if(signInResult.RequiresTwoFactor)
             {
-                var claimsPrincipal = await signInManager.CreateUserPrincipalAsync(user);
-                var tokenResult = await tokenGenerater.GenerateJwtToken(new GenerateJwtTokenModel
+                if (!string.IsNullOrEmpty(loginDto.TwoFactorCode))
                 {
-                    Claims = claimsPrincipal.Claims,
-                    Audience = jwtSettingOptions.CurrentValue.Audience,
-                    Issuer = jwtSettingOptions.CurrentValue.Issuer,
-                    ExpireSeconds = jwtSettingOptions.CurrentValue.ExpireSeconds,
-                    RefreshTokenExpireSeconds = jwtSettingOptions.CurrentValue.RefreshTokenExpireSeconds,
-                    SecurityKey = jwtSettingOptions.CurrentValue.SecurityKey
-                });
-                return Success(tokenResult);
+                    signInResult = await signInManager.TwoFactorAuthenticatorSignInAsync(loginDto.TwoFactorCode, loginDto.IsPersistent, rememberClient: loginDto.IsPersistent);
+                }
+                else if (!string.IsNullOrEmpty(loginDto.TwoFactorRecoveryCode))
+                {
+                    signInResult = await signInManager.TwoFactorRecoveryCodeSignInAsync(loginDto.TwoFactorRecoveryCode);
+                }
+                throw new BusinessException(ErrorCode.RequiresTwoFactor);
             }
-            else
+
+            if (!signInResult.Succeeded)
             {
-                throw new BusinessException(ErrorCode.LoginError);
+                throw new BusinessException(ErrorCode.LoginError, signInResult.ToString());
             }
+
+            var claimsPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+            var tokenResult = await tokenGenerater.GenerateJwtToken(new GenerateJwtTokenModel
+            {
+                Claims = claimsPrincipal.Claims,
+                Audience = jwtSettingOptions.CurrentValue.Audience,
+                Issuer = jwtSettingOptions.CurrentValue.Issuer,
+                ExpireSeconds = jwtSettingOptions.CurrentValue.ExpireSeconds,
+                RefreshTokenExpireSeconds = jwtSettingOptions.CurrentValue.RefreshTokenExpireSeconds,
+                SecurityKey = jwtSettingOptions.CurrentValue.SecurityKey
+            });
+            return Success(tokenResult);
+            
         }
 
         public async Task<R<TokenResult>> Refresh(RefreshTokenDto refreshTokenDto)
