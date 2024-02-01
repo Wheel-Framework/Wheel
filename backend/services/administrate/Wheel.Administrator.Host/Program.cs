@@ -105,7 +105,6 @@ builder.Services.AddCapDistributedEventBus(x =>
 });
 
 builder.Services.AddAutoMapper();
-builder.Services.AddIdGen(0);
 
 builder.Services.AddSetting(typeof(AdministratorSettingSotre));
 

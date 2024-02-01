@@ -9,8 +9,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="SequentialGuid" Version="4.0.4" />
-		<PackageReference Include="IdGen" Version="3.0.3" />
-		<PackageReference Include="IdGen.DependencyInjection" Version="3.0.0" />
+		<PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Wheel.DependencyInjection\Wheel.DependencyInjection.csproj" />

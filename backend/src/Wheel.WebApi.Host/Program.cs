@@ -84,7 +84,6 @@ builder.Services.AddCapDistributedEventBus(x =>
     //x.UseRedis(builder.Configuration["ConnectionStrings:Redis"]);
 });
 builder.Services.AddAutoMapper();
-builder.Services.AddIdGen(0);
 
 var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
 
