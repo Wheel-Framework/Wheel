@@ -10,5 +10,7 @@ public enum CompareType
     LessThanOrEqual,
     Contains,
     StartsWith,
-    EndsWith
+    EndsWith,
+    IsNull,
+    IsNotNull
 }

@@ -96,6 +96,8 @@ public static class WhereExtensions
             CompareType.Contains => compareSite == CompareSite.LEFT ? $"{source}.Contains({target})" : $"{target}.Contains({source})",
             CompareType.StartsWith => compareSite == CompareSite.LEFT ? $"{source}.StartsWith({target})" : $"{target}.StartsWith({source})",
             CompareType.EndsWith => compareSite == CompareSite.LEFT ? $"{source}.EndsWith({target})" : $"{target}.EndsWith({source})",
+            CompareType.IsNull => $"{source} == null",
+            CompareType.IsNotNull => $"{source} != null",
             _ => throw new NotSupportedException()
         };
     }
