@@ -35,7 +35,7 @@ public static class WhereExtensions
                 whereExpression.Append(" && ");
             }
 
-            whereExpression.Append(BuildCompareExpression(propertyName, property, compareAttribute.CompareType));
+            whereExpression.Append(BuildCompareExpression(propertyName, property, compareAttribute.CompareType, compareAttribute.CompareSite));
         }
 
         if(whereExpression.Length > 0)
@@ -71,7 +71,7 @@ public static class WhereExtensions
                 whereExpression.Append(" && ");
             }
 
-            whereExpression.Append(BuildCompareExpression(propertyName, property, compareAttribute.CompareType));
+            whereExpression.Append(BuildCompareExpression(propertyName, property, compareAttribute.CompareType, compareAttribute.CompareSite));
         }
 
         if(whereExpression.Length > 0)
@@ -81,19 +81,21 @@ public static class WhereExtensions
         return enumerable;
     }
 
-    private static string BuildCompareExpression(string propertyName, PropertyInfo propertyInfo, CompareType compareType)
+    private static string BuildCompareExpression(string propertyName, PropertyInfo propertyInfo, CompareType compareType, CompareSite compareSite)
     {
+        var source = $"q.{propertyName}";
+        var target = $"o.{propertyInfo.Name}";
         return compareType switch
         {
-            CompareType.Equal => $"q.{propertyName} == o.{propertyInfo.Name}",
-            CompareType.NotEqual => $"q.{propertyName} != o.{propertyInfo.Name}",
-            CompareType.GreaterThan => $"q.{propertyName} > o.{propertyInfo.Name}",
-            CompareType.GreaterThanOrEqual => $"q.{propertyName} >= o.{propertyInfo.Name}",
-            CompareType.LessThan => $"q.{propertyName} <= o.{propertyInfo.Name}",
-            CompareType.LessThanOrEqual => $"q.{propertyName} <= o.{propertyInfo.Name}",
-            CompareType.Contains => $"o.{propertyInfo.Name}.Contains(q.{propertyName})",
-            CompareType.StartsWith => $"q.{propertyName}.StartsWith(o.{propertyInfo.Name})",
-            CompareType.EndsWith => $"q.{propertyName}.EndsWith(o.{propertyInfo.Name})",
+            CompareType.Equal => compareSite == CompareSite.LEFT ? $"{source} == {target}" : $"{target} == {source}",
+            CompareType.NotEqual => compareSite == CompareSite.LEFT ? $"{source} != {target}" : $"{target} != {source}",
+            CompareType.GreaterThan => compareSite == CompareSite.LEFT ? $"{source} < {target}" : $"{target} > {source}",
+            CompareType.GreaterThanOrEqual => compareSite == CompareSite.LEFT ? $"{source} <= {target}" : $"{target} >= {source}",
+            CompareType.LessThan => compareSite == CompareSite.LEFT ? $"{source} > {target}" : $"{target} < {source}",
+            CompareType.LessThanOrEqual => compareSite == CompareSite.LEFT ? $"{source} >= {target}" : $"{target} <= {source}",
+            CompareType.Contains => compareSite == CompareSite.LEFT ? $"{source}.Contains({target})" : $"{target}.Contains({source})",
+            CompareType.StartsWith => compareSite == CompareSite.LEFT ? $"{source}.StartsWith({target})" : $"{target}.StartsWith({source})",
+            CompareType.EndsWith => compareSite == CompareSite.LEFT ? $"{source}.EndsWith({target})" : $"{target}.EndsWith({source})",
             _ => throw new NotSupportedException()
         };
     }

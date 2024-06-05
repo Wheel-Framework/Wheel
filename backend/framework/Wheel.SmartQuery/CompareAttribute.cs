@@ -15,5 +15,7 @@ public class CompareAttribute : Attribute
 
     public CompareType CompareType { get; set; }
 
+    public CompareSite CompareSite { get; set; } = CompareSite.LEFT;
+
     public string? CompareProperty { get; set; }
 }
