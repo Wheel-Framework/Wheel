@@ -1,10 +1,10 @@
 ﻿using DynamicExpresso;
 using System.Reflection;
 using System.Text;
-using System.Linq;
 using System.Linq.Expressions;
+using Wheel.SmartQuery;
 
-namespace Wheel.SmartQuery;
+namespace System.Linq;
 
 public static class WhereExtensions
 {
